@@ -3,7 +3,7 @@ from django.db import connection
 
 # Create your views here.
 def index(request):
-    return render(request,'app/index.html',result_dict)
+    return render(request,'app/index.html')
 
 def buyerindex(request):
     ## Delete customer
