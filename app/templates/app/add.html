@@ -5,11 +5,9 @@
 {% load static %}
 <html>
 <body>
-    <h2>Add New Buyer</h2>
-    <a href="/">Back to home</a>
+    <h2>Join Us Here</h2>
 
     <p style="color:red">{{ status|safe }}</p>
-    <img src="{% static 'app/images/welcome.jpg' %}" width="30%"   alt="welcome image"/><br/> <br>
     <!-- Create a Form -->
     <form method="POST">
         <!-- Security token by Django -->
@@ -24,12 +22,12 @@
         Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" maxlength="16" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         <br> Scan QR Code below to Top Up Wallet:
         <br> (Minimum Top Up for New Buyer: $5)
-        <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="20%"   alt="qrcode"/><br/>
+        <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
         Wallet Balance <span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" maxlength="16" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
         
 
         <br>
-        <button type="submit" value="Add">Add</button>
+        <button type="submit" value="Sign Up">Add</button>
     </form>
 </body>
 </html>
