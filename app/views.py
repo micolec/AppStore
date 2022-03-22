@@ -3,22 +3,6 @@ from django.db import connection
 
 # Create your views here.
 def index(request):
-    """Shows the main page"""
-
-    ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM buyer WHERE username = %s", [request.POST['id']])
-
-    ## Use raw query to get all objects
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer ORDER BY first_name")
-        buyers = cursor.fetchall()
-        # list of tuples
-
-    result_dict = {'records': buyers}
-
     return render(request,'app/index.html',result_dict)
 
 def buyerindex(request):
@@ -39,10 +23,10 @@ def buyerindex(request):
     return render(request,'app/buyerindex.html',result_dict)
 
 def login(request):
-	return render(request,'AppHONUSupper/login.html')
+	return render(request,'app/login.html')
 
 def loginhome(request):
-	return render(request,'AppHONUSupper/loginhome.html')
+	return render(request,'app/loginhome.html')
 
 # Create your views here.
 def view(request, id):
