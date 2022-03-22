@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+{% extends "AppCarPool/base.html" %}
+{% block content %}
+
+<style>
+h2   {
+	font: normal 32px Arial, sans-serif;
+}
+h3 {
+ font: normal 20px Arial, sans-serif;
+}
+</style>
+
+	<body>
+	<h2>If you are a passenger</h2>
+	<form action="ride" method = "GET">
+		<label for="origin">Origin:</label><br>
+		<input type="text" name="origin" placeholder="Insert Origin"><br>
+		<label for="destination">Destination:</label><br>
+		<input type="text" name="destination" placeholder="Insert Destination"><br><br>
+		<input type="submit" value="Find Ride!"><br><br>
+	</form>	
+	<h2>If you are a driver</h2>
+	<h3>Lookup bids for your ride</h3>
+	<form action="driver" method = "GET">
+		<label for="destination">Ride ID:</label><br>
+		<input type="text" name="rideid" placeholder="Insert Ride ID"/><br><br>
+		<input type="submit" value="Lookup Bid!"/><br><br>
+	<h3>Advertise your ride</h3>
+  <a class="ml-2" href="{% url 'advertise' %}">Add ride here!</a>
+	
+</form>
+	</form>
+	</body>
+		
+
+{% endblock content %}
