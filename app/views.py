@@ -19,8 +19,28 @@ def index(request):
 
     result_dict = {'records': buyers}
 
-    return render(request,'app/index.html',result_dict)
+    return render(request,'app/home.html',result_dict)
 
+
+"""def buyersindex(request):
+    """Shows the main page"""
+
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM buyer WHERE username = %s", [request.POST['id']])
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM buyer ORDER BY first_name")
+        buyers = cursor.fetchall()
+        # list of tuples
+
+    result_dict = {'records': buyers}
+
+    return render(request,'app/index.html',result_dict)
+"""
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
