@@ -1,0 +1,40 @@
+
+   
+{% load static %}
+<html>
+<body>
+    <h1>home page lol </h1>
+    <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
+    <br> Hi there! Welcome to HONUSupper- an application for hungry residents from NUS Halls to join group orders where everyone can chip in to lower the delivery fee :D
+    <br> <h2>Existing Buyers in HONUSuppers</h2>
+    <a href="add">New Buyer? Register here!</a>
+    <a href="index">View All Buyers</a>
+    <br/><br/>
+    <table border=1>
+        <thead>
+            <th>Username</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Hall</th>
+            <th>Action</th>
+        </thead>
+        {% for cust in records %}
+        <tr>
+            <td> {{ cust.0 }} </td>
+            <td> {{ cust.2 }} </td>
+            <td> {{ cust.3 }} </td>
+            <td> {{ cust.5 }} </td>
+            <td>
+                <a href="view/{{cust.0}}"><button>View</button></a> | 
+                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                | 
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{cust.0}}"/>
+                <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
+              </form></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
