@@ -40,6 +40,9 @@ def buyerindex(request):
 
     return render(request,'app/buyerindex.html',result_dict)
 
+def login(request):
+	return render(request,'AppHONUSupper/login.html')
+
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
