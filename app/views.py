@@ -79,7 +79,7 @@ def add(request):
                 messages.success(request, f'Account created for %s! Please log in.' % (request.POST['username']))
                 return redirect('login')    
             else:
-                status = 'Buyer with Username %s already exists' % (request.POST['username']
+                status = 'Buyer with Username %s already exists' % (request.POST['username'])
 
 
     context['status'] = status
