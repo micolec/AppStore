@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends "AppCarPool/base.html" %}
+{% extends "app/base.html" %}
 {% block content %}
 
 <style>
@@ -28,7 +28,7 @@ h3 {
 		<input type="text" name="rideid" placeholder="Insert Ride ID"/><br><br>
 		<input type="submit" value="Lookup Bid!"/><br><br>
 	<h3>Advertise your ride</h3>
-  <a class="ml-2" href="{% url 'advertise' %}">Add ride here!</a>
+  <a class="ml-2" href="{% url 'buyerindex' %}">Add ride here!</a>
 	
 </form>
 	</form>
