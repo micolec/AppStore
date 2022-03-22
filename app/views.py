@@ -12,32 +12,6 @@ def login(request):
 def loginhome(request):
 	return render(request,'app/loginhome.html')
 
-def register(request):
-
-    context = {}
-    status = ''
-
-    if request.POST:
-        ## Check if customerid is already in the table
-        with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [request.POST['username']])
-            buyer = cursor.fetchone()
-            ## No customer with same id
-            if buyer == None:
-                ##TODO: date validation
-                cursor.execute("INSERT INTO buyer VALUES (%s, %s, %s, %s, %s, %s, %s)"
-                        , [request.POST['username'], request.POST['password'], request.POST['first_name'],
-                           request.POST['last_name'] , request.POST['phone_number'], request.POST['hall'], request.POST['wallet_balance']])
-                messages.success(request, f'Account created for %s! Please log in.')
-                return redirect('login')    
-            else:
-                status = 'Buyer with Username %s already exists' % (request.POST['username'])
-
-    context['status'] = status
- 
-    return render(request, "app/add.html", context)
-
 def buyerindex(request):
     ## Delete customer
     if request.POST:
@@ -84,7 +58,8 @@ def add(request):
                 cursor.execute("INSERT INTO buyer VALUES (%s, %s, %s, %s, %s, %s, %s)"
                         , [request.POST['username'], request.POST['password'], request.POST['first_name'],
                            request.POST['last_name'] , request.POST['phone_number'], request.POST['hall'], request.POST['wallet_balance'] ])
-                return redirect('index')    
+                messages.success(request, f'Account created for %s! Please log in.' % (request.POST['username']))
+                return redirect('login')    
             else:
                 status = 'Buyer with Username %s already exists' % (request.POST['username'])
 
