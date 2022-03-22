@@ -1,14 +1,16 @@
+{% extends "app/base.html" %}
+{% block content %}
 
-   
 {% load static %}
 <html>
 <body>
-    <h1>home page lol </h1>
+    <h1>AppHONUSupper </h1>
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     <br> Hi there! Welcome to HONUSupper- an application for hungry residents from NUS Halls to join group orders where everyone can chip in to lower the delivery fee :D
     <br> <h2>Existing Buyers in HONUSuppers</h2>
-    <a href="add">New Buyer? Register here!</a>
-    <a href="index">View All Buyers</a>
+    <a class="ml-2" href="{% url 'loginhome' %}">Simply order or advertise food orders using this app.</a>
     <br/><br/>
 </body>
 </html>
+
+{% endblock content %}
