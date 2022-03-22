@@ -22,9 +22,9 @@ def index(request):
     return render(request,'app/home.html',result_dict)
 
 
-"""
+
 def buyersindex(request):
-    Shows the main page
+   " Shows the buyer indexpage "
 
     ## Delete customer
     if request.POST:
@@ -40,7 +40,7 @@ def buyersindex(request):
 
     result_dict = {'records': buyers}
 
-    return render(request,'app/index.html',result_dict)
+    return render(request,'app/buyerindex.html',result_dict)
 """
 # Create your views here.
 def view(request, id):
