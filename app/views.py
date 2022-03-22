@@ -20,7 +20,7 @@ def login(request):
                 messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
             else:
-                status = 'Unable to login. Either username or password is incorrect.')
+                status = 'Unable to login. Either username or password is incorrect.'
 
 
     context['status'] = status
@@ -79,7 +79,7 @@ def add(request):
                 messages.success(request, f'Account created for %s! Please log in.' % (request.POST['username']))
                 return redirect('login')    
             else:
-                status = 'Buyer with Username %s already exists' % (request.POST['username'])
+                status = 'Buyer with Username %s already exists' % (request.POST['username']
 
 
     context['status'] = status
