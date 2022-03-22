@@ -36,7 +36,7 @@ h1   {color: Grey;
 			{% if user.is_authenticated %}
 				{% if user.is_superuser %}
 				  <a class="nav-item nav-link" href="/admin">Administer</a>
-				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Profile</a>
+				  <a class="nav-item nav-link" href="/app/buyerindex">Profile</a>
 				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Logout</a>
 				{% else %}  
 				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Profile</a>
@@ -44,7 +44,7 @@ h1   {color: Grey;
 				{% endif %}
 			{% else %}
 			  <a class="nav-item nav-link" href="/AppStore/login">Login</a>
-			  <a class="nav-item nav-link" href="/AppStore/register">Register</a>
+			  <a class="nav-item nav-link" href="/app/register">Register</a>
 			{% endif %}
 			</div>
 		  </div>
