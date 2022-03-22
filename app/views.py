@@ -41,7 +41,6 @@ def buyerindex(request):
 def login(request):
 	return render(request,'AppHONUSupper/login.html')
 
-@login_required
 def loginhome(request):
 	return render(request,'AppHONUSupper/loginhome.html')
 
