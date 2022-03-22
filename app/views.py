@@ -23,7 +23,7 @@ def index(request):
 
 
 """def buyersindex(request):
-    """Shows the main page"""
+    Shows the main page
 
     ## Delete customer
     if request.POST:
