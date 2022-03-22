@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', app.views.index, name='index'),
     path('login', auth_views.LoginView.as_view(template_name='AppHONUSupper/login.html'), name='login'),
- 
+    path('loginhome', app.views.loginhome, name='loginhome'),
+    
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
