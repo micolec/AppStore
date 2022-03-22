@@ -7,7 +7,25 @@ def index(request):
     return render(request,'app/index.html')
 
 def login(request):
-	return render(request,'app/login.html')
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+	    password = cursor.fetchone()
+            if password == %s, [request.POST['password']]:
+                messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
+                return redirect('login')    
+            else:
+                status = 'Unable to login. Either username or password is incorrect.')
+
+
+    context['status'] = status
+ 
+    return render(request, "app/login.html", context)
 
 def loginhome(request):
 	return render(request,'app/loginhome.html')
@@ -35,7 +53,7 @@ def view(request, id):
     
     ## Use raw query to get a customer
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+        cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
         buyer = cursor.fetchone()
     result_dict = {'buyer': buyer}
 
