@@ -21,8 +21,6 @@ def index(request):
 
     return render(request,'app/index.html',result_dict)
 
-
-
 def buyerindex(request):
     ## Delete customer
     if request.POST:
@@ -42,6 +40,10 @@ def buyerindex(request):
 
 def login(request):
 	return render(request,'AppHONUSupper/login.html')
+
+@login_required
+def loginhome(request):
+	return render(request,'AppHONUSupper/loginhome.html')
 
 # Create your views here.
 def view(request, id):
