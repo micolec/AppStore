@@ -19,7 +19,7 @@ def index(request):
 
     result_dict = {'records': buyers}
 
-    return render(request,'app/home.html',result_dict)
+    return render(request,'app/index.html',result_dict)
 
 
 
