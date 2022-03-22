@@ -23,7 +23,7 @@ def index(request):
 
 
 
-def buyersindex(request):
+def buyerindex(request):
     ## Delete customer
     if request.POST:
         if request.POST['action'] == 'delete':
