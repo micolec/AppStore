@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends "AppCarPool/base.html" %}
+{% extends "app/base.html" %}
 {% block content %}
 	<body>
 	<h2>Find the ride of your choice!</h2>
