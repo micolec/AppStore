@@ -1,6 +1,6 @@
 <html>
 <body>
-    <h2>Edit {{obj.5}}</h2>
+    <h2>Edit {{obj.0}}</h2>
     <a href="/">Back to home</a>
 
     <p style="color:red">{{ status|safe }}</p>
@@ -11,13 +11,12 @@
         {% csrf_token %}
         <!-- form -->
         <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-        First name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="first_name" value="{{obj.0}}" maxlength="64" class="textinput textInput" required="" id="id_first_name"> </div> </div> <div id="div_id_last_name" class="control-group"> <label for="id_last_name" class="control-label requiredField">
-        Last name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" value="{{obj.1}}" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_email" class="control-group"> <label for="id_email" class="control-label requiredField">
-        Email<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="email" value="{{obj.2}}" maxlength="64" class="textinput textInput" required="" id="id_email"> </div> </div> <div id="div_id_dob" class="control-group"> <label for="id_dob" class="control-label requiredField">
-        Date of birth (yyyy-mm-dd)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="dob" value="{{obj.3|slugify}}" class="dateinput" required="" id="id_dob"> </div> </div> <div id="div_id_since" class="control-group"> <label for="id_since" class="control-label requiredField">
-        Since (yyyy-mm-dd)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="since" value="{{obj.4|slugify}}" class="dateinput" required="" id="id_since"> </div> </div> <div id="div_id_customerid" class="control-group"> <label for="id_customerid" class="control-label requiredField">
-        Country<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="country" value="{{obj.6}}" maxlength="16" class="textinput textInput" required="" id="id_country"> </div> </div>
-
+        Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="password" value="{{obj.1}}" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
+        First Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="first_name" value="{{obj.2}}" maxlength="64" class="textinput textInput" required="" id="id_first_name"> </div> </div> <div id="div_id_last_name" class="control-group"> <label for="id_last_name" class="control-label requiredField">
+        Last Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" value="{{obj.3}}" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_phone_number" class="control-group"> <label for="id_phone_number" class="control-label requiredField">
+        Phone Number<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="phone_number" value="{{obj.4}}" maxlength="64" class="textinput textInput" required="" id="id_phone_number"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
+        Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" value="{{obj.5}}" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
+        Wallet Balance<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.6}}" maxlength="64" class="textinput textInput" required="" id="wallet_balance"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">     
         <br>
         <button type="submit" value="Update">Update</button>
     </form>
