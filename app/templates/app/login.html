@@ -3,6 +3,7 @@
 {% extends "app/base.html" %}
 {% block content %}
 	<div class="content-section">
+	<p style="color:red">{{ status|safe }}</p>
         <form method="POST">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Log In</legend>
