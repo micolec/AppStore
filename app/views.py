@@ -22,7 +22,8 @@ def index(request):
     return render(request,'app/home.html',result_dict)
 
 
-"""def buyersindex(request):
+"""
+def buyersindex(request):
     Shows the main page
 
     ## Delete customer
