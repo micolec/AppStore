@@ -11,6 +11,25 @@ def login(request):
 def loginhome(request):
 	return render(request,'app/loginhome.html')
 
+def register(request):
+	return render(request, "app/add.html", context)
+"""
+	form = CreateUserForm()
+	
+	if request.method == 'POST':
+			form = CreateUserForm(request.POST)
+			if form.is_valid():
+				form.save()
+				username = form.cleaned_data.get('username')
+				messages.success(request, f'Account created for {username}! Please log in.')
+				return redirect('userdb')
+	
+	else:
+			form = CreateUserForm()
+	
+	return render(request,'app/register.html', {'form': form})
+"""
+
 def buyerindex(request):
     ## Delete customer
     if request.POST:
