@@ -17,22 +17,6 @@ def loginhome(request):
 
 def register(request):
 
-	form = CreateUserForm()
-	
-	if request.method == 'POST':
-			form = CreateUserForm(request.POST)
-			if form.is_valid():
-				form.save()
-				username = form.cleaned_data.get('username')
-				messages.success(request, f'Account created for {username}! Please log in.')
-				return redirect('login')
-	
-	else:
-			form = CreateUserForm()
-	
-	return render(request,'app/register.html', {'form': form})
-
-def add(request):
     context = {}
     status = ''
 
@@ -48,7 +32,8 @@ def add(request):
                 cursor.execute("INSERT INTO buyer VALUES (%s, %s, %s, %s, %s, %s, %s)"
                         , [request.POST['username'], request.POST['password'], request.POST['first_name'],
                            request.POST['last_name'] , request.POST['phone_number'], request.POST['hall'], request.POST['wallet_balance'] ])
-                return redirect('index')    
+		messages.success(request, f'Account created for {username}! Please log in.')
+                return redirect('login')    
             else:
                 status = 'Buyer with Username %s already exists' % (request.POST['username'])
 
