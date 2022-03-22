@@ -5,6 +5,12 @@ from django.db import connection
 def index(request):
     return render(request,'app/index.html')
 
+def login(request):
+	return render(request,'app/login.html')
+
+def loginhome(request):
+	return render(request,'app/loginhome.html')
+
 def buyerindex(request):
     ## Delete customer
     if request.POST:
@@ -21,12 +27,6 @@ def buyerindex(request):
     result_dict = {'records': buyers}
 
     return render(request,'app/buyerindex.html',result_dict)
-
-def login(request):
-	return render(request,'app/login.html')
-
-def loginhome(request):
-	return render(request,'app/loginhome.html')
 
 # Create your views here.
 def view(request, id):
