@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends "AppCarPool/base.html" %}
+{% extends "app/base.html" %}
 {% block content %}
 	<div class="content-selection">
 		<form method="POST">
