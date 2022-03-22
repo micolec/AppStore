@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import connection
+from .forms import CreateUserForm, Advertise, Bid, CreateUsersForm
 
 # Create your views here.
 def index(request):
