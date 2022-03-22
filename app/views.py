@@ -39,7 +39,7 @@ def buyersindex(request):
     result_dict = {'records': buyers}
 
     return render(request,'app/buyerindex.html',result_dict)
-"""
+
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
@@ -54,7 +54,6 @@ def view(request, id):
 
 # Create your views here.
 def add(request):
-    """Shows the main page"""
     context = {}
     status = ''
 
@@ -81,7 +80,6 @@ def add(request):
 
 # Create your views here.
 def edit(request, id):
-    """Shows the main page"""
 
     # dictionary for initial data with
     # field names as keys
