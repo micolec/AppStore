@@ -24,8 +24,6 @@ def index(request):
 
 
 def buyersindex(request):
-   " Shows the buyer indexpage "
-
     ## Delete customer
     if request.POST:
         if request.POST['action'] == 'delete':
