@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db import connection
-from .forms import CreateUserForm, Advertise, Bid, CreateUsersForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -13,6 +15,7 @@ def loginhome(request):
 	return render(request,'app/loginhome.html')
 
 def register(request):
+
 	form = CreateUserForm()
 	
 	if request.method == 'POST':
@@ -27,6 +30,31 @@ def register(request):
 			form = CreateUserForm()
 	
 	return render(request,'app/register.html', {'form': form})
+
+def add(request):
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [request.POST['username']])
+            buyer = cursor.fetchone()
+            ## No customer with same id
+            if buyer == None:
+                ##TODO: date validation
+                cursor.execute("INSERT INTO buyer VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST['username'], request.POST['password'], request.POST['first_name'],
+                           request.POST['last_name'] , request.POST['phone_number'], request.POST['hall'], request.POST['wallet_balance'] ])
+                return redirect('index')    
+            else:
+                status = 'Buyer with Username %s already exists' % (request.POST['username'])
+
+
+    context['status'] = status
+ 
+    return render(request, "app/add.html", context)
 
 def buyerindex(request):
     ## Delete customer
