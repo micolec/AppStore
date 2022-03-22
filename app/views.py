@@ -12,7 +12,7 @@ def loginhome(request):
 	return render(request,'app/loginhome.html')
 
 def register(request):
-	return render(request, "app/add.html", context)
+	return render(request, "app/add.html")
 """
 	form = CreateUserForm()
 	
