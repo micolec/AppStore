@@ -43,6 +43,121 @@ def buyerindex(request):
 def login(request):
 	return render(request,'AppHONUSupper/login.html')
 
+@login_required
+def loginhome(request):
+	return render(request,'AppHONUSupper/loginhome.html')
+
+def login(request):
+	return render(request,'AppHONUSupper/login.html')
+
+def register(request):
+	form = CreateUserForm()
+	
+	if request.method == 'POST':
+			form = CreateUserForm(request.POST)
+			if form.is_valid():
+				form.save()
+				username = form.cleaned_data.get('username')
+				messages.success(request, f'Account created for {username}! Please log in.')
+				return redirect('userdb')
+	
+	else:
+			form = CreateUserForm()
+	
+	return render(request,'AppHONUSupper/register.html', {'form': form})
+	
+def userdb(request):
+	form = CreateUsersForm()
+	
+	if request.method == 'POST':
+			form = CreateUsersForm(request.POST)
+			if form.is_valid():
+				form.save()
+				username = form.cleaned_data.get('username')
+				messages.success(request, f'Account created for {username}! Please log in.')
+				return redirect('login')
+	
+	else:
+			form = CreateUsersForm()
+	
+	return render(request,'AppHONUSupper/register.html', {'form': form})
+
+@login_required
+def ride(request):
+	search_string = request.GET.get('origin', '')
+	search_string2 = request.GET.get('destination', '')
+	results = Ride.objects.filter(origin__regex=r'%s' %(search_string), destination__regex=r'%s' %(search_string2))
+	results = [(r.ride_id,r.origin,r.destination,r.start_time) for r in results]
+	result_dict = {'records': results}
+	return render(request,'AppHONUSupper/ride.html',result_dict)
+
+def bid(request):
+	form = Bid()
+	
+	if request.method == 'POST':
+			form = Bid(request.POST)
+			if form.is_valid():
+#				form = form.save(commit=False)
+#				form.bid_id = random.randint(10000, 99999)
+#				form.username = request.user
+				form.save()
+				username = form.cleaned_data.get('username')
+				messages.success(request, f'Bid created for {username}!')
+				return redirect('loginhome')
+	
+	else:
+			form = Bid()
+			
+	return render(request,'AppHONUSupper/bid.html', {'form': form})			
+			
+@login_required
+def driver(request):
+	search_string = request.GET.get('rideid','')
+	users = 'SELECT * FROM bid WHERE ride_id ~ \'%s\'' % (search_string)
+	c = connection.cursor()
+	c.execute(users)
+	results = c.fetchall()
+	result_dict = {'records': results}
+	return render(request,'AppHONUSupper/driver.html',result_dict)
+                      
+@login_required
+def profile(request):
+	return render(request,'AppHONUSupper/profile.html')
+	
+@login_required
+def advertise(request):
+	form = Advertise()
+	
+	if request.method == 'POST':
+			form = Advertise(request.POST)
+			if form.is_valid():
+#				form = form.save(commit=False)
+#				form.ride_id = random.randint(10000000, 99999999)
+#				form.driver = request.user
+				form.save()
+				username = form.cleaned_data.get('username')
+				messages.success(request, f'Ride created for {username}!')
+				return redirect('loginhome')
+	
+	else:
+			form = Advertise()
+	
+	return render(request,'AppHONUSupper/advertise.html', {'form': form})
+
+@login_required
+def acceptance(request):
+	search_string = request.GET.get('name','')
+	users = 'SELECT * FROM bid,ride WHERE bid_id ~ \'%s\' AND bid.ride_id = ride.ride_id' % (search_string)
+	c = connection.cursor()
+	c.execute(users)
+	results = c.fetchall()
+	result_dict = {'records': results}
+	return render(request,'AppHONUSupper/acceptance.html',result_dict)
+	
+#@login_required
+#def acceptance(request):
+#	return render(request,'AppHONUSupper/acceptance.html')
+
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
