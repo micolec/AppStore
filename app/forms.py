@@ -1,13 +1,14 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import Ride, Bid
+#from .models import Ride, Bid
 		
 class CreateUserForm(UserCreationForm):
 	class Meta:
 		model = User
-		fields = ['username', 'email', 'first_name', 'last_name', 'password1', 'password2']
+		fields = ['username', 'first_name', 'last_name', 'password1', 'password2', 'phone_number', 'hall']
 
+"""		
 class Advertise(forms.ModelForm):
     class Meta:
         model = Ride
@@ -18,3 +19,4 @@ class Bid(forms.ModelForm):
         model = Bid
         fields = ["bid_id", "username", "ride", "bid_price"]
 
+"""
