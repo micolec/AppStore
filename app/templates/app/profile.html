@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+{% extends "AppCarPool/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	    <div class="content-section">
+      <div class="media">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.first_name }} {{ user.last_name }}</h2>
+          <p class="text-secondary">Username: {{ user.username }}</p>
+          <p class="text-secondary">Email: {{ user.email }}</p>
+        </div>
+      </div>
+      <!-- FORM HERE -->
+    </div>
+{% endblock content %}                         
