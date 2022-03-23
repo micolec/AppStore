@@ -146,7 +146,7 @@ def addgrouporder(request):
                 status = 'Order Open'
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing
-                           request.POST['order_date'] , request.POST['order_by'], status ])
+                           request.POST['order_date'] , request.POST['order_by'],status])
                 messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
                 return redirect('index')
             else:
