@@ -140,8 +140,10 @@ def addgrouporder(request):
             orderid = cursor.fetchone()
             ## No orderid with same details
             if orderid == None:
-                opening = orderid[4]
-                closing = orderid[5]
+		cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
+		shopdet = cursor.fetchone()
+                opening = shopdet[3]
+                closing = shopdet[4]
                 cursor.execute("SELECT MAX(group_order_id) FROM orderid")
                 new_id = cursor.fetchone() + 1
                 cursor.execute("INSERT INTO orderid VALUES (new_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open'", 
