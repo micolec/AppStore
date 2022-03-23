@@ -145,8 +145,8 @@ def addgrouporder(request):
                 cursor.execute("SELECT MAX(group_order_id) FROM orderid")
                 new_id = cursor.fetchone() + 1
                 cursor.execute("INSERT INTO orderid VALUES (new_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open'"
-                        , [request.POST['creator'], [request.POST['hall'], [request.POST['shopname'],[request.POST['order_date'], 
-                               [request.POST['order_by']])
+                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], 
+                               request.POST['order_by']])
                 
                 return redirect('index')    
             else:
