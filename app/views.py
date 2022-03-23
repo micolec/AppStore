@@ -116,3 +116,12 @@ def edit(request, id):
     context["status"] = status
  
     return render(request, "app/edit.html", context)
+
+def seller(request):        
+    if request.method == 'GET': # this will be GET now      
+        shop_name =  request.GET.get('search') # do some research what it does       
+        try:
+            status = Add_prod.objects.filter(shopname__icontains=shop_name) # filter returns a list so you might consider skip except part
+        return render(request,"sellerindex.html",{"shops":status})
+    else:
+        return render(request,"sellerindex.html",{})

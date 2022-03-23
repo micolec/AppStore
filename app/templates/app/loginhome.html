@@ -23,7 +23,7 @@ h3 {
 	</form>	
 	<h2>If you are a shop owner</h2>
 	<h3>See open orders for your shop</h3>
-	<form action="seller" method = "GET">
+	<form action="{% url 'seller' %}" method = "GET">
 		<label for="shop">Shop Name:</label><br>
 		<input type="text" name="shop" placeholder="Insert Shop Name"/><br><br>
 		<input type="submit" value="Search!"/><br><br>
