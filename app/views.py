@@ -47,6 +47,23 @@ def buyerindex(request):
 
     return render(request,'app/buyerindex.html',result_dict)
 
+def openorders(request):
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM buyer WHERE group_order_id = %s", [request.POST['id']])
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid ORDER BY group_order_id DESC")
+        grporders = cursor.fetchall()
+        # list of tuples
+
+    result_dict = {'records': grporders}
+
+    return render(request,'app/openorders.html',result_dict)
+
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
