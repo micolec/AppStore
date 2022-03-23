@@ -122,6 +122,6 @@ def seller(request):
         shop_name =  request.GET.get('search') # do some research what it does       
         try:
             status = Add_prod.objects.filter(shopname__icontains=shop_name) # filter returns a list so you might consider skip except part
-        return render(request,"sellerindex.html",{"shops":status})
+        return render(request,"sellerindex.html",{})
     else:
         return render(request,"sellerindex.html",{})
