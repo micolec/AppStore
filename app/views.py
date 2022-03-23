@@ -117,7 +117,7 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
-def seller(request):        
+def sellerindex(request):        
     if request.method == 'GET': # this will be GET now      
         shop_name =  request.GET.get('search') # do some research what it does       
         return render(request,"app/sellerindex.html",{})
