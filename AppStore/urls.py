@@ -24,6 +24,7 @@ urlpatterns = [
     path('login', app.views.login, name='login'),
     path('loginhome', app.views.loginhome, name='loginhome'),
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
+    path('sellerindex', app.views.sellerindex, name='sellerindex'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
     path('edit/<str:id>', app.views.edit, name='edit'),
