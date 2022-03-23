@@ -125,4 +125,4 @@ def sellerindex(request):
 
     result_dict = {'records': sellers}
 
-    return render(request,"app/sellerindex.html",{})
+    return render(request,"app/sellerindex.html",result_dict)
