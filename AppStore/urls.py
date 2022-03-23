@@ -26,6 +26,7 @@ urlpatterns = [
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
     path('add', app.views.add, name='add'),
+    path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
     path('view/<str:id>', app.views.view, name='view'),
     path('edit/<str:id>', app.views.edit, name='edit'),
 ]
