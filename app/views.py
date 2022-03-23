@@ -138,7 +138,7 @@ def addgrouporder(request):
 ## No orderid with same details
             if orderid == None:
                 cursor.execute("SELECT MAX(group_order_id) FROM orderid")
-                curr_id = cursor.fetchone()[0]
+                curr_id = cursor.fetchone()[0] + 1
                 cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
                 shopdet = cursor.fetchone()
                 opening = shopdet[3]
