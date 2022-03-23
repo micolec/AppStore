@@ -52,7 +52,7 @@ def openorders(request):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM buyer WHERE group_order_id = %s", [request.POST['id']])
+                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
