@@ -140,19 +140,19 @@ def addgrouporder(request):
             orderid = cursor.fetchone()
             ## No orderid with same details
             if orderid == None:
-			cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
-			shopdet = cursor.fetchone()
-			opening = shopdet[3]
-			closing = shopdet[4]
-			cursor.execute("SELECT MAX(group_order_id) FROM orderid")
-			new_id = cursor.fetchone() + 1
-			cursor.execute("INSERT INTO orderid VALUES (new_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open'", 
-				       [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], 
-				       request.POST['order_by']])
+		cursor.execute("SELECT * FROM shop WHERE shopname = %s",[request.POST['shopname']])
+		shopdet = cursor.fetchone()
+		opening = shopdet[3]
+		closing = shopdet[4]
+		cursor.execute("SELECT MAX(group_order_id) FROM orderid")
+		new_id = cursor.fetchone() + 1
+		cursor.execute("INSERT INTO orderid VALUES (new_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open'", 
+			       [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
                 
-                return redirect('index')    
+                return redirect('index')
+	
             else:
-                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
+		status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
 
 
     context['status'] = status
