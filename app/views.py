@@ -140,9 +140,9 @@ def addgrouporder(request):
             ## No orderid with same details
             if orderid == None:
                 cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
-		shopdet = cursor.fetchone()
-		opening = shopdet[3]
-		closing = shopdet[4]
+	        shopdet = cursor.fetchone()
+	        opening = shopdet[3]
+	        closing = shopdet[4]
                 cursor.execute("SELECT * FROM shop WHERE shopname = %s"
                         , [request.POST['shopname']])
                 messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
