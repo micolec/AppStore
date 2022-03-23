@@ -165,7 +165,7 @@ def addgrouporder(request):
                         , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing,
                            request.POST['order_date'] , request.POST['order_by'],status])
                 messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
-                return redirect('index')
+                return redirect('openorders')
             else:
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
 
