@@ -1,0 +1,48 @@
+{% extends "app/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+    <h1>Existing Open Orders</h1>
+    <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
+    <br> Here's a list of all current open orders. 
+    <br> <h2>Current Open Orders</h2>
+    <a href="addgrouporder">Don't see a group order from your hall to the restaurant your are eyeing? Click to start new group order!</a>
+    <br/><br/>
+    <table border=1>
+        <thead>
+            <th>Group Order ID</th>
+            <th>Creator's Username</th>
+            <th>Hall</th>
+            <th>Shop Name</th>
+            <th>Order Date</th>
+            <th>Order Closing Time</th>
+            <th>Order Status</th>
+            <th>Action</th>
+        </thead>
+        {% for order in records %}
+        <tr>
+            <td> {{ order.0 }} </td>
+            <td> {{ order.1 }} </td>
+            <td> {{ order.2 }} </td>
+            <td> {{ order.3 }} </td>
+            <td> {{ order.4 }} </td>
+            <td> {{ order.5 }} </td>
+            <td> {{ order.6 }} </td>
+            <td>
+                <a href="view/{{cust.0}}"><button>View</button></a> | 
+                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                | 
+                <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{cust.0}}"/>
+                <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
+              </form></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+{% endblock content %}
