@@ -117,11 +117,10 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
-def sellerindex(request):        
-    if request.method == 'GET': # this will be GET now      
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid ORDER BY shopname")
-            sellers = fetchall()
+def sellerindex(request):             
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid ORDER BY shopname")
+        sellers = fetchall()
 
     result_dict = {'records': sellers}
 
