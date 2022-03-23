@@ -125,3 +125,34 @@ def sellerindex(request):
     result_dict = {'records': sellers}
 
     return render(request,"app/sellerindex.html",result_dict)
+
+def addgrouporder(request):
+    """Shows the main page"""
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+
+            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s"
+                           , [request.POST['creator']], [request.POST['hall']], [request.POST['shopname']],[request.POST['order_date']], [request.POST['order_by']])
+            orderid = cursor.fetchone()
+            ## No orderid with same details
+            if orderid == None:
+                opening = orderid[4]
+                closing = orderid[5]
+                cursor.execute("SELECT MAX(group_order_id) FROM orderid")
+                new_id = cursor.fetchone() + 1
+                cursor.execute("INSERT INTO orderid VALUES (new_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open')"
+                        , [request.POST['creator']], [request.POST['hall']], [request.POST['shopname']],[request.POST['order_date']], 
+                               [request.POST['order_by']])
+                
+                return redirect('index')    
+            else:
+                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
+
+
+    context['status'] = status
+ 
+    return render(request, "app/addgrouporder.html", context)
