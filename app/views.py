@@ -143,9 +143,10 @@ def addgrouporder(request):
                 shopdet = cursor.fetchone()
                 opening = shopdet[3]
                 closing = shopdet[4]
-                cursor.execute("INSERT INTO orderid VALUES (curr_id, %s, %s, %s, opening, closing, %s, %s, 'Order Open')"
-                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
-                           request.POST['order_date'] , request.POST['order_by'] ])
+		status = 'Order Open'
+                cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing
+                           request.POST['order_date'] , request.POST['order_by'], status ])
                 messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
                 return redirect('index')
             else:
