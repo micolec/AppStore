@@ -136,7 +136,7 @@ def addgrouporder(request):
         with connection.cursor() as cursor:
 
             cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s"
-                           , [request.POST['creator']], [request.POST['hall']], [request.POST['shopname']],[request.POST['order_date']], [request.POST['order_by']])
+                           , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], request.POST['order_by'])
             orderid = cursor.fetchone()
             ## No orderid with same details
             if orderid == None:
