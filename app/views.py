@@ -120,7 +120,7 @@ def edit(request, id):
 def sellerindex(request):             
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid ORDER BY shopname")
-        sellers = fetchall()
+        sellers = cursor.fetchall()
 
     result_dict = {'records': sellers}
 
