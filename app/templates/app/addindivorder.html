@@ -5,7 +5,11 @@
 {% load static %}
 <html>
 <body>
-    <h2>Add New Individual Order to {{prev.1}} Group Order %s' % ([id]) for {{prev.2}} </h2>
+    <h2>Add New Individual Order to Group Order {{prev.0}}</h2>
+    <br>Shop's Name:{{prev.3}} 
+    <br>Hall:{{prev.2}} 
+    <br>Group Order Closing Time: {{prev.7}} 
+    <br>Group Order Created By: {{prev.1}} 
     <!-- Create a Form -->
     <form method="POST">
         <!-- Security token by Django -->
