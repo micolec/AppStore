@@ -29,10 +29,12 @@ h3   {
 	<table class="zui-table">
 	<tr>
 		<thead>
-			<th>Order Id</th>
+			<th>Order ID</th>
 			<th>Customer Username</th>
 			<th>Hall</th>
-			<th>Bid Price</th>
+			<th>Order Date</th>
+            <th>Order By</th>
+            <th>Delivery Status</th>
 		</thead>
 	</tr>
 		{% for r in records %}
@@ -41,7 +43,9 @@ h3   {
 			<td> {{ r.0 }} </td>
 			<td> {{ r.1 }} </td>
 			<td> {{ r.2 }} </td>
-			<td> {{ r.3 }} </td>
+			<td> {{ r.6 }} </td>
+            <td> {{ r.7 }} </td>
+            <td> {{ r.8 }} </td>
 		</tbody>
 	</tr>
 		{% endfor %}
