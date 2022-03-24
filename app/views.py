@@ -78,8 +78,6 @@ def view(request, id):
 
 def addindivorder(request, id):
     """links from open orders: join button"""
-    context = {}
-    status = ''
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -95,11 +93,8 @@ def addindivorder(request, id):
             messages.success(request, f'%s added to Group Order! Press add to order more items.' % (request.POST['item']))
             return redirect('openorders')
             """should link to viewindivorder"""
-
-
-    context['status'] = status
  
-    return render(request, "app/addindivorder.html", context, result_dict)
+    return render(request, "app/addindivorder.html", result_dict)
 
 # Create your views here.
 def add(request):
