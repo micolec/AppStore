@@ -17,7 +17,7 @@ def login(request):
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
             if password == [request.POST['password']]:
-                messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']]))
+                messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
@@ -108,7 +108,7 @@ def addindivorder(request, id):
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Press add to order more items.' % (request.POST['item']))
-            return redirect('viewindivorder/%s', [request.POST['username'])
+            return redirect('viewindivorder/%s', [request.POST['username']])
             """should link to viewindivorder"""
  
     return render(request, "app/addindivorder.html", result_dict)
