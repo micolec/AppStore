@@ -29,5 +29,6 @@ urlpatterns = [
     path('add', app.views.add, name='add'),
     path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
     path('view/<str:id>', app.views.view, name='view'),
+    path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
     path('edit/<str:id>', app.views.edit, name='edit'),
 ]
