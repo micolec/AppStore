@@ -136,7 +136,7 @@ def edit(request, id):
 
 def sellerindex(request):             
     search_string = request.GET.get('shopname','')
-    users = 'SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname ~ \'%s\''% (search_string)
+    users = 'SELECT * FROM orderid WHERE NOT delivery_status = "Food Delivered" AND shopname ~ \'%s\''% (search_string)
     c = connection.cursor()
     c.execute(users)
     results = c.fetchall()
