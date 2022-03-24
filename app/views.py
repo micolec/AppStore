@@ -64,6 +64,23 @@ def openorders(request):
 
     return render(request,'app/openorders.html',result_dict)
 
+def viewindivorder(request):
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM orders WHERE username = %s", [request.POST['username']])
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orders WHERE username = %s", [request.POST['username']])
+        indivorders = cursor.fetchall()
+        # list of tuples
+
+    result_dict = {'records': indivorders}
+
+    return render(request,'app/viewindivorder.html',result_dict)
+
 # Create your views here.
 def view(request, id):
     """Shows the main page"""
