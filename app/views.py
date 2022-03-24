@@ -17,7 +17,7 @@ def login(request):
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
             if password == [request.POST['password']]:
-                messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
+                messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']]))
                 return redirect('loginhome')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
