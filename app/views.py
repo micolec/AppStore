@@ -79,7 +79,7 @@ def view(request, id):
 def addindivorder(request, id):
     """links from open orders: join button"""
     with connection.cursor() as cursor:
-            cursor.execute("SELECT group_order_id, buyer_hall, shopname FROM orders WHERE group_order_id = %s", [id])
+            cursor.execute("SELECT group_order_id, hall, shopname FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
             group_ord_id = prev[0]
             hall = prev[1]
