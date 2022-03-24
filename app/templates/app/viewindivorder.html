@@ -30,11 +30,9 @@
             <td> {{ order.5 }} </td>
             <td> {{ order.6 }} </td>
             <td> {{ order.7 }} </td>
-            <td>
-                <a href="addindivorder/{{order.0}}"><button>Join this Group Order</button></a> | 
+            <td> 
                 <a href="edit/{{cust.0}}"><button>Edit</button></a>
-                | 
-                <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
+                
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="un" value="{{order.0}}"/>
