@@ -65,7 +65,7 @@ def openorders(request):
     return render(request,'app/openorders.html',result_dict)
 
 def viewindivorder(request, id):
-    ## Delete customer NEED TO FIX!!!!
+    ## Delete customer NEED TO FIX!!!! must add condition on item also
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
