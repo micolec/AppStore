@@ -107,7 +107,7 @@ def addindivorder(request, id):
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
-            messages.success(request, f'%s added to Group Order! Press add to order more items.' % (request.POST['item']))
+            messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
  
