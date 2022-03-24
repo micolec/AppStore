@@ -78,9 +78,7 @@ def view(request, id):
 
 def addindivorder(request, id):
     """links from open orders: join button"""
-
-    if request.POST:
-        with connection.cursor() as cursor:
+    with connection.cursor() as cursor:
             cursor.execute("SELECT group_order_id, buyer_hall, shopname FROM orders WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
             group_ord_id = prev[0]
@@ -88,6 +86,8 @@ def addindivorder(request, id):
             shopname = prev[2]
             result_dict = {'prev': prev}
 
+    if request.POST:
+        with connection.cursor() as cursor:
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Press add to order more items.' % (request.POST['item']))
