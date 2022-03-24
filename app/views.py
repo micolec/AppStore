@@ -73,7 +73,7 @@ def viewindivorder(request):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE id = %s", [request.POST['id']])
+        cursor.execute("SELECT * FROM orders WHERE username = %s", [request.POST['un']])
         indivorders = cursor.fetchall()
         # list of tuples
 
