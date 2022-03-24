@@ -56,7 +56,7 @@ def openorders(request):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid ORDER BY group_order_id DESC")
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
         grporders = cursor.fetchall()
         # list of tuples
 
