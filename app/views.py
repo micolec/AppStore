@@ -56,13 +56,30 @@ def openorders(request):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid ORDER BY group_order_id DESC")
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
         grporders = cursor.fetchall()
         # list of tuples
 
     result_dict = {'records': grporders}
 
     return render(request,'app/openorders.html',result_dict)
+
+def viewindivorder(request, id):
+    ## Delete customer NEED TO FIX!!!! must add condition on item also
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
+        indivorders = cursor.fetchall()
+        # list of tuples
+
+    result_dict = {'records': indivorders}
+
+    return render(request,'app/viewindivorder.html',result_dict)
 
 # Create your views here.
 def view(request, id):
@@ -75,6 +92,26 @@ def view(request, id):
     result_dict = {'buyer': buyer}
 
     return render(request,'app/view.html',result_dict)
+
+def addindivorder(request, id):
+    """links from open orders: join button"""
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_ord_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
+            messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
+            return redirect(f'/viewindivorder/%s' % (request.POST['username']))
+            """should link to viewindivorder"""
+ 
+    return render(request, "app/addindivorder.html", result_dict)
 
 # Create your views here.
 def add(request):

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+{% extends "app/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+    <h2>Add your order!</h2>
+    Group Order ID: {{prev.0}}
+    <br>Shop's Name: {{prev.3}} 
+    <br>Hall: {{prev.2}} 
+    <br>Order Closing Time: {{prev.7}} 
+    <br>Order Creator: {{prev.1}} 
+    <br>
+    <br> View Menu here:
+    <br> (Insert Link to Menu)
+    <br>
+    <br>
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">
+        Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_username"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">
+        Item<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="item" maxlength="64" class="textinput textInput" required="" id="id_item"> </div> </div> <div id="div_id_item" class="control-group"> <label for="id_item" class="control-label requiredField">
+        Quantity of Item<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" maxlength="32" class="textinput textInput" required="" id="id_qty"> </div> </div> <div id="div_id_qty" class="control-group"> <label for="id_qty" class="control-label requiredField">
+
+        <br>
+        <button type="submit" value="Sign Up">Add</button>
+    </form>
+</body>
+</html>
+{% endblock content %}
