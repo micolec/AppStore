@@ -69,7 +69,7 @@ def viewindivorder(request):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [request.POST['username']])
+                cursor.execute("DELETE FROM orders WHERE username = %s", [request.POST['un']])
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
