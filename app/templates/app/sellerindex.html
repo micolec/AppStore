@@ -1,41 +1,51 @@
-{% extends "app/base.html" %}
+{% extends "AppCarPool/base.html" %}
 {% block content %}
-{% load static %}
-<html>
-<body>
-    <h1>WELCOME</h1>
-    <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
-    <br> Hi there! Welcome to HONUSupper- an application for hungry residents from NUS Halls to join group orders where everyone can chip in to lower the delivery fee :D
-    <br> <h2>Existing orders in HONUSuppers</h2>
-    <a href="add">New Buyer? Register here!</a>
-    <br/><br/>
-    <table border=1>
-        <thead>
-            <th>Username</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Hall</th>
-            <th>Action</th>
-        </thead>
-        {% for cust in records %}
-        <tr>
-            <td> {{ cust.0 }} </td>
-            <td> {{ cust.2 }} </td>
-            <td> {{ cust.3 }} </td>
-            <td> {{ cust.5 }} </td>
-            <td>
-                <a href="view/{{cust.0}}"><button>View</button></a> | 
-                <a href="edit/{{cust.0}}"><button>Edit</button></a>
-                | 
-                <form method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{cust.0}}"/>
-                <button onclick="return confirm('Are you sure you want to delete {{cust.0}}?');" type="submit" name="action" value="delete">Delete</button> 
-              </form></td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
-
+	<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 32px Arial, sans-serif;}
+h3   {
+	font: normal 20px Arial, sans-serif;}
+	</style>
+	<h2>Current Bids
+	</h2>
+	<body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+			<th>Bid Id</th>
+			<th>Rider Username</th>
+			<th>Ride Id</th>
+			<th>Bid Price</th>
+		</thead>
+	</tr>
+		{% for r in records %}
+	<tr>
+		<tbody>
+			<td> {{ r.0 }} </td>
+			<td> {{ r.1 }} </td>
+			<td> {{ r.2 }} </td>
+			<td> {{ r.3 }} </td>
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	</body>
 {% endblock content %}

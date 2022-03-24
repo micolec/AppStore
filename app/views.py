@@ -135,12 +135,12 @@ def edit(request, id):
     return render(request, "app/edit.html", context)
 
 def sellerindex(request):             
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid ORDER BY shopname")
-        sellers = cursor.fetchall()
-
-    result_dict = {'records': sellers}
-
+    search_string = request.GET.get('shopname','')
+    users = 'SELECT * FROM orderid WHERE shopname ~ \'%s\''% (search_string)
+    c = connection.cursor()
+    c.execute(users)
+    results = c.fetchall()
+    result_dict = {'records': results}
     return render(request,"app/sellerindex.html",result_dict)
 
 def addgrouporder(request):
