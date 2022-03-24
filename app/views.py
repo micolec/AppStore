@@ -64,16 +64,16 @@ def openorders(request):
 
     return render(request,'app/openorders.html',result_dict)
 
-def viewindivorder(request):
-    ## Delete customer
+def viewindivorder(request, id):
+    ## Delete customer NEED TO FIX!!!!
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [request.POST['un']])
+                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE username = %s", [request.POST['un']])
+        cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
         indivorders = cursor.fetchall()
         # list of tuples
 
