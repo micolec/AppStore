@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+{% extends "app/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+    <h2>Edit this item!</h2>
+    Item: {{r.1}}
+    <br>Price: {{r.2}} 
+
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_item" class="control-group"> <label for="id_item" class="control-label requiredField">
+        Item<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="item" maxlength="64" class="textinput textInput" required="" id="id_item"> </div> </div> <div id="div_id_item" class="control-group"> <label for="id_item" class="control-label requiredField">
+        Price<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="price" maxlength="32" class="textinput textInput" required="" id="id_"> </div> </div> <div id="div_id_price" class="control-group"> <label for="id_price" class="control-label requiredField">
+
+        <br>
+        <button type="submit" value="Edit">Add</button>
+    </form>
+</body>
+</html>
+{% endblock content %}
