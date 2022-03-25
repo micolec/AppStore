@@ -204,6 +204,22 @@ def seller_orderid(request, id):
  
     return render(request, "app/seller_orderid.html", result_dict)
 
+def seller_menu(request):
+    search_string = request.GET.get('shopname','')
+    users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
+    c = connection.cursor()
+    c.execute(users)
+    results = c.fetchall()
+    result_dict = {'records': results}
+
+    if request.POST:
+        if request.POST['action'] == 'edit':
+            return render(request,"app/seller_menu.html",result_dict)
+
+    return render(request,"app/seller_menu.html",result_dict)   
+
+
+
 def addgrouporder(request):
     context = {}
     status = ''
