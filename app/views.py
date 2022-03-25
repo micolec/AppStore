@@ -208,7 +208,7 @@ def seller_orderid(request, id):
 
 def seller_menu(request):
     search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM item WHERE shopname = %s", [search_string]
+    users = ("SELECT * FROM item WHERE shopname = %s", [search_string])
     c = connection.cursor()
     c.execute(users)
     results = c.fetchall()
