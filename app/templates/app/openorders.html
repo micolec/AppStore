@@ -11,6 +11,23 @@
     <br> <h3> Create New Group Order</h3>
     <a href="addgrouporder">Don't see a group order from your hall to the restaurant your are eyeing? Click to start new group order!</a>
     <br/><br/>
+
+    <form method="POST">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Choose your Shop</legend>
+        </fieldset>
+    <!-- Security token by Django -->
+        {% csrf_token %}
+    <!-- form -->
+    <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
+    Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
+    Shop<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="password" maxlength="64" class="textinput textInput" required="" id="id_shop"> </div> </div> <div id="div_id_shop" class="control-group"> <label for="id_shop" class="control-label requiredField">
+        
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Log In </button>
+        </div>
+    </form>
+
     <table border=1>
         <thead>
             <th>Group Order ID</th>
