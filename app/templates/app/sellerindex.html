@@ -49,7 +49,7 @@ h3   {
             <td> {{ r.7 }} </td>
             <td> {{ r.8 }} </td>
 			<td>
-                <a href="seller_orderid"><button>Edit</button></a>
+                <a href="seller_orderid/{{r.0}}"><button>Edit</button></a>
                 <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
