@@ -20,8 +20,7 @@
         {% csrf_token %}
         <!-- form -->
         <div id="div_id_delivery_status" class="control-group"> <label for="id_delivery_status" class="control-label requiredField">
-        Order Status<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="delivery_status" maxlength="64" class="textinput textInput" required="" id="id_delivery_status"> </div> </div> <div id="div_id_delivery_status" class="control-group"> <label for="id_delivery_status" class="control-label requiredField">
-
+        Order Status<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="delivery_status" value="{{r.8}}" maxlength="64" class="textinput textInput" required="" id="id_delivery_status"> </div> </div>
         <br>
         <button type="submit" value="edit">Edit</button>
     </form>
