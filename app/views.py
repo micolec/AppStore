@@ -86,11 +86,11 @@ def openorders(request):
     # context['status'] = status
 
     ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
-
+#    if request.POST:
+#        if request.POST['action'] == 'delete':
+#            with connection.cursor() as cursor:
+#                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
+#
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
@@ -243,7 +243,7 @@ def seller_orderid(request, id):
 
 def seller_menu(request):
     search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM item WHERE shopname = %s", [search_string]
+    users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
     c = connection.cursor()
     c.execute(users)
     results = c.fetchall()
