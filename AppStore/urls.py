@@ -25,6 +25,7 @@ urlpatterns = [
     path('loginhome', app.views.loginhome, name='loginhome'),
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
+    path('seller_orderid', app.views.seller_orderid, name='seller_orderid'),
     path('openorders', app.views.openorders, name='openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
     path('add', app.views.add, name='add'),
