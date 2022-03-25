@@ -191,7 +191,7 @@ def seller_orderid(request, id):
     with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
-            group_ord_id = prev[0]
+            group_order_id = prev[0]
             hall = prev[2]
             shopname = prev[3]
             result_dict = {'prev': prev}
