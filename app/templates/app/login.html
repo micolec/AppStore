@@ -2,12 +2,12 @@
 
 {% extends "app/base.html" %}
 {% block content %}
-    <div class="float-container">
-        <div class="float-child">
-            <div class="green">Login as Buyer</div>
-
+	<div class="content-section">
+	<p style="color:red">{{ status|safe }}</p>
         <form method="POST">
-        
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Log In</legend>
+            </fieldset>
 		<!-- Security token by Django -->
         	{% csrf_token %}
 		<!-- form -->
@@ -21,15 +21,8 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                 New User? <a class="ml-2" href="{% url 'add' %}">Sign Up</a>
+                 New Buyer? <a class="ml-2" href="{% url 'add' %}">Sign Up Here</a>
             </small>
         </div>
-        </div>
-
-        <div class="float-child">
-            <div class="blue">Float Column 2</div>
-        </div>
     </div>
-
-
 {% endblock content %}                     
