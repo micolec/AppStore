@@ -2,6 +2,14 @@
 {% block content %}
 {% load static %}
 <html>
+<style>
+h2   {
+	font: normal 32px Arial, sans-serif;
+}
+h3 {
+ font: normal 20px Arial, sans-serif;
+}
+</style>
 <body>
     <!--<h1>Existing Open Orders</h1>-->
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
@@ -12,23 +20,21 @@
     <a href="addgrouporder">Don't see a group order from your hall to the restaurant your are eyeing? Click to start new group order!</a>
     <br/><br/>
 
-    <form method="POST">
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Choose your Preferred Shop</legend>
-        </fieldset>
-    <!-- Security token by Django -->
-        {% csrf_token %}
-    <!-- form -->
-    <!-- PROBLEM!!!!! -->
-    <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-    Hall<span class="">*</span> </label> <div class="controls"> <input type="text" name="buyer_hall" maxlength="64" class="textinput textInput" required="" id="id_buyer_hall"> </div> </div> <div id="div_id_buyer_hall" class="control-group"> <label for="id_buyer_hall" class="control-label">
-    Shop<span class="">*</span> </label> <div class="controls"> <input type="text" name="shopname" maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label">
-        
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit"> Filter </button>
-        </div>
-    </form>
-
+    <h3>Edit your menu</h3>
+	<form action="seller_menu" method = "GET">
+		<label for="shopname">Shop Name:</label><br>
+		<input type="text" name="shopname" placeholder="Insert Shop Name"/><br><br>
+		<input type="submit" value="Search!"/><br><br>
+	</form>	
+	<h3>See open orders for your shop</h3>
+	<form action="sellerindex" method = "GET">
+		<label for="shopname">Shop Name:</label><br>
+		<input type="text" name="shopname" placeholder="Insert Shop Name"/><br><br>
+		<input type="submit" value="Search!"/><br><br>
+	</form>	
+	
+</form>
+	</form>
     <table border=1>
         <thead>
             <th>Group Order ID</th>
