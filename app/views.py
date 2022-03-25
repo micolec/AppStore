@@ -217,7 +217,7 @@ def seller_menu(request):
 
     return render(request,"app/seller_menu.html",result_dict)   
 
-def edit_menu(request, id):
+def edit_menu(request):
 
     context ={}
 
