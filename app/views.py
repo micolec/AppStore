@@ -211,6 +211,10 @@ def seller_menu(request):
     results = c.fetchall()
     result_dict = {'records': results}
 
+    if request.POST:
+        with connection.cursor() as cursor:
+            return redirect(f'/edit_menu')
+
     return render(request,"app/seller_menu.html",result_dict)   
 
 def edit_menu(request, id):
