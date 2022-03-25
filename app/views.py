@@ -212,10 +212,6 @@ def seller_menu(request):
     results = c.fetchall()
     result_dict = {'records': results}
 
-    if request.POST:
-        if request.POST['action'] == 'edit':
-            return render(request,"app/seller_menu.html",result_dict)
-
     return render(request,"app/seller_menu.html",result_dict)   
 
 
