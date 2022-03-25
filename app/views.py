@@ -68,22 +68,22 @@ def buyerindex(request):
 
 def openorders(request):
 
-    # context = {}
-    # status = ''
+    context = {}
+    status = ''
 
-    # if request.POST:
-    #     ## Check if hall is present
-    #     with connection.cursor() as cursor:
-    #         cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
-    #         shopname = cursor.fetchone()[0]
-    #         if shopname == request.POST['shopname']:
-    #             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-    #             return redirect('openorders')    
-    #         else:
-    #             status = 'Unable to query. Either hall name or shop name is incorrect.'
+    if request.POST:
+        ## Check if hall is present
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
+            shopname = cursor.fetchone()[0]
+            if shopname == request.POST['shopname']:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('openorders')    
+            else:
+                status = 'Unable to query. Either hall name or shop name is incorrect.'
 
 
-    # context['status'] = status
+    context['status'] = status
 
     ## Delete customer
     if request.POST:
@@ -99,7 +99,7 @@ def openorders(request):
 
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html', result_dict)
+    return render(request,'app/openorders.html',context, result_dict)
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also

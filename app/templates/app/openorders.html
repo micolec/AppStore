@@ -14,17 +14,17 @@
 
     <form method="POST">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Choose your Shop</legend>
+            <legend class="border-bottom mb-4">Choose your Preferred Shop</legend>
         </fieldset>
     <!-- Security token by Django -->
         {% csrf_token %}
     <!-- form -->
     <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-    Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
-    Shop<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="password" maxlength="64" class="textinput textInput" required="" id="id_shop"> </div> </div> <div id="div_id_shop" class="control-group"> <label for="id_shop" class="control-label requiredField">
+    Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="buyer_hall" maxlength="64" class="textinput textInput" required="" id="id_buyer_hall"> </div> </div> <div id="div_id_buyer_hall" class="control-group"> <label for="id_buyer_hall" class="control-label requiredField">
+    Shop<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="shopname" maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
         
         <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Log In </button>
+            <button class="btn btn-outline-info" type="submit"> Filter </button>
         </div>
     </form>
 
