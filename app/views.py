@@ -33,7 +33,7 @@ def loginseller(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT password FROM seller WHERE username = %s", [request.POST['username']])
+            cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
