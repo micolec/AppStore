@@ -99,7 +99,7 @@ def openorders(request):
 
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html',context, result_dict)
+    return render(request,'app/openorders.html', result_dict)
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
