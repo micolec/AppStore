@@ -198,7 +198,7 @@ def seller_orderid(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE delivery_status SET %s"
+            cursor.execute("UPDATE orderid SET delivery_status = %s"
                     , request.POST['delivery_status'])
             messages.success(request, f'Delivery Status has been updated!' % (request.POST['item']))
             return redirect(f'/sellerindex')
