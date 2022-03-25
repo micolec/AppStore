@@ -29,8 +29,8 @@ def login(request):
  
     return render(request, "app/login.html", context)
 
-def loginhome(request):
-	return render(request,'app/loginhome.html')
+def loginhome(request):   
+    return render(request,'app/loginhome.html')
 
 def buyerindex(request):
     ## Delete customer
@@ -173,14 +173,50 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
+# vito
 def sellerindex(request):             
     search_string = request.GET.get('shopname','')
-    users = 'SELECT * FROM orderid WHERE NOT delivery_status = "Food Delivered" AND shopname ~ \'%s\''% (search_string)
+    users = "SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname ~ \'%s\'"% (search_string)
     c = connection.cursor()
     c.execute(users)
     results = c.fetchall()
     result_dict = {'records': results}
+
+    if request.POST:
+        if request.POST['action'] == 'edit':
+            return render(request,"app/seller_orderid.html",result_dict)
+
     return render(request,"app/sellerindex.html",result_dict)
+
+def seller_orderid(request, id):
+    """links from sellerindex: edit button"""
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_order_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], prev[0]))
+            messages.success(request, f'Delivery Status has been updated!')
+            return redirect(f'/sellerindex')
+ 
+    return render(request, "app/seller_orderid.html", result_dict)
+
+def seller_menu(request):
+    search_string = request.GET.get('shopname','')
+    users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
+    c = connection.cursor()
+    c.execute(users)
+    results = c.fetchall()
+    result_dict = {'records': results}
+
+    return render(request,"app/seller_menu.html",result_dict)   
+
+
 
 def addgrouporder(request):
     context = {}

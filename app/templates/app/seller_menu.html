@@ -30,12 +30,9 @@ h3   {
 	<table class="zui-table">
 	<tr>
 		<thead>
-			<th>Order ID</th>
-			<th>Customer Username</th>
-			<th>Hall</th>
-			<th>Order Date</th>
-            <th>Order By</th>
-            <th>Delivery Status</th>
+			<th>Shop Item</th>
+			<th>Item</th>
+			<th>Price</th>
 			<th>Action</th>
 		</thead>
 	</tr>
@@ -45,15 +42,14 @@ h3   {
 			<td> {{ r.0 }} </td>
 			<td> {{ r.1 }} </td>
 			<td> {{ r.2 }} </td>
-			<td> {{ r.6 }} </td>
-            <td> {{ r.7 }} </td>
-            <td> {{ r.8 }} </td>
+			<td> {{ r.3 }} </td>
 			<td>
-                <a href="seller_orderid/{{r.0}}"><button>Edit</button></a>
-                <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
+                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="id" value="{{r.8}}"/>
+                <input type="hidden" name="un" value="{{r.0}}"/>
+                <button onclick type="submit" name="action" value="delete">Delete</button> 
               </form></td>
 		</tbody>
 	</tr>
