@@ -17,7 +17,7 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('loginhome')    
+                return redirect('openorders')    
             else:
                 status = 'None. Unable to login. Either username or password is incorrect.' + request.POST['password']
 
