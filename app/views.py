@@ -15,11 +15,11 @@ def login(request):
         with connection.cursor() as cursor:
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
-            if password == 'F9DNb1surVlB':
+            if password == request.POST['password']:
                 messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
             else:
-                status = 'None. Unable to login. Either username or password is incorrect.' + password
+                status = 'None. Unable to login. Either username or password is incorrect.' + request.POST['password']
 
 
     context['status'] = status
@@ -205,44 +205,13 @@ def seller_orderid(request, id):
 
 def seller_menu(request):
     search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
+    users = "SELECT * FROM item WHERE shopname = %s", [search_string]
     c = connection.cursor()
     c.execute(users)
     results = c.fetchall()
     result_dict = {'records': results}
 
-    if request.POST:
-        with connection.cursor() as cursor:
-            return redirect(f'/edit_menu')
-
     return render(request,"app/seller_menu.html",result_dict)   
-
-def edit_menu(request):
-
-    context ={}
-
-    # fetch the object related to passed id
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE item = %s", [id])
-        obj = cursor.fetchone()
-
-    status = ''
-    # save the data from the form
-
-    if request.POST:
-        ##TODO: date validation
-        with connection.cursor() as cursor:
-            cursor.execute("UPDATE item SET price = %s WHERE item = %s"
-                    , [request.POST['price'], request.POST['item'], [id]])
-            status = 'Menu edited successfully!'
-            cursor.execute("SELECT * FROM item WHERE shopname = %s", [id])
-            obj = cursor.fetchone()
-
-    context["obj"] = obj
-    context["status"] = status
- 
-    return render(request, "app/edit_menu.html", context)
-
 
 
 
