@@ -27,22 +27,7 @@ def login(request):
  
     return render(request, "app/login.html", context)
 
-def loginhome(request):
-    search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM SupperItem WHERE shopname ~ \'%s\'"% (search_string)
-    c = connection.cursor()
-    c.execute(users)
-    results = c.fetchall()
-    result_dict = {'records': results}
-    
-    if request.POST:
-        if request.POST['action'] == 'seller_menu':
-            return render(request,"app/seller_menu.html",result_dict)
-
-    if request.POST:
-        if request.POST['action'] == 'sellerindex':
-            return render(request,"app/sellerindex.html",result_dict)
-            
+def loginhome(request):   
     return render(request,'app/loginhome.html')
 
 def buyerindex(request):
