@@ -189,7 +189,7 @@ def sellerindex(request):
 def seller_orderid(request, id):
     """links from sellerindex: edit button"""
     with connection.cursor() as cursor:
-           # cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
             group_order_id = prev[0]
             hall = prev[2]
