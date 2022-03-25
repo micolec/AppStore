@@ -204,7 +204,7 @@ def seller_orderid(request, id):
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
  
-    return render(request, "app/addindivorder.html", result_dict)
+    return render(request, "app/seller_orderid.html", result_dict)
 
 def addgrouporder(request):
     context = {}
