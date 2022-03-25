@@ -17,7 +17,7 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('openorders')    
+                return redirect('buyerindex')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
@@ -37,7 +37,7 @@ def loginseller(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('loginhome')    
+                return redirect('sellerindex')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
