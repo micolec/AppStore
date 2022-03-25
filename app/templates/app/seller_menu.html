@@ -30,7 +30,6 @@ h3   {
 	<table class="zui-table">
 	<tr>
 		<thead>
-			<th>Shop Item</th>
 			<th>Item</th>
 			<th>Price</th>
 			<th>Action</th>
@@ -39,12 +38,10 @@ h3   {
 		{% for r in records %}
 	<tr>
 		<tbody>
-			<td> {{ r.0 }} </td>
 			<td> {{ r.1 }} </td>
 			<td> {{ r.2 }} </td>
-			<td> {{ r.3 }} </td>
 			<td>
-                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                <a href="edit/{{r.1}}"><button>Edit</button></a>
                 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
