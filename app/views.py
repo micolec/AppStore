@@ -15,12 +15,14 @@ def login(request):
         with connection.cursor() as cursor:
 
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[1]
+            password = cursor.fetchone()[0]
             if password == [request.POST['password']]:
                 messages.success(request, f'Welcome user %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
+            if password == None:
+                status = 'None. Unable to login. Either username or password is incorrect.'
             else:
-                status = 'Unable to login. Either username or password is incorrect.'
+                status = 'boo'
 
 
     context['status'] = status
