@@ -178,7 +178,14 @@ def sellerindex(request):
     c.execute(users)
     results = c.fetchall()
     result_dict = {'records': results}
+
+    if request.POST:
+        if request.POST['action'] == 'edit':
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE orderid SET delivery_status = %s", [request.POST['id']])
+
     return render(request,"app/sellerindex.html",result_dict)
+
 
 def addgrouporder(request):
     context = {}
