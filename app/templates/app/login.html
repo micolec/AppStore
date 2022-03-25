@@ -2,39 +2,34 @@
 
 {% extends "app/base.html" %}
 {% block content %}
+    <div class="float-container">
+        <div class="float-child">
+            <div class="green">Login as Buyer</div>
 
-<div class="float-container">
-
-  <div class="float-child">
-    <div class="green">Float Column 1</div>
-        <div class="content-section">
-        <p style="color:red">{{ status|safe }}</p>
-            <form method="POST">
-                <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Log In</legend>
-                </fieldset>
-            <!-- Security token by Django -->
-                {% csrf_token %}
-            <!-- form -->
-            <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-            Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_username"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">
-            Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="password" name="password" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_password" class="control-group"> <label for="id_password" class="control-label requiredField">
-                
-                <div class="form-group">
-                    <button class="btn btn-outline-info" type="submit">Log In </button>
-                </div>
-            </form>
-            <div class="border-top pt-3">
-                <small class="text-muted">
-                    New User? <a class="ml-2" href="{% url 'add' %}">Sign Up</a>
-                </small>
+        <form method="POST">
+        
+		<!-- Security token by Django -->
+        	{% csrf_token %}
+		<!-- form -->
+		<div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
+		Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_username"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">
+		Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="password" name="password" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_password" class="control-group"> <label for="id_password" class="control-label requiredField">
+            
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">Log In </button>
             </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                 New User? <a class="ml-2" href="{% url 'add' %}">Sign Up</a>
+            </small>
+        </div>
+        </div>
+
+        <div class="float-child">
+            <div class="blue">Float Column 2</div>
         </div>
     </div>
 
-    <div class="float-child">
-        <div class="blue">Float Column 2</div>
-    </div>
-</div>
 
 {% endblock content %}                     

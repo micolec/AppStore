@@ -28,10 +28,12 @@ h1   {color: Grey;
 		  </button>
 		 
 		  <div class="collapse navbar-collapse" id="navbarToggle">
+			"""
 			<div class="navbar-nav mr-auto">
 				<a class="nav-item nav-link" href="/openorders">Open Group Orders</a>
 				<a class="nav-item nav-link" href="/addgrouporder">Create New Group Order</a>
 			</div>
+			""""
 			<!-- Navbar Right Side -->
 			<div class="navbar-nav">
 			{% if user.is_authenticated %}
@@ -39,7 +41,9 @@ h1   {color: Grey;
 				  <a class="nav-item nav-link" href="/admin">Administer</a>
 				  <a class="nav-item nav-link" href="/app/buyerindex">Profile</a>
 				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Logout</a>
-				{% else %}  
+				{% else %} 
+				  <a class="nav-item nav-link" href="/openorders">Open Group Orders</a>
+				  <a class="nav-item nav-link" href="/addgrouporder">Create New Group Order</a>
 				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Profile</a>
 				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Logout</a>
 				{% endif %}
