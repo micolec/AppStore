@@ -171,6 +171,7 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
+# vito
 def sellerindex(request):             
     search_string = request.GET.get('shopname','')
     users = "SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname ~ \'%s\'"% (search_string)
@@ -181,11 +182,29 @@ def sellerindex(request):
 
     if request.POST:
         if request.POST['action'] == 'edit':
-            with connection.cursor() as cursor:
-                cursor.execute("UPDATE orderid SET delivery_status = %s", [request.POST['id']])
+            return render(request,"app/seller_orderid.html",result_dict)
 
     return render(request,"app/sellerindex.html",result_dict)
 
+def seller_orderid(request, id):
+    """links from sellerindex: edit button"""
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_ord_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                    , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
+            messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
+            return redirect(f'/viewindivorder/%s' % (request.POST['username']))
+            """should link to viewindivorder"""
+ 
+    return render(request, "app/addindivorder.html", result_dict)
 
 def addgrouporder(request):
     context = {}
