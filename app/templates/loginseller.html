@@ -6,7 +6,7 @@
 	<p style="color:red">{{ status|safe }}</p>
         <form method="POST">
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Log In as Buyer</legend>
+                <legend class="border-bottom mb-4">Log In as Seller</legend>
             </fieldset>
 		<!-- Security token by Django -->
         	{% csrf_token %}
@@ -21,7 +21,7 @@
         </form>
         <div class="border-top pt-3">
             <small class="text-muted">
-                 New Buyer? <a class="ml-2" href="{% url 'add' %}">Register Here</a>
+                 New Seller? <a class="ml-2" href="{% url 'add' %}">Register Here</a>
             </small>
         </div>
     </div>
