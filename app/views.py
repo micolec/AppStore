@@ -112,6 +112,7 @@ def viewindivorder(request, id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
         indivorders = cursor.fetchall()
+        grpid = indivorders[0][2]
         # list of tuples
 
     result_dict = {'records': indivorders}
