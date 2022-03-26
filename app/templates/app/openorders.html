@@ -3,13 +3,29 @@
 {% load static %}
 <html>
 <style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
 h2   {
-	font: normal 32px Arial, sans-serif;
-}
-h3 {
- font: normal 20px Arial, sans-serif;
-}
-</style>
+	font: normal 32px Arial, sans-serif;}
+h3   {
+	font: normal 20px Arial, sans-serif;}
+	</style>
 <body>
     <!--<h1>Existing Open Orders</h1>-->
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
