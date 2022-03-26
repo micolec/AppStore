@@ -31,10 +31,9 @@ h3   {
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     <br> <h1>Item(s) ordered</h1>
     Here's a list of all items you ordered. 
-    <br>
-    <br> Add more items
+    <br> Click to
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/{{indivorders.2}}"><button>Add</button></a>
+    <a href="/addindivorder/{{indivorders.2}}"><button>Add</button></a> more items
     <form method="POST" style="display: inline;">
     {% csrf_token %}
     <input type="hidden" name="id" value="{{indivorders.2}}"/>
