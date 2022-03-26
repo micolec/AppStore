@@ -33,10 +33,10 @@ h3   {
     Here's a list of all items you ordered. 
     <br> Click to
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/{{grpid}}"><button>Add</button></a> more items
+    <a href="/addindivorder/{{indivorders[0][2]}}"><button>Add</button></a> more items
     <form method="POST" style="display: inline;">
     {% csrf_token %}
-    <input type="hidden" name="grpid" value="{{grpid}}"/>
+    <input type="hidden" name="grpid" value="{{indivorders[0][2]}}"/>
    </form></td>
     <br/><br/>
     <table class="zui-table">
@@ -73,10 +73,11 @@ h3   {
         </tr>
         {% endfor %}
 	    </form> 
-    <br>     
-</body>
+	</table>
     <br> Click here to find your total cost (with delivery fee)
     <br> Insert Link --> Aggregate SQL Query   
+    <br>
+</body>
 </html>
 
 {% endblock content %}
