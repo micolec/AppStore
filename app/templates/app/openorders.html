@@ -26,7 +26,6 @@ h2   {
 h3   {
 	font: normal 20px Arial, sans-serif;}
 	</style>
-<body>
     <!--<h1>Existing Open Orders</h1>-->
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     <br> <h2>All Group Orders</h2>
@@ -46,41 +45,41 @@ h3   {
 	</form>	
 	
 </form>
-	</form>
-    <table border=1>
-        <thead>
-            <th>Group Order ID</th>
-            <th>Creator's Username</th>
-            <th>Hall</th>
-            <th>Shop Name</th>
-            <th>Order Date</th>
-            <th>Order Closing Time</th>
-            <th>Order Status</th>
-            <th>Action</th>
-        </thead>
-        {% for order in records %}
-        <tr>
-            <td> {{ order.0 }} </td>
-            <td> {{ order.1 }} </td>
-            <td> {{ order.2 }} </td>
-            <td> {{ order.3 }} </td>
-            <td> {{ order.6 }} </td>
-            <td> {{ order.7 }} </td>
-            <td> {{ order.8 }} </td>
-            <td>
-                <a href="addindivorder/{{order.0}}"><button>Join this Group Order</button></a> | 
-                <a href="edit/{{cust.0}}"><button>Edit</button></a>
-                | 
-                <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
+
+	<body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Group Order ID</th>
+                        <th>Creator's Username</th>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Order Date</th>
+                        <th>Order Closing Time</th>
+                        <th>Order Status</th>
+                        <th>Action</th>
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.6 }} </td>
+                        <td> {{ order.7 }} </td>
+                        <td> {{ order.8 }} </td>
+                        <td>
+                <a href="addindivorder/{{order.0}}"><button>Join Group Order</button></a>
+                <a href="seller_orderid/{{order.0}}"><button>Edit</button></a>
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="id" value="{{order.0}}"/>
-                <button onclick="return confirm('Are you sure you want to delete {{order.0}}?');" type="submit" name="action" value="delete">Delete</button> 
+                <input type="hidden" name="un" value="{{order.0}}"/>
               </form></td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
-
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	</body>
 {% endblock content %}
