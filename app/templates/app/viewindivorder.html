@@ -32,7 +32,7 @@ h3   {
     <br> <h1>Item(s) ordered</h1>
     Here's a list of all items you ordered. 
     <br>
-    <br> <h3> Add more items</h3>
+    <br> Add more items
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
     <a href="/addindivorder/{{indivorders.2}}"><button>Add</button></a>
     <form method="POST" style="display: inline;">
@@ -61,7 +61,6 @@ h3   {
             <td> {{ order.4 }} </td>
             <td> {{ order.5 }} </td>
             <td> {{ order.6 }} </td>
-            <td> {{ order.7 }} </td>
 			<td>
 
                 <a href="edit/{{order.0}}"><button>Edit</button></a>
@@ -74,10 +73,10 @@ h3   {
         </tbody>
         </tr>
         {% endfor %}
+	    </form> 
     <br>
     <br> Click here to find your total cost (with delivery fee)
-    <br> Insert Link --> Aggregate SQL Query 
-</form>        
+    <br> Insert Link --> Aggregate SQL Query        
 </body>
 </html>
 
