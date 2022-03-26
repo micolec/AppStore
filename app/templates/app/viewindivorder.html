@@ -33,10 +33,10 @@ h3   {
 	<h3>Here's a list of all items you ordered. </h3>
     <br> Click to
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/grpid"><button>Add</button></a> more items
+    <a href="/addindivorder/" + grpid><button>Add</button></a> more items
     <form method="POST" style="display: inline;">
     {% csrf_token %}
-    <input type="hidden" name="grpid" value= grpid/>
+    <input type="hidden" name="grpid" value= "grpid"/>
    </form></td>
     <br/><br/>
     <table class="zui-table">
