@@ -34,10 +34,10 @@ h3   {
     <br>
     <br> <h3> Add more items</h3>
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/{{records.2}}"><button>Add</button></a>
+    <a href="/addindivorder/{{indivorders.2}}"><button>Add</button></a>
     <form method="POST" style="display: inline;">
     {% csrf_token %}
-    <input type="hidden" name="id" value="{{records.2}}"/>
+    <input type="hidden" name="id" value="{{indivorders.2}}"/>
    </form></td>
     <br/><br/>
     <table class="zui-table">
