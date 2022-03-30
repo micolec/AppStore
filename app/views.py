@@ -43,7 +43,7 @@ def loginseller(request):
                 messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
             else:
-                status = 'Unable to login. Either username or password is incorrect.'
+                status = 'Insufficient funds in wallet. Please Top-Up.'
 
 
     context['status'] = status
