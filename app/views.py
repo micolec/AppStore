@@ -131,7 +131,8 @@ def viewindivorder(request, id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
-        grpid = indivorders[0][2]
+        if indivorders:
+            grpid = indivorders[0][2]
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
     with connection.cursor() as cursor:
