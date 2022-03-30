@@ -166,7 +166,7 @@ def viewindivorder(request, id):
    
     result_dict = {'records': indivorders, 'records2': fee}
 
-    return render(request,'app/viewindivorder.html',context, result_dict)
+    return render(request,'app/viewindivorder.html',result_dict)
 
 # Create your views here.
 def view(request, id):
