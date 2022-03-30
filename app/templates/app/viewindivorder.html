@@ -78,10 +78,43 @@ h3   {
         {% endfor %}
 	    </form> 
 	</table>
+
+    <table class="zui-table">
+	<tr>
+		<thead>
+            <th>Username</th>
+            <th>Group Order ID</th>
+            <th>Order Total</th>
+            <th>Delivery Fee</th>
+            <th>Total Price (incl. Delivery)</th>
+		</thead>
+	</tr>
+		{% for order in records2 %}
+	<tr>
+		<tbody>
+            <td> {{ order.0 }} </td>
+            <td> {{ order.1 }} </td>
+            <td> {{ order.2 }} </td>
+            <td> {{ order.3 }} </td>
+            <td> {{ order.4 }} </td>
+			<td>
+
+        </tbody>
+        </tr>
+        {% endfor %}
+	    
+	</table>
+
     <br> Click here to find your total cost (with delivery fee)
     <br> Insert Link --> Aggregate SQL Query   
     <br>
-    <br>
+    <br> Problem: not able to get per order total bc can only pass in one primary key 
+    <br>  ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct  
+    <form method="POST" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="un" value="{{order.0}}"/>  
+    <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
+    </form></td>
 </body>
 </html>
 
