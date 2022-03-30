@@ -250,6 +250,12 @@ def seller_menu(request):
     results = c.fetchall()
     result_dict = {'records': results}
 
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
+
     return render(request,"app/seller_menu.html",result_dict)   
 
 
