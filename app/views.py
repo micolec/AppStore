@@ -276,7 +276,7 @@ def edit_menu(request, item):
             cursor.execute("SELECT * FROM item WHERE item = %s", [item])
             obj = cursor.fetchone()
 
-    return render(request,"app/seller_menu.html",result_dict)  
+    return render(request,"app/edit_menu.html",result_dict)  
 
 def addgrouporder(request):
     context = {}
