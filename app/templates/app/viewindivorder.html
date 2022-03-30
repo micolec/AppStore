@@ -48,6 +48,8 @@ h3   {
             <th>Shop Name</th>
             <th>Item</th>
             <th>Quantity</th>
+            <th>Price Per Item</th>
+            <th>Total Price</th>
             <th>Action</th>
 		</thead>
 	</tr>
@@ -57,9 +59,11 @@ h3   {
             <td> {{ order.0 }} </td>
             <td> {{ order.1 }} </td>
             <td> {{ order.2 }} </td>
+            <td> {{ order.3 }} </td>
             <td> {{ order.4 }} </td>
             <td> {{ order.5 }} </td>
             <td> {{ order.6 }} </td>
+            <td> {{ order.7 }} </td>
 			<td>
 
                 <a href="edit/{{order.0}}"><button>Edit</button></a>
