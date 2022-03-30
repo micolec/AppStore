@@ -144,7 +144,7 @@ def viewindivorder(request, id):
             existing = money[0]
             existing = float(existing[1:])
    
-    context = {}
+    
     status = ''
     if request.POST:
         if request.POST['action'] == 'delete':
@@ -159,12 +159,9 @@ def viewindivorder(request, id):
                 else:
                     status = 'Unable to query. Either hall name or shop name is incorrect.'
 
-
-    context['status'] = status
-
     ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
    
-    result_dict = {'records': indivorders, 'records2': fee}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
