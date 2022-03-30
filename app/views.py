@@ -141,6 +141,7 @@ def viewindivorder(request, id):
             fee = cursor.fetchall()
             total = fee[0][4]
             total = float(total[1:])
+           
     with connection.cursor() as cursor:
             cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
             money = cursor.fetchone()
@@ -150,6 +151,7 @@ def viewindivorder(request, id):
     
     status = ''
     if request.POST:
+        #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
