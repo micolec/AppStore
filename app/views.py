@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
 
 # Create your views here.
 def index(request):
@@ -13,10 +14,13 @@ def login(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
+            usernamee = [request.POST['username']]
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password == request.POST['password']:
+            passwordd = cursor.fetchone()[0]
+            if passwordd == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                buyer = authenticate(username = usernamee, password = passwordd)
+                login(username, password)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
@@ -128,7 +132,7 @@ def viewindivorder(request, id):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
         indivorders = cursor.fetchall()
         grpid = indivorders[0][2]
         # list of tuples
@@ -268,38 +272,22 @@ def seller_menu(request):
     results = c.fetchall()
     result_dict = {'records': results}
 
-    ## Delete item
+    ## Delete customer
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
 
+<<<<<<< HEAD
         if request.POST['action'] == 'add_menu':
             return redirect(f'/add_menu')
 
 
     return render(request,"app/seller_menu.html",result_dict)
+=======
+    return render(request,"app/seller_menu.html",result_dict)   
+>>>>>>> abcc547c05aa2ea2d3ac4900c43f4a43ba4070b7
 
-def add_menu(request):
-    context = {}
-    status = ''
-
-    if request.POST:
-        ## Check if menu is already in the table
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM item WHERE shopname = %s AND item = %s AND shopname = %s AND price = %s", [request.POST['shopname'],request.POST['item'], request.POST['price']])
-            orderid = cursor.fetchone()
-## No orderid with same details
-            if item == None:
-                cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
-                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], request.POST['item'] , request.POST['price'],status])
-                messages.success(request, f'New item %s has been added !' % (request.POST['item']))
-                return redirect('add_menu')
-            else:
-                status = '%s already exists' % (request.POST['item'])
-
-    context['status'] = status
-    return render(request, "app/add_menu.html", context)
 
 
 def addgrouporder(request):
