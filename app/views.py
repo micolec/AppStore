@@ -134,7 +134,7 @@ def viewindivorder(request, id):
                 cursor.execute("UPDATE FROM buyer SET wallet_balance = %s WHERE username = %s", [total, id])
                 messages.success(request, f'Paid! Wallet Balance has been updated.')
                 return redirect(f'/viewindivorder/%s' % [id])
-              
+    ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
         indivorders = cursor.fetchall()
