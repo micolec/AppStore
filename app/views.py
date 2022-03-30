@@ -137,8 +137,11 @@ def viewindivorder(request, id):
         indivorders = cursor.fetchall()
         grpid = indivorders[0][2]
         # list of tuples
-
-    result_dict = {'records': indivorders}
+    with connection.cursor() as cursor:
+        cursor.execute(";with t1 as (SELECT group_order_id, SUM(total_price) AS group_total, ROUND((delivery_fee *1.0)/ COUNT(*), 2) AS delivery_fee_per_pax FROM (SELECT o.group_order_id, (price * qty) AS total_price, delivery_fee FROM orders o, item i, shop s WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price GROUP BY group_order_id, delivery_fee), t2 as ( SELECT username, group_order_id, SUM(total_price) AS indiv_total FROM (SELECT username, group_order_id,(price * qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price GROUP BY username, group_order_id ORDER BY group_order_id) SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee_per_pax,t1.group_total FROM t1,t2 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s", [id])
+        fee = cursor.fetchall()
+   
+    result_dict = {'records': indivorders, 'records2': fee}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
