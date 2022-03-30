@@ -177,7 +177,7 @@ def topup(request, id):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE buyer SET wallet_balance = %s WHERE username = %s", (request.POST['wallet_balance'], prev[0]))
             messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % [id])   
+            return redirect(f'/viewindivorder/%s' % [id[0]])   
  
     return render(request, "app/topup.html", result_dict)
 
