@@ -152,8 +152,8 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-                cursor.execute("UPDATE FROM buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                 if total <= existing:
+                    cursor.execute("UPDATE FROM buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % [id])    
                 else:
