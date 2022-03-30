@@ -106,17 +106,15 @@ h3   {
         {% endfor %}
 	    
 	</table>
-
-    <br> Click here to find your total cost (with delivery fee)
-    <br> Insert Link --> Aggregate SQL Query   
-    <br>
-    <br> Problem: not able to get per order total bc can only pass in one primary key 
-    <br>  ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct  
+    <br> Problem: not able to get per order total for specific order. right now getting top of the list
+    
     <form method="POST" style="display: inline;">
     {% csrf_token %}
     <input type="hidden" name="un" value="{{order.0}}"/>  
     <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
     </form></td>
+    <a href="topup">Don't see a group order from your hall to the restaurant your are eyeing? Click to start new group order!</a>
+    <br>
 </body>
 </html>
 
