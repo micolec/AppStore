@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages, auth
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login as auth_login, authenticate
 
 # Create your views here.
 def index(request):
@@ -20,7 +20,7 @@ def login(request):
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                 buyer = authenticate(username=username, password=password)
-                auth.login(request, buyer)
+                auth_login(request, buyer)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
