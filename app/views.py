@@ -278,7 +278,11 @@ def seller_menu(request):
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
 
-    return render(request,"app/seller_menu.html",result_dict)   
+        if request.POST['action'] == 'add_menu':
+            return redirect(f'/add_menu')
+
+
+    return render(request,"app/seller_menu.html",result_dict)
 
 
 
