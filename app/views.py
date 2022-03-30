@@ -13,10 +13,13 @@ def login(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
+            usernamee = [request.POST['username']]
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password == request.POST['password']:
+            passwordd = cursor.fetchone()[0]
+            if passwordd == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                buyer = authenticate(username = usernamee, password = passwordd)
+                login(request, user)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'

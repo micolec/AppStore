@@ -7,6 +7,7 @@
         <form method="POST">
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Log In as Buyer</legend>
+                {{ form|crispy }}
             </fieldset>
 		<!-- Security token by Django -->
         	{% csrf_token %}
