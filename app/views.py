@@ -1,34 +1,30 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
-from .models import *
 
 # Create your views here.
 def index(request):
     return render(request,'app/index.html')
 
 def login(request):
-    return render(request, "app/login.html")
+    context = {}
+    status = ''
 
-# def login(request):
-#     context = {}
-#     status = ''
-
-#     if request.POST:
-#         ## Check if customerid is already in the table
-#         with connection.cursor() as cursor:
-#             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-#             password = cursor.fetchone()[0]
-#             if password == request.POST['password']:
-#                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-#                 return redirect('openorders')    
-#             else:
-#                 status = 'Unable to login. Either username or password is incorrect.'
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+            password = cursor.fetchone()[0]
+            if password == request.POST['password']:
+                messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                return redirect('openorders')    
+            else:
+                status = 'Unable to login. Either username or password is incorrect.'
 
 
-#     context['status'] = status
+    context['status'] = status
  
-#     return render(request, "app/login.html", context)
+    return render(request, "app/login.html", context)
 
 def loginseller(request):
     context = {}
@@ -104,6 +100,24 @@ def openorders(request):
     result_dict = {'records': grporders}
 
     return render(request,'app/openorders.html', result_dict)
+
+def edit_indiv_order(request, id):
+    """links from viewindivorder: edit button"""
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_order_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
+            messages.success(request, f'Delivery Status has been updated!')
+            return redirect(f'/sellerindex')
+ 
+    return render(request, "app/seller_orderid.html", result_dict)
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
@@ -257,30 +271,6 @@ def seller_menu(request):
     return render(request,"app/seller_menu.html",result_dict)   
 
 
-def edit_menu(request, item):
-
-    # dictionary for initial data with
-    # field names as keys
-    context ={}
-
-    # fetch the object related to passed id
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE item = %s", [item])
-        obj = cursor.fetchone()
-
-    status = ''
-    # save the data from the form
-
-    if request.POST:
-        ##TODO: date validation
-        with connection.cursor() as cursor:
-            cursor.execute("UPDATE item SET price = %s WHERE item = %s"
-                    , [request.POST['price'], id ])
-            status = 'Menu edited successfully!'
-            cursor.execute("SELECT * FROM item WHERE item = %s", [item])
-            obj = cursor.fetchone()
-
-    return render(request,"app/edit_menu.html",result_dict)  
 
 def addgrouporder(request):
     context = {}
