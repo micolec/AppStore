@@ -274,8 +274,28 @@ def seller_menu(request):
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
 
-    return render(request,"app/seller_menu.html",result_dict)   
+    return render(request,"app/seller_menu.html",result_dict)
 
+def add_menu(request):
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if menu is already in the table
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM item WHERE shopname = %s AND item = %s AND shopname = %s AND price = %s", [request.POST['shopname'],request.POST['item'], request.POST['price']])
+            orderid = cursor.fetchone()
+## No orderid with same details
+            if item == None:
+                cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
+                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], request.POST['item'] , request.POST['price'],status])
+                messages.success(request, f'New item %s has been added !' % (request.POST['item']))
+                return redirect('add_menu')
+            else:
+                status = '%s already exists' % (request.POST['item'])
+
+    context['status'] = status
+    return render(request, "app/add_menu.html", context)
 
 
 def addgrouporder(request):
