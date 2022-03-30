@@ -284,7 +284,34 @@ def seller_menu(request):
 
     return render(request,"app/seller_menu.html",result_dict)
 
+def edit_menu(request, id):
 
+    # dictionary for initial data with
+    # field names as keys
+    context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM item WHERE item = %s", [id])
+        obj = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        ##TODO: date validation
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE item SET shopname = %s, item = %s, price = %s"
+                    , [request.POST['shopename'], request.POST['item'], request.POST['price'], id ])
+            status = 'Item edited successfully!'
+            cursor.execute("SELECT * FROM item WHERE item = %s", [id])
+            obj = cursor.fetchone()
+
+
+    context["obj"] = obj
+    context["status"] = status
+ 
+    return render(request, "app/edit_menu.html", context)
 
 def addgrouporder(request):
     context = {}
