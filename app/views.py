@@ -19,8 +19,8 @@ def login(request):
             passwordd = cursor.fetchone()[0]
             if passwordd == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                buyer = authenticate(username = usernamee, password = passwordd)
-                login(username, password)
+                #buyer = authenticate(username = usernamee, password = passwordd)
+                #login(username, password)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
@@ -132,7 +132,7 @@ def viewindivorder(request, id):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
+        cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
         indivorders = cursor.fetchall()
         grpid = indivorders[0][2]
         # list of tuples
