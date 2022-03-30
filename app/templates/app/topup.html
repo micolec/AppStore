@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+{% extends "app/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+    <h2>Top Up Wallet.</h2>
+    <br>Username: {{prev.0}} 
+    <br>Existing Balance: {{prev.6}}
+
+    <br> Scan QR Code below to Top Up Wallet:
+    <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
+
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
+        Updated Wallet Balance<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{prev.8}}" maxlength="64" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
+        <br>
+        <button type="submit" value="update">Update</button>
+    </form>
+</body>
+</html>
+{% endblock content %}
