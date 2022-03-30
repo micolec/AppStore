@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.contrib import messages, auth
+from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate
 
 # Create your views here.
@@ -14,13 +14,13 @@ def login(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor: 
-            username = [request.POST['username']]
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+            username = request.POST['username']
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                #buyer = authenticate(username=username, password=password)
-                #auth_login(request, buyer)
+                buyer = authenticate(username=username, password=password)
+                auth_login(request, buyer)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
