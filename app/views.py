@@ -19,8 +19,8 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                buyer = authenticate(request, username=username, password=password)
-                login(request, buyer)
+                buyer = authenticate(username=username, password=password)
+                login(buyer)
                 return redirect('openorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
