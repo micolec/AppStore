@@ -45,7 +45,7 @@ h3   {
                 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="un" value="{{r.0}}"/>
+                <input type="hidden" name="id" value="{{r.0}}"/>
                 <button onclick type="submit" name="action" value="delete">Delete</button> 
               </form></td>
 		</tbody>

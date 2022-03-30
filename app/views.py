@@ -268,7 +268,7 @@ def seller_menu(request):
     results = c.fetchall()
     result_dict = {'records': results}
 
-    ## Delete customer
+    ## Delete item
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
