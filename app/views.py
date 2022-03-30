@@ -155,7 +155,7 @@ def viewindivorder(request, id):
                 if (existing - total) >= 5:
                     cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % [id])    
+                    return redirect(f'/viewindivorder/%s' % id)    
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up. Ensure wallet has minimum $5 after payment.'
 
