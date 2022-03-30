@@ -1,19 +1,47 @@
 {% extends "app/base.html" %}
 {% block content %}
 {% load static %}
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 32px Arial, sans-serif;}
+h3   {
+	font: normal 20px Arial, sans-serif;}
+	</style>
 <html>
 <body>
     <!--<h1>Existing Open Orders</h1>-->
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     <br> <h1>Item(s) ordered</h1>
-    Here's a list of all items you ordered. 
-    <br>
-    <br> <h3> Add more items</h3>
+	<h3>Here's a list of all items you ordered. </h3>
+    <br> Click to
     <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/{{indivorders.2}}"><button>Add</button></a>
+    <a href="/addindivorder/{{ grpid }}"><button>Add</button></a> more items
+    <form method="POST" style="display: inline;">
+    {% csrf_token %}
+    <input type="hidden" name="grpid" value="grpid" />
+   </form></td>
     <br/><br/>
-    <table border=1>
-        <thead>
+    <table class="zui-table">
+	<tr>
+		<thead>
             <th>Username</th>
             <th>Hall</th>
             <th>Group Order ID</th>
@@ -21,30 +49,35 @@
             <th>Item</th>
             <th>Quantity</th>
             <th>Action</th>
-        </thead>
-        {% for order in records %}
-        <tr>
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
             <td> {{ order.0 }} </td>
             <td> {{ order.1 }} </td>
             <td> {{ order.2 }} </td>
             <td> {{ order.4 }} </td>
             <td> {{ order.5 }} </td>
             <td> {{ order.6 }} </td>
-            <td> {{ order.7 }} </td>
-            <td> 
-                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+			<td>
+
+                <a href="edit/{{order.0}}"><button>Edit</button></a>
                 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="un" value="{{order.0}}"/>
                 <button onclick="return confirm('Are you sure you want to delete {{order.0}}?');" type="submit" name="action" value="delete">Delete</button> 
               </form></td>
+        </tbody>
         </tr>
         {% endfor %}
-    </table>
-    <br>
+	    </form> 
+	</table>
     <br> Click here to find your total cost (with delivery fee)
-    <br> Insert Link --> Aggregate SQL Query 
+    <br> Insert Link --> Aggregate SQL Query   
+    <br>
+    <br>
 </body>
 </html>
 

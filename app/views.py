@@ -78,7 +78,7 @@ def openorders(request):
     #         shopname = cursor.fetchone()[0]
     #         if shopname == request.POST['shopname']:
     #             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-    #             return redirect('openorders')    
+    #             return redirect('filtered_open_orders')    
     #         else:
     #             status = 'Unable to query. Either hall name or shop name is incorrect.'
 
@@ -86,11 +86,11 @@ def openorders(request):
     # context['status'] = status
 
     ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
-
+#    if request.POST:
+#        if request.POST['action'] == 'delete':
+#            with connection.cursor() as cursor:
+#                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
+#
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
@@ -112,6 +112,7 @@ def viewindivorder(request, id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
         indivorders = cursor.fetchall()
+        grpid = indivorders[0][2]
         # list of tuples
 
     result_dict = {'records': indivorders}
