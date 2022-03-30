@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
+from .models import *
 
 # Create your views here.
 def index(request):
@@ -8,7 +9,7 @@ def index(request):
 
 def login(request):
     return render(request, "app/login.html")
-    
+
 # def login(request):
 #     context = {}
 #     status = ''

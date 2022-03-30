@@ -2,7 +2,7 @@
 
 {% extends "app/base.html" %}
 {% block content %}
-	{% comment %} <div class="content-section">
+	<div class="content-section">
 	<p style="color:red">{{ status|safe }}</p>
         <form method="POST">
             <fieldset class="form-group">
@@ -24,5 +24,5 @@
                  New Buyer? <a class="ml-2" href="{% url 'add' %}">Register Here</a>
             </small>
         </div>
-    </div> {% endcomment %}
+    </div> 
 {% endblock content %}                     

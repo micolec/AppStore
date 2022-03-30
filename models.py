@@ -179,14 +179,6 @@ class Buyer(models.Model):
     last_name = models.CharField(max_length=128)
     phone_number = models.CharField(unique=True, max_length=8)
 
-    username VARCHAR(32) PRIMARY KEY,
-	password VARCHAR(32) NOT NULL,
-	first_name VARCHAR(128) NOT NULL,
-	last_name VARCHAR(128) NOT NULL,
-	phone_number INTEGER UNIQUE NOT NULL CHECK (phone_number BETWEEN 80000000 AND 99999999),
-	hall VARCHAR(32) NOT NULL CHECK (hall IN  ('Raffles','Temasek','Sheares', 'Kent Ridge','Eusoff','King Edward VII')),
-	wallet_balance
-
     class Meta:
         managed = False
         db_table = 'SupperBuyer'
