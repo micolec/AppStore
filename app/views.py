@@ -101,6 +101,24 @@ def openorders(request):
 
     return render(request,'app/openorders.html', result_dict)
 
+def edit_indiv_order(request, id):
+    """links from viewindivorder: edit button"""
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_order_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
+            messages.success(request, f'Delivery Status has been updated!')
+            return redirect(f'/sellerindex')
+ 
+    return render(request, "app/seller_orderid.html", result_dict)
+
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     if request.POST:
@@ -259,30 +277,6 @@ def seller_menu(request):
     return render(request,"app/seller_menu.html",result_dict)   
 
 
-def edit_menu(request, item):
-
-    # dictionary for initial data with
-    # field names as keys
-    context ={}
-
-    # fetch the object related to passed id
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE item = %s", [item])
-        obj = cursor.fetchone()
-
-    status = ''
-    # save the data from the form
-
-    if request.POST:
-        ##TODO: date validation
-        with connection.cursor() as cursor:
-            cursor.execute("UPDATE item SET price = %s WHERE item = %s"
-                    , [request.POST['price'], id ])
-            status = 'Menu edited successfully!'
-            cursor.execute("SELECT * FROM item WHERE item = %s", [item])
-            obj = cursor.fetchone()
-
-    return render(request,"app/edit_menu.html",result_dict)  
 
 def addgrouporder(request):
     context = {}

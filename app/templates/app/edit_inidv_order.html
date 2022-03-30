@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+{% extends "app/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+    <h2>Edit Order!</h2>
+    Username: {{order.0}}
+    <br>Hall: {{order.1}} 
+    <br>Group Order ID: {{prev.2}} 
+    <br>Shop Name: {{prev.4}} 
+    <br>Item: {{prev.5}}
+    <br>Quantity:
+ 
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_qty" class="control-group"> <label for="id_qty" class="control-label requiredField">
+        Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" value="{{order.6}}" maxlength="64" class="textinput textInput" required="" id="id_qty"> </div> </div>
+        <br>
+        <button type="submit" value="edit">Submit Change</button>
+    </form>
+</body>
+</html>
+{% endblock content %}
