@@ -152,12 +152,12 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-                if total <= existing:
-                    cursor.execute("UPDATE FROM buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
+                if (existing - total) >= 5:
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % [id])    
                 else:
-                    status = 'Unable to query. Either hall name or shop name is incorrect.'
+                    status = 'Wallet has insufficient balance. Please Top Up.'
 
     ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
    
