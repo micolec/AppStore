@@ -32,7 +32,7 @@ h1   {color: Grey;
 			</div>
 			<!-- Navbar Right Side -->
 			<div class="navbar-nav">
-			{% if user.is_authenticated %}
+			{% if buyer.is_authenticated %}
 				{% if user.is_superuser %}
 				  <a class="nav-item nav-link" href="/admin">Administer</a>
 				  <a class="nav-item nav-link" href="/app/buyerindex">Profile</a>
