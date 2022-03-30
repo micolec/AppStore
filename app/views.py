@@ -7,24 +7,27 @@ def index(request):
     return render(request,'app/index.html')
 
 def login(request):
-    context = {}
-    status = ''
+    return render(request, "app/login.html")
+    
+# def login(request):
+#     context = {}
+#     status = ''
 
-    if request.POST:
-        ## Check if customerid is already in the table
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password == request.POST['password']:
-                messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('openorders')    
-            else:
-                status = 'Unable to login. Either username or password is incorrect.'
+#     if request.POST:
+#         ## Check if customerid is already in the table
+#         with connection.cursor() as cursor:
+#             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+#             password = cursor.fetchone()[0]
+#             if password == request.POST['password']:
+#                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+#                 return redirect('openorders')    
+#             else:
+#                 status = 'Unable to login. Either username or password is incorrect.'
 
 
-    context['status'] = status
+#     context['status'] = status
  
-    return render(request, "app/login.html", context)
+#     return render(request, "app/login.html", context)
 
 def loginseller(request):
     context = {}
