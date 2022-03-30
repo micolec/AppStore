@@ -108,12 +108,14 @@ h3   {
 	    
 	</table>
     
-    
+    <p style="color:red">{{ status|safe }}</p>
     <br> <form method="POST" style="display: inline;">
     {% csrf_token %}
-    <input type="hidden" name="un" value="{{id}}"/>  
+	    {{form.as_p}}
+    <input type="hidden" name="id" value="{{id}}"/>  
     <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
     </form></td>
+
     <br> Problem: not able to get per order total for specific order. right now getting top of the list
     <br> Ensure that your wallet has sufficient balance.
     <a href="/topup/{{groupid}}">Click to Top-Up wallet.</a>
