@@ -125,6 +125,9 @@ def edit_indiv_order(request, id):
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
+    context = {}
+    status = ''
+   
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
         indivorders = cursor.fetchall()
@@ -140,6 +143,7 @@ def viewindivorder(request, id):
             money = cursor.fetchone()
             existing = money[0]
             existing = float(existing[1:])
+   
     context = {}
     status = ''
     if request.POST:
@@ -156,7 +160,7 @@ def viewindivorder(request, id):
                     status = 'Unable to query. Either hall name or shop name is incorrect.'
 
 
-     context['status'] = status
+    context['status'] = status
 
     ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
    
