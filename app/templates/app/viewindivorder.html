@@ -20,6 +20,8 @@
     color: #333;
     padding: 10px;
 }
+h1   {
+	font: normal 40px Arial, sans-serif;}
 h2   {
 	font: normal 32px Arial, sans-serif;}
 h3   {
@@ -31,9 +33,9 @@ h3   {
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     <br> <h1>Item(s) ordered</h1>
 	<h3>Here's a list of all items you ordered. </h3>
-    <br> Click to
-    <!--<h1>GOT PROBLEM BELOW LINK DOESNT WORK IDK WHy it works for edit/{{cust.0}} leh...</h1>-->
-    <a href="/addindivorder/{{ grpid }}"><button>Add</button></a> more items
+    Click to
+    
+    <a href="/addindivorder/{{groupid}}"><button>Add</button></a> more items
     <form method="POST" style="display: inline;">
     {% csrf_token %}
     <input type="hidden" name="grpid" value="grpid" />
@@ -78,9 +80,45 @@ h3   {
         {% endfor %}
 	    </form> 
 	</table>
-    <br> Click here to find your total cost (with delivery fee)
-    <br> Insert Link --> Aggregate SQL Query   
-    <br>
+    <br> <h1>Current Order Total Price</h1>
+    
+    <table class="zui-table">
+	<tr>
+		<thead>
+            <th>Username</th>
+            <th>Group Order ID</th>
+            <th>Order Total</th>
+            <th>Delivery Fee</th>
+            <th>Total Price (incl. Delivery)</th>
+		</thead>
+	</tr>
+		{% for order in records2 %}
+	<tr>
+		<tbody>
+            <td> {{ order.0 }} </td>
+            <td> {{ order.1 }} </td>
+            <td> {{ order.2 }} </td>
+            <td> {{ order.3 }} </td>
+            <td> {{ order.4 }} </td>
+
+        </tbody>
+        </tr>
+        {% endfor %}
+	    
+	</table>
+    
+    <p style="color:red">{{ status|safe }}</p>
+    <form method="POST" style="display: inline;">
+    {% csrf_token %}
+	    {{form.as_p}}
+    <input type="hidden" name="id" value="{{un}}"/>  
+    <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
+    </form></td>
+
+    <br> Problem: not able to get per order total for specific order. right now getting top of the list
+    <br> Ensure that your wallet has sufficient balance.
+    <a href="/topup/{{un}}">Click to Top-Up wallet.</a>
+    
     <br>
 </body>
 </html>
