@@ -115,9 +115,9 @@ def edit_indiv_order(request, id):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
             messages.success(request, f'Delivery Status has been updated!')
-            return redirect(f'/sellerindex')
+            return redirect(f'/viewindivorder')
  
-    return render(request, "app/seller_orderid.html", result_dict)
+    return render(request, "app/edit_indiv_order.html", result_dict)
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
@@ -128,7 +128,7 @@ def viewindivorder(request, id):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE username = %s", [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
         indivorders = cursor.fetchall()
         grpid = indivorders[0][2]
         # list of tuples
