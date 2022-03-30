@@ -13,7 +13,7 @@ def login(request):
 
     if request.POST:
         ## Check if customerid is already in the table
-        with connection.cursor() as cursor:
+        with connection.cursor() as cursor: 
             username = [request.POST['username']]
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
