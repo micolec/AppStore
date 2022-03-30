@@ -161,7 +161,7 @@ def viewindivorder(request, id):
 
     ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
