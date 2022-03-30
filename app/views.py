@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate
+from .models import *
 
 # Create your views here.
 def index(request):

@@ -7,7 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-
 # class AuthGroup(models.Model):
 #     name = models.CharField(unique=True, max_length=150)
 
@@ -172,25 +171,24 @@ from django.db import models
 #         unique_together = (('w', 'i'),)
 
 
-class Users(models.Model):
+class Buyer(models.Model):
     username = models.CharField(primary_key=True, max_length=32)
-    password = models.CharField(max_length=64)
-    first_name = models.CharField(max_length=32)
-    last_name = models.CharField(max_length=32)
-    email = models.CharField(unique=True, max_length=256)
+    password = models.CharField(max_length=32)
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = 'buyer'
 
 
-class Warehouse(models.Model):
-    w_id = models.IntegerField(primary_key=True)
-    w_name = models.CharField(max_length=50)
-    w_street = models.CharField(max_length=50)
-    w_city = models.CharField(max_length=50)
-    w_country = models.CharField(max_length=50)
+# class Warehouse(models.Model):
+#     w_id = models.IntegerField(primary_key=True)
+#     w_name = models.CharField(max_length=50)
+#     w_street = models.CharField(max_length=50)
+#     w_city = models.CharField(max_length=50)
+#     w_country = models.CharField(max_length=50)
 
-    class Meta:
-        managed = False
-        db_table = 'warehouse'
+#     class Meta:
+#         managed = False
+#         db_table = 'warehouse'

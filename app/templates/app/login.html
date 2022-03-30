@@ -11,10 +11,10 @@
 		<!-- Security token by Django -->
         	{% csrf_token %}
             {{form.as_p}}
-		<!-- form -->
+		{% comment %} <!-- form -->
 		<div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
 		Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="username" maxlength="64" class="textinput textInput" required="" id="id_username"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">
-		Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="password" name="password" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_password" class="control-group"> <label for="id_password" class="control-label requiredField"> 
+		Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="password" name="password" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_password" class="control-group"> <label for="id_password" class="control-label requiredField">  {% endcomment %}
             
             <div class="form-group">
                 <button class="btn btn-outline-info" type="submit">Log In </button>
