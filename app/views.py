@@ -53,8 +53,11 @@ def loginseller(request):
     return render(request, "app/loginseller.html", context)
 
 def logout(request):
-    messages.success(request, f'You have successfully logged out. See you at HONUSupper again!')
-    return render(request, 'app/logout.html')
+    context = {}
+    status = messages.success(request, f'You have successfully logged out. See you at HONUSupper again!')
+
+    context['status'] = status
+    return render(request, 'app/logout.html', context)
 
 def sellerorders(request):   
     return render(request,'app/sellerorders.html')
@@ -81,19 +84,19 @@ def openorders(request, username):
     context = {}
     status = ''
 
-    # if request.POST:
-    #     # Check if hall is present
-    #     with connection.cursor() as cursor:
-    #         cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
-    #         shopname = cursor.fetchone()[0]
-    #         if shopname == request.POST['shopname']:
-    #             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-    #             return redirect('filtered_open_orders')    
-    #         else:
-    #             status = 'Unable to query. Either hall name or shop name is incorrect.'
+    if request.POST:
+        # Check if hall is present
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
+            shopname = cursor.fetchone()[0]
+            if shopname == request.POST['shopname']:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('filtered_open_orders')    
+            else:
+                status = 'Unable to query. Either hall name or shop name is incorrect.'
 
 
-    # context['status'] = status
+    context['status'] = status
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
