@@ -75,6 +75,7 @@ def buyerindex(request):
 
     return render(request,'app/buyerindex.html',result_dict)
 
+
 def openorders(request, username):
 
     context = {}
@@ -83,11 +84,12 @@ def openorders(request, username):
     if request.POST:
         # Check if hall is present
         with connection.cursor() as cursor:
-            cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
+            #IDK
+            cursor.execute("SELECT * FROM orderid, buyer WHERE hall = buyer_hall and = %s", [request.POST['buyer_hall']])
             shopname = cursor.fetchone()[0]
             if shopname == request.POST['shopname']:
                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect('filtered_open_orders')    
+                return redirect('openorders')    
             else:
                 status = 'Unable to query. Either hall name or shop name is incorrect.'
 
