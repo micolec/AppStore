@@ -21,7 +21,7 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('openorders') 
+                return redirect(f'/openorders/%s' % username) 
             if username == 'superadmin' and password ==  'superadmin':
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('admin')
@@ -54,7 +54,7 @@ def loginseller(request):
 
 def logout(request):
     messages.success(request, f'You have successfully logged out. See you at HONUSupper again!')
-    return redirect('index') 
+    return render(request, 'app/logout.html')
 
 def sellerorders(request):   
     return render(request,'app/sellerorders.html')
