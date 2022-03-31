@@ -41,7 +41,7 @@ class AuthUser(AbstractUser):
     is_buyer = models.BooleanField('Is buyer', default = False)
     is_seller = models.BooleanField('Is seller', default = False)
     is_superuser = models.BooleanField()
-    username = models.CharField(primary_key=True, max_length=150)
+    username = models.CharField(unique=True, max_length=150)
 
     class Meta:
         managed = False
