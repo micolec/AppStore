@@ -6,9 +6,9 @@ from django.contrib import messages
 def index(request):
     return render(request,'app/index.html')
 
+def admin(request):
+    return render(request, 'app/admin.html')
 def login(request):
-    context = {}
-    status = ''
 
     if request.POST:
         ## Check if customerid is already in the table
@@ -18,14 +18,14 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('openorders')    
+                return redirect('openorders') 
+            if username == 'superadmin' and password ==  'superadmin':
+                messages.success(request, f'Welcome superadmin back to HONUSupper!')
+                return redirect('admin')
             else:
-                status = 'Unable to login. Either username or password is incorrect.'
+                messages.error(request, f'Unable to login. Either username or password is incorrect.')
 
-
-    context['status'] = status
- 
-    return render(request, "app/login.html", context)
+    return render(request, "app/login.html")
 
 def loginseller(request):
     context = {}

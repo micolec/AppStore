@@ -32,19 +32,9 @@ h1   {color: Grey;
 			</div>
 			<!-- Navbar Right Side -->
 			<div class="navbar-nav">
-			{% if buyer.is_authenticated %}
-				{% if user.is_superuser %}
-				  <a class="nav-item nav-link" href="/admin">Administer</a>
-				  <a class="nav-item nav-link" href="/app/buyerindex">Profile</a>
-				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Logout</a>
-				{% else %}  
-				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Profile</a>
-				  <a class="nav-item nav-link" href="/AppStore/buyerindex">Logout</a>
-				{% endif %}
-			{% else %}
 			  <a class="nav-item nav-link" href="/login">For Buyer</a>
 			  <a class="nav-item nav-link" href="/loginseller">For Seller</a>
-			{% endif %}
+			  <a class="nav-item nav-link" href="/admin">For Admin</a>
 			</div>
 		  </div>
 		</div>
