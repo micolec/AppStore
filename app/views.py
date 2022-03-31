@@ -17,7 +17,7 @@ def login(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor: 
-            # username = request.POST['username']
+            username = request.POST['username']
             # password = request.POST['password']
             # if username == 'superadmin' and password == 'superadmin':
             #     messages.success(request, f'Welcome superadmin back to HONUSupper!')
