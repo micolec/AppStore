@@ -37,7 +37,7 @@ from django.contrib.auth.models import AbstractUser
 #         unique_together = (('content_type', 'codename'),)
 
 
-class AuthUser(AbstractUser):
+class User(AbstractUser):
     is_buyer = models.BooleanField('Is buyer', default = False)
     is_seller = models.BooleanField('Is seller', default = False)
     is_superuser = models.BooleanField()
