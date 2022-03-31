@@ -149,5 +149,4 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'app.AuthUser'
 django_heroku.settings(locals())
