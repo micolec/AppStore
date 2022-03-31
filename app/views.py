@@ -53,7 +53,6 @@ def loginseller(request):
     return render(request, "app/loginseller.html", context)
 
 def logout(request):
-    messages.success(request, f'You have successfully logged out. See you at HONUSupper again!')
     return render(request, 'app/logout.html')
 
 def sellerorders(request):   
