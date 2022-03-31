@@ -32,6 +32,7 @@ urlpatterns = [
     #path('edit_menu', app.views.edit_menu, name='edit_menu'),
     path('openorders', app.views.openorders, name='openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
+    path('topup/<str:id>', app.views.topup, name='topup'),
     path('add', app.views.add, name='add'),
     path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
     path('view/<str:id>', app.views.view, name='view'),
