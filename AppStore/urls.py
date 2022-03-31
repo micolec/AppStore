@@ -22,6 +22,7 @@ urlpatterns = [
     path('', app.views.index, name='index'),
     path('login', app.views.login, name='login'),
     path('loginseller', app.views.loginseller, name = 'loginseller'),
+    path('logout', app.views.index, name = 'index'),
     path('sellerorders', app.views.sellerorders, name='sellerorders'),
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
