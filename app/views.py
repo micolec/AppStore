@@ -99,7 +99,7 @@ def openorders(request):
 
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html', result_dict, status)
+    return render(request,'app/openorders.html', result_dict)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
