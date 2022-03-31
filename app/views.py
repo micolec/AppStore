@@ -21,7 +21,7 @@ def login(request):
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('openorders') 
+                return redirect('sellerorders') 
             if username == 'superadmin' and password ==  'superadmin':
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('admin')
