@@ -10,6 +10,8 @@ def admin(request):
     return render(request, 'app/admin.html')
 
 def login(request):
+    context = {}
+    status = ''
 
     if request.POST:
         ## Check if customerid is already in the table
@@ -24,9 +26,11 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('admin')
             else:
-                messages.error(request, f'Unable to login. Either username or password is incorrect.')
+                status = 'Unable to login. Either username or password is incorrect.'
 
-    return render(request, "app/login.html")
+    context['status'] = status
+
+    return render(request, "app/login.html", context)
 
 def loginseller(request):
     context = {}
