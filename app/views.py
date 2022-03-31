@@ -74,8 +74,8 @@ def buyerindex(request):
 
 def openorders(request):
 
-    #context = {}
-    #status = ''
+    # context = {}
+    # status = ''
 
     # if request.POST:
     #     # Check if hall is present
