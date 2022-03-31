@@ -1,0 +1,1 @@
+insert into auth_user(is_buyer, is_seller, is_superuser, username) values (true, false, false, coop75);
