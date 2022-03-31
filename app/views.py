@@ -6,7 +6,7 @@ from django.contrib import messages
 
 def baseadmin(request):
     return render(request, 'app/baseadmin.html')
-    
+
 def index(request):
     return render(request,'app/index.html')
 
@@ -25,7 +25,7 @@ def login(request):
                 return redirect(f'/openorders/%s' % username) 
             if username == 'superadmin' and password ==  'superadmin':
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
-                return redirect('admin')
+                return redirect('baseadmin')
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
