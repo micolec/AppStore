@@ -18,7 +18,7 @@ import app.views
 
 
 urlpatterns = [
-    path('admin', app.views.admin, name = 'admin'),
+    path('baseadmin', app.views.baseadmin, name = 'baseadmin'),
     path('', app.views.index, name='index'),
     path('login', app.views.login, name='login'),
     path('loginseller', app.views.loginseller, name = 'loginseller'),

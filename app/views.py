@@ -3,11 +3,12 @@ from django.db import connection
 from django.contrib import messages
 
 # Create your views here.
+
+def baseadmin(request):
+    return render(request, 'app/baseadmin.html')
+    
 def index(request):
     return render(request,'app/index.html')
-
-def admin(request):
-    return render(request, 'app/admin.html')
 
 def login(request):
     context = {}
