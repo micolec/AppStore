@@ -16,26 +16,26 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
-import app.views
+import app.migrations.views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', app.views.index, name='index'),
+    path('', app.migrations.views.index, name='index'),
     path('login', auth_views.LoginView.as_view(template_name='app/login.html'), name='login'),
-    path('loginseller', app.views.loginseller, name = 'loginseller'),
-    path('loginhome', app.views.loginhome, name='loginhome'),
-    path('buyerindex', app.views.buyerindex, name='buyerindex'),
-    path('sellerindex', app.views.sellerindex, name='sellerindex'),
-    path('seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
-    path('seller_menu', app.views.seller_menu, name='seller_menu'),
+    path('loginseller', app.migrations.views.loginseller, name = 'loginseller'),
+    path('loginhome', app.migrations.views.loginhome, name='loginhome'),
+    path('buyerindex', app.migrations.views.buyerindex, name='buyerindex'),
+    path('sellerindex', app.migrations.views.sellerindex, name='sellerindex'),
+    path('seller_orderid/<str:id>', app.migrations.views.seller_orderid, name='seller_orderid'),
+    path('seller_menu', app.migrations.views.seller_menu, name='seller_menu'),
     #path('edit_menu', app.views.edit_menu, name='edit_menu'),
-    path('openorders', app.views.openorders, name='openorders'),
-    path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
-    path('topup/<str:id>', app.views.topup, name='topup'),
-    path('add', app.views.add, name='add'),
-    path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
-    path('view/<str:id>', app.views.view, name='view'),
-    path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
-    path('edit/<str:id>', app.views.edit, name='edit'),
+    path('openorders', app.migrations.views.openorders, name='openorders'),
+    path('viewindivorder/<str:id>', app.migrations.views.viewindivorder, name='viewindivorder'),
+    path('topup/<str:id>', app.migrations.views.topup, name='topup'),
+    path('add', app.migrations.views.add, name='add'),
+    path('addgrouporder', app.migrations.views.addgrouporder, name='addgrouporder'),
+    path('view/<str:id>', app.migrations.views.view, name='view'),
+    path('addindivorder/<str:id>', app.migrations.views.addindivorder, name='addindivorder'),
+    path('edit/<str:id>', app.migrations.views.edit, name='edit'),
 ]
