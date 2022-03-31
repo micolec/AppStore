@@ -28,19 +28,24 @@ h3   {
 	</style>
     <!--<h1>Existing Open Orders</h1>-->
     <br> <h2>Create New Group Order</h2>
-    Don't see a group order from your hall to the restaurant your are eyeing? <a href="addgrouporder">Click to start new group order! </a> 
+    Don't see a group order from your hall to the restaurant your are eyeing? 
+    <a href="addgrouporder">Click to start new group order! </a> 
+    
+    <p> 
+    </p>
+    
     <br>
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
     
     <br/>
 
-    <h3>Filter</h3>
+    <h2>See Orders from your Preferred Shop</h2>
 	<form action="seller_menu" method = "GET">
 		<label for="hall">Hall:</label><br>
 		<input type="text" name="hall" placeholder="Insert Hall:"/><br><br>
 		<label for="shopname">Shop Name:</label><br>
 		<input type="text" name="shopname" placeholder="Insert Shop Name:"/><br><br>
-		<input type="submit" value="Filter!"/><br><br>
+		<input type="submit" value="Filter"/><br><br>
 	</form>	
 	
 </form>

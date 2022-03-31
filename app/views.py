@@ -77,26 +77,20 @@ def openorders(request):
     context = {}
     status = ''
 
-    # if request.POST:
-    #     ## Check if hall is present
-    #     with connection.cursor() as cursor:
-    #         cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
-    #         shopname = cursor.fetchone()[0]
-    #         if shopname == request.POST['shopname']:
-    #             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-    #             return redirect('filtered_open_orders')    
-    #         else:
-    #             status = 'Unable to query. Either hall name or shop name is incorrect.'
+    if request.POST:
+        ## Check if hall is present
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT shopname FROM orders WHERE buyer_hall = %s", [request.POST['buyer_hall']])
+            shopname = cursor.fetchone()[0]
+            if shopname == request.POST['shopname']:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('filtered_open_orders')    
+            else:
+                status = 'Unable to query. Either hall name or shop name is incorrect.'
 
 
-    # context['status'] = status
+    context['status'] = status
 
-    ## Delete customer
-#    if request.POST:
-#        if request.POST['action'] == 'delete':
-#            with connection.cursor() as cursor:
-#                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
-#
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
@@ -105,7 +99,7 @@ def openorders(request):
 
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html', result_dict)
+    return render(request,'app/openorders.html', result_dict, status)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
