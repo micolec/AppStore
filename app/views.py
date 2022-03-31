@@ -24,7 +24,7 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('admin')
             else:
-                messages.ERROR(request, f'Unable to login. Either username or password is incorrect.')
+                messages.error(request, f'Unable to login. Either username or password is incorrect.')
 
     return render(request, "app/login.html")
 
