@@ -8,6 +8,7 @@ def index(request):
 
 def admin(request):
     return render(request, 'app/admin.html')
+
 def login(request):
 
     if request.POST:
@@ -15,7 +16,7 @@ def login(request):
         with connection.cursor() as cursor: 
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             username = request.POST['username']
-            password = cursor.fetchone()[0]
+            password = cursor.fetchone()
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('openorders') 
