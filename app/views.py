@@ -16,12 +16,12 @@ def login(request):
 
     if request.POST:
         ## Check if customerid is already in the table
-        username = request.POST['username']
-        password = request.POST['password']
-        if username == 'superadmin' and password == 'superadmin':
-            messages.success(request, f'Welcome superadmin back to HONUSupper!')
-            return redirect('baseadmin')
         with connection.cursor() as cursor: 
+            username = request.POST['username']
+            password = request.POST['password']
+            if username == 'superadmin' and password == 'superadmin':
+                messages.success(request, f'Welcome superadmin back to HONUSupper!')
+                return redirect('buyerindex')
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
@@ -43,7 +43,7 @@ def loginseller(request):
         password = request.POST['password']
         if username == 'superadmin' and password == 'superadmin':
             messages.success(request, f'Welcome superadmin back to HONUSupper!')
-            return redirect('baseadmin')
+            return redirect('buyerindex')
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
             cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
