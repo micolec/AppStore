@@ -17,12 +17,13 @@ def login(request):
     if request.POST:
         ## Check if customerid is already in the table
         username = request.POST['username']
-        password = cursor.fetchone()[0]
+        password = request.POST['password']
         if username == 'superadmin' and password == 'superadmin':
             messages.success(request, f'Welcome superadmin back to HONUSupper!')
             return redirect('baseadmin')
         with connection.cursor() as cursor: 
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+            password = cursor.fetchone()[0]
             if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                 return redirect(f'/openorders/%s' % username) 
