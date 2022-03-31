@@ -3,7 +3,6 @@ from django.db import connection
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate
 from .models import *
-
 # Create your views here.
 def index(request):
     return render(request,'app/index.html')
@@ -44,7 +43,7 @@ def loginseller(request):
                 messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
                 return redirect('loginhome')    
             else:
-                status = 'Insufficient funds in wallet. Please Top-Up.'
+                status = 'Unable to login. Either username or password is incorrect.'
 
 
     context['status'] = status
@@ -126,66 +125,22 @@ def edit_indiv_order(request, id):
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
-    context = {}
-    status = ''
-    
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
-        indivorders = cursor.fetchall()
-        if indivorders:
-            grpid = indivorders[0][2]
-        #rn the second table is using orderid = grpid which is the first entry of first table
-        # list of tuples
-    with connection.cursor() as cursor:
-        if indivorders:
-            cursor.execute(";with t1 as (SELECT group_order_id, SUM(total_price) AS group_total, ROUND((delivery_fee *1.0)/ COUNT(*), 2) AS delivery_fee_per_pax FROM (SELECT o.group_order_id, (price * qty) AS total_price, delivery_fee FROM orders o, item i, shop s WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price GROUP BY group_order_id, delivery_fee), t2 as ( SELECT username, group_order_id, SUM(total_price) AS indiv_total FROM (SELECT username, group_order_id,(price * qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price GROUP BY username, group_order_id ORDER BY group_order_id) SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee_per_pax,(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total FROM t1,t2 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s ORDER BY group_order_id DESC", [id,grpid])
-            fee = cursor.fetchall()
-            total = fee[0][4]
-            total = float(total[1:])
-           
-    with connection.cursor() as cursor:
-            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
-            money = cursor.fetchone()
-            existing = money[0]
-            existing = float(existing[1:])
-   
-    
-    status = ''
     if request.POST:
-        #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
-        if request.POST['action'] == 'deduct':
-            with connection.cursor() as cursor:
-                if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
-                    messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % id)    
-                else:
-                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'
 
-    ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
-   
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id}
+    ## Use raw query to get all objects
+    #3
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s", [id])
+        indivorders = cursor.fetchall()
+        grpid = indivorders[0][2]
+        # list of tuples
+
+    result_dict = {'records': indivorders}
 
     return render(request,'app/viewindivorder.html',result_dict)
-
-def topup(request, id):
-    
-    with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
-            prev = cursor.fetchone()
-            username = prev[0]
-            result_dict = {'prev': prev}
-
-    if request.POST:
-        with connection.cursor() as cursor:
-            cursor.execute("UPDATE buyer SET wallet_balance = %s WHERE username = %s", (request.POST['wallet_balance'], prev[0]))
-            messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % id)   
- 
-    return render(request, "app/topup.html", result_dict)
 
 # Create your views here.
 def view(request, id):
