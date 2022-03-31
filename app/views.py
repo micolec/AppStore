@@ -81,12 +81,19 @@ def openorders(request, username):
     context = {}
     status = ''
 
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+        grporders = cursor.fetchall()
+        # list of tuples
+
+
     if request.POST:
         # Check if hall is present
         with connection.cursor() as cursor:
-            #IDK
-            cursor.execute("SELECT * FROM orderid, buyer WHERE hall = buyer_hall and = %s", [request.POST['buyer_hall']])
             shopname = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+            grporders = cursor.fetchall()
             if shopname == request.POST['shopname']:
                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
                 return redirect('openorders')    
@@ -96,15 +103,9 @@ def openorders(request, username):
 
     context['status'] = status
 
-    ## Use raw query to get all objects
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
-        grporders = cursor.fetchall()
-        # list of tuples
-
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html', result_dict)
+    return render(request,'app/openorders.html', result_dict, status)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
