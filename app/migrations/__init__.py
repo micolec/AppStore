@@ -53,14 +53,6 @@ class Migration(migrations.Migration):
                 ('is_superuser', models.BooleanField()),
                 ('username', models.CharField(unique=True, max_length=150)),
             ],
-
-            class AuthUser(AbstractUser):
-
-    class Meta:
-        managed = False
-        db_table = 'auth_user'
-
-
             options={
                 'db_table': 'auth_user',
                 'managed': False,
