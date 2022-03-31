@@ -18,10 +18,10 @@ def login(request):
         ## Check if customerid is already in the table
         with connection.cursor() as cursor: 
             username = request.POST['username']
-            # password = request.POST['password']
-            # if username == 'superadmin' and password == 'superadmin':
-            #     messages.success(request, f'Welcome superadmin back to HONUSupper!')
-            #     return redirect('buyerindex')
+            password = request.POST['password']
+            if username == 'superadmin' and password == 'superadmin':
+                messages.success(request, f'Welcome superadmin back to HONUSupper!')
+                return redirect('buyerindex')
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
             if password == request.POST['password']:
@@ -103,7 +103,7 @@ def openorders(request, username):
             grporders = cursor.fetchall()
             if shopname == request.POST['shopname']:
                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect('openorders')    
+                return redirect('buyerindex')    
             else:
                 status = 'Unable to query. Either hall name or shop name is incorrect.'
 
