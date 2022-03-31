@@ -76,7 +76,7 @@ def buyerindex(request):
 
     return render(request,'app/buyerindex.html',result_dict)
 
-def openorders(request):
+def openorders(request, username):
 
     context = {}
     status = ''
