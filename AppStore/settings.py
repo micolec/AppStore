@@ -114,7 +114,7 @@ else:
     }
 
 MESSAGE_TAGS = {
-    messages.error: 'danger',
+    messages.ERROR: 'danger',
 }
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
