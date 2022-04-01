@@ -171,9 +171,7 @@ def viewindivorder(request, id):
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % id)    
                 else:
-                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'
-
-    ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
+                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
     result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id}
 
