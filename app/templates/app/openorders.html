@@ -73,8 +73,8 @@ h3   {
                         <td> {{ order.7 }} </td>
                         <td> {{ order.8 }} </td>
                         <td>
-                <a href="addindivorder/{{order.0}}"><button>Join Group Order</button></a>
-                <a href="seller_orderid/{{order.0}}"><button>Edit</button></a>
+                <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
+                <a href="/seller_orderid/{{order.0}}"><button>Edit</button></a>
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="un" value="{{order.0}}"/>
