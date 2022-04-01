@@ -85,8 +85,8 @@ def buyerindex(request):
 
 def openorders(request, username):
 
-    context = {}
-    status = ''
+    # context = {}
+    # status = ''
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
@@ -108,11 +108,11 @@ def openorders(request, username):
     #             status = 'Unable to query. Either hall name or shop name is incorrect.'
 
 
-    context['status'] = status
+    # context['status'] = status
 
     result_dict = {'records': grporders}
 
-    return render(request,'app/openorders.html', result_dict, status)
+    return render(request,'app/openorders.html', result_dict)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
