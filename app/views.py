@@ -146,7 +146,7 @@ def viewindivorder(request, id):
         # list of tuples
     with connection.cursor() as cursor:
         if indivorders:
-            cursor.execute(";with t1 as (SELECT group_order_id, SUM(total_price) AS group_total, ROUND((delivery_fee *1.0)/ COUNT(*), 2) AS delivery_fee_per_pax FROM (SELECT o.group_order_id, (price * qty) AS total_price, delivery_fee FROM orders o, item i, shop s WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price GROUP BY group_order_id, delivery_fee), t2 as ( SELECT username, group_order_id, SUM(total_price) AS indiv_total FROM (SELECT username, group_order_id,(price * qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price GROUP BY username, group_order_id ORDER BY group_order_id) SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee_per_pax,(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total FROM t1,t2 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s ORDER BY group_order_id DESC", [id,grpid])
+            cursor.execute(";with t1 as (SELECT group_order_id, SUM(total_price) AS group_total, ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax FROM (SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee FROM orders o, item i, shop s WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price GROUP BY group_order_id, delivery_fee), t2 as ( SELECT username, group_order_id, SUM(total_price) AS indiv_total FROM (SELECT username, group_order_id,(price * qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price GROUP BY username, group_order_id ORDER BY group_order_id) SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee_per_pax,(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total FROM t1,t2 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s ORDER BY group_order_id DESC", [id,grpid])
             fee = cursor.fetchall()
             total = fee[0][4]
             total = float(total[1:])
@@ -171,9 +171,7 @@ def viewindivorder(request, id):
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % id)    
                 else:
-                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'
-
-    ## error for wallet balance because it is updating order total to wallet balance, idk how to make it deduct          
+                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
     result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id}
 
