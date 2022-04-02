@@ -89,26 +89,25 @@ def openorders(request, username):
     # status = ''
 
     ## Use raw query to get all objects
+    if request.POST:
+        # Check if hall is present
+        with connection.cursor() as cursor:
+            shopname = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+            grporders = cursor.fetchall()
+            if shopname == request.POST['shopname']:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect(f'/openorders/%s' % username)    
+            else:
+                status = 'Unable to query. Either hall name or shop name is incorrect.'
+
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
         grporders = cursor.fetchall()
         # list of tuples
 
 
-    # if request.POST:
-    #     # Check if hall is present
-    #     with connection.cursor() as cursor:
-    #         shopname = cursor.fetchone()[0]
-    #         cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
-    #         grporders = cursor.fetchall()
-    #         if shopname == request.POST['shopname']:
-    #             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-    #             return redirect('buyerindex')    
-    #         else:
-    #             status = 'Unable to query. Either hall name or shop name is incorrect.'
-
-
-    # context['status'] = status
+    context['status'] = status
 
     result_dict = {'records': grporders}
 
