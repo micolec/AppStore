@@ -85,8 +85,7 @@ def buyerindex(request):
 
 def openorders(request, username):
 
-    # context = {}
-    # status = ''
+    status = ''
 
     ## Use raw query to get all objects
     if request.POST:
@@ -107,9 +106,7 @@ def openorders(request, username):
         # list of tuples
 
 
-    context['status'] = status
-
-    result_dict = {'records': grporders}
+    result_dict = {'records': grporders, 'status': status}
 
     return render(request,'app/openorders.html', result_dict)
 
@@ -120,6 +117,7 @@ def edit_indiv_order(request, id):
             prev = cursor.fetchone()
             group_order_id = prev[0]
             hall = prev[2]
+
             shopname = prev[3]
             result_dict = {'prev': prev}
 
