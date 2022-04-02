@@ -24,7 +24,7 @@ def login(request):
                 return redirect('buyerindex')
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             password = cursor.fetchone()[0]
-            if password == request.POST['password']:
+            if password != None and password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                 return redirect(f'/openorders/%s' % username) 
             else:
