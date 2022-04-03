@@ -24,7 +24,7 @@ urlpatterns = [
     path('logout', app.views.logout, name = 'logout'),
 
     path('openorders/<str:username>', app.views.openorders, name='openorders'),
-    path('filtered_openorders/<str:username>/<str:shopname>'),
+    path('filtered_openorders/<str:username>/<str:shopname>', app.views.filtered_openorders, name = 'filtered_openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
     path('topup/<str:id>', app.views.topup, name='topup'),
     path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
