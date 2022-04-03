@@ -78,7 +78,7 @@ def openorders(request, username):
             shops = cursor.fetchall()
             if shopname in shops:
                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect('/filtered_openorders/%s/%s' %username %shopname)
+                return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
             else:
                 status = 'Unable to query. Shop name is incorrect.'
 
