@@ -22,9 +22,9 @@ def login(request):
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
             if cursor.fetchone() != None:
                 password = cursor.fetchone()[0]
-            if password == request.POST['password']:
-                messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                return redirect(f'/openorders/%s' % username) 
+                if password == request.POST['password']:
+                    messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                    return redirect(f'/openorders/%s' % username) 
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
@@ -75,43 +75,42 @@ def openorders(request, username):
         # Check if hall is present
         with connection.cursor() as cursor:
             shopname = cursor.fetchone()[0]
-            cursor.execute("SELECT * FROM orderid WHERE hall = (SELECT hall FROM buyer WHERE username = username) AND shop delivery_status = 'Order Open' AND shopname = shopname ORDER BY group_order_id DESC")
-            grporders = cursor.fetchall()
-            if grporders != None:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname'])) 
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            if shopname in shops:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('/filtered_openorders/%s/%s' %username %shopname)
             else:
                 status = 'Unable to query. Shop name is incorrect.'
-
 
     result_dict = {'records': grporders, 'status': status}
 
     return render(request,'app/openorders.html', result_dict)
 
-# def filtered_openorders(request, username, shopname):
+def filtered_openorders(request, username, shopname):
 
-#     status = ''
+    status = ''
 
-#     # Use raw query to get all objects
-#     if request.POST:
-#         Check if hall is present
-#         with connection.cursor() as cursor:
-#             shopname = cursor.fetchone()[0]
-#             cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
-#             grporders = cursor.fetchall()
-#             if shopname == request.POST['shopname']:
-#                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-#                 return redirect(f'/filtered_openorders/%s/%s' % username %shopname)    
-#             else:
-#                 status = 'Unable to query. Either hall name or shop name is incorrect.'
+    # Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE hall = (SELECT hall FROM buyer WHERE username = username) AND delivery_status = 'Order Open' AND shopname = shopname ORDER BY group_order_id DESC")
+        grporders = cursor.fetchall()
+    
+    if request.POST:
+        # Check if hall is present
+        with connection.cursor() as cursor:
+            shopname = cursor.fetchone()[0]
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            if shopname in shops:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('/filtered_openorders/%s/%s' %username %shopname)
+            else:
+                status = 'Unable to query. Shop name is incorrect.'
 
-#     with connection.cursor() as cursor:
-#         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND shopORDER BY group_order_id DESC")
-#         grporders = cursor.fetchall()
-#         list of tuples
+    result_dict = {'records': grporders, 'status': status}
 
-#     result_dict = {'records': grporders, 'status': status}
-
-#     return render(request,'app/filtered_openorders.html', result_dict)
+    return render(request,'app/filtered_openorders.html', result_dict)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
