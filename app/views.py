@@ -13,20 +13,19 @@ def login(request):
 
     if request.POST:
         ## Check if customerid is already in the table
-        with connection.cursor() as cursor: 
             username = request.POST['username']
             password = request.POST['password']
             if username == 'superadmin' and password == 'superadmin':
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
-            cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            if cursor.fetchone()[0] != None:
+            with connection.cursor() as cursor: 
+                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])    
                 password = cursor.fetchone()[0]
                 if password == request.POST['password']:
                     messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                     return redirect(f'/openorders/%s' % username) 
-            else:
-                status = 'Unable to login. Either username or password is incorrect.'
+                else:
+                    status = 'Unable to login. Either username or password is incorrect.'
 
     context['status'] = status
 
