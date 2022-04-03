@@ -112,7 +112,9 @@ h3   {
         {% endfor %}
 	    
 	</table>
-    
+    <h2>Wallet Balance</h2>
+    <br>Username: {{prev.0}} 
+    <br>Existing Balance: {{prev.6}}
     <p style="color:red">{{ status|safe }}</p>
     <form method="POST" style="display: inline;">
     {% csrf_token %}
