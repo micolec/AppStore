@@ -18,7 +18,6 @@ import app.views
 
 
 urlpatterns = [
-    path('baseadmin', app.views.baseadmin, name = 'baseadmin'),
     path('', app.views.index, name='index'),
     path('login', app.views.login, name='login'),
     path('loginseller', app.views.loginseller, name = 'loginseller'),
