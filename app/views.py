@@ -4,9 +4,6 @@ from django.contrib import messages
 
 # Create your views here.
 
-def baseadmin(request):
-    return render(request, 'app/baseadmin.html')
-
 def index(request):
     return render(request,'app/index.html')
 
@@ -23,8 +20,9 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password != None and password == request.POST['password']:
+            if cursor.fetchone() != None:
+                password = cursor.fetchone()[0]
+            if password == request.POST['password']:
                 messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
                 return redirect(f'/openorders/%s' % username) 
             else:
@@ -62,53 +60,58 @@ def loginseller(request):
 def logout(request):
     return render(request, 'app/logout.html')
 
-def sellerorders(request):   
-    return render(request,'app/sellerorders.html')
-
-def buyerindex(request):
-    ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM buyer WHERE username = %s", [request.POST['id']])
-
-    ## Use raw query to get all objects
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer ORDER BY first_name")
-        buyers = cursor.fetchall()
-        # list of tuples
-
-    result_dict = {'records': buyers}
-
-    return render(request,'app/buyerindex.html',result_dict)
-
 
 def openorders(request, username):
 
     status = ''
-
-    ## Use raw query to get all objects
-    if request.POST:
-        # Check if hall is present
-        with connection.cursor() as cursor:
-            shopname = cursor.fetchone()[0]
-            cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
-            grporders = cursor.fetchall()
-            if shopname == request.POST['shopname']:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect(f'/openorders/%s' % username)    
-            else:
-                status = 'Unable to query. Either hall name or shop name is incorrect.'
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
         grporders = cursor.fetchall()
         # list of tuples
 
+    ## Use raw query to get all objects
+    if request.POST:
+        # Check if hall is present
+        with connection.cursor() as cursor:
+            shopname = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM orderid WHERE hall = (SELECT hall FROM buyer WHERE username = username) AND shop delivery_status = 'Order Open' AND shopname = shopname ORDER BY group_order_id DESC")
+            grporders = cursor.fetchall()
+            if grporders != None:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname'])) 
+            else:
+                status = 'Unable to query. Shop name is incorrect.'
+
 
     result_dict = {'records': grporders, 'status': status}
 
     return render(request,'app/openorders.html', result_dict)
+
+# def filtered_openorders(request, username, shopname):
+
+#     status = ''
+
+#     # Use raw query to get all objects
+#     if request.POST:
+#         Check if hall is present
+#         with connection.cursor() as cursor:
+#             shopname = cursor.fetchone()[0]
+#             cursor.execute("SELECT * FROM orderid WHERE buyer_hall = (SELECT hall FROM buyer WHERE username = username) and delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+#             grporders = cursor.fetchall()
+#             if shopname == request.POST['shopname']:
+#                 messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+#                 return redirect(f'/filtered_openorders/%s/%s' % username %shopname)    
+#             else:
+#                 status = 'Unable to query. Either hall name or shop name is incorrect.'
+
+#     with connection.cursor() as cursor:
+#         cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND shopORDER BY group_order_id DESC")
+#         grporders = cursor.fetchall()
+#         list of tuples
+
+#     result_dict = {'records': grporders, 'status': status}
+
+#     return render(request,'app/filtered_openorders.html', result_dict)
 
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
@@ -190,18 +193,6 @@ def topup(request, id):
  
     return render(request, "app/topup.html", result_dict)
 
-# Create your views here.
-def view(request, id):
-    """Shows the main page"""
-    
-    ## Use raw query to get a customer
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
-        buyer = cursor.fetchone()
-    result_dict = {'buyer': buyer}
-
-    return render(request,'app/view.html',result_dict)
-
 def addindivorder(request, id):
     """links from open orders: join button"""
     with connection.cursor() as cursor:
@@ -221,6 +212,53 @@ def addindivorder(request, id):
             """should link to viewindivorder"""
  
     return render(request, "app/addindivorder.html", result_dict)
+
+def addgrouporder(request):
+    context = {}
+    status = ''
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
+            orderid = cursor.fetchone()
+## No orderid with same details
+            if orderid == None:
+                cursor.execute("SELECT MAX(group_order_id) FROM orderid")
+                curr_id = cursor.fetchone()[0] + 1
+                cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
+                shopdet = cursor.fetchone()
+                opening = shopdet[3]
+                closing = shopdet[4]
+                status = 'Order Open'
+                cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing,
+                           request.POST['order_date'] , request.POST['order_by'],status])
+                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
+                return redirect('openorders')
+            else:
+                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
+
+
+    context['status'] = status
+    return render(request, "app/addgrouporder.html", context)
+
+def buyerindex(request):
+    ## Delete customer
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM buyer WHERE username = %s", [request.POST['id']])
+
+    ## Use raw query to get all objects
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM buyer ORDER BY first_name")
+        buyers = cursor.fetchall()
+        # list of tuples
+
+    result_dict = {'records': buyers}
+
+    return render(request,'app/buyerindex.html',result_dict)
 
 # Create your views here.
 def add(request):
@@ -248,6 +286,18 @@ def add(request):
     context['status'] = status
  
     return render(request, "app/add.html", context)
+
+# Create your views here.
+def view(request, id):
+    """Shows the main page"""
+    
+    ## Use raw query to get a customer
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+        buyer = cursor.fetchone()
+    result_dict = {'buyer': buyer}
+
+    return render(request,'app/view.html',result_dict)
 
 # Create your views here.
 def edit(request, id):
@@ -280,7 +330,10 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
-# vito
+# vito: sellers
+def sellerorders(request):   
+    return render(request,'app/sellerorders.html')
+
 def sellerindex(request):             
     search_string = request.GET.get('shopname','')
     users = "SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname ~ \'%s\'"% (search_string)
@@ -361,33 +414,3 @@ def edit_menu(request, id):
     context["status"] = status
  
     return render(request, "app/edit_menu.html", context)
-
-def addgrouporder(request):
-    context = {}
-    status = ''
-
-    if request.POST:
-        ## Check if customerid is already in the table
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
-            orderid = cursor.fetchone()
-## No orderid with same details
-            if orderid == None:
-                cursor.execute("SELECT MAX(group_order_id) FROM orderid")
-                curr_id = cursor.fetchone()[0] + 1
-                cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
-                shopdet = cursor.fetchone()
-                opening = shopdet[3]
-                closing = shopdet[4]
-                status = 'Order Open'
-                cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing,
-                           request.POST['order_date'] , request.POST['order_by'],status])
-                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
-                return redirect('openorders')
-            else:
-                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
-
-
-    context['status'] = status
-    return render(request, "app/addgrouporder.html", context)

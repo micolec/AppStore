@@ -23,18 +23,22 @@ urlpatterns = [
     path('login', app.views.login, name='login'),
     path('loginseller', app.views.loginseller, name = 'loginseller'),
     path('logout', app.views.logout, name = 'logout'),
+
+    path('openorders/<str:username>', app.views.openorders, name='openorders'),
+    # path('filtered_openorders/<str:username>/<str:shopname>'),
+    path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
+    path('topup/<str:id>', app.views.topup, name='topup'),
+    path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
+    path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
+
     path('sellerorders', app.views.sellerorders, name='sellerorders'),
-    path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
     path('seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
     path('seller_menu', app.views.seller_menu, name='seller_menu'),
     path('edit_menu', app.views.edit_menu, name='edit_menu'),
-    path('openorders/<str:username>', app.views.openorders, name='openorders'),
-    path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
-    path('topup/<str:id>', app.views.topup, name='topup'),
+
+    path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('add', app.views.add, name='add'),
-    path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
     path('view/<str:id>', app.views.view, name='view'),
-    path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
     path('edit/<str:id>', app.views.edit, name='edit'),
 ]
