@@ -112,6 +112,10 @@ h3   {
         {% endfor %}
 	    
 	</table>
+    <h3>Wallet Balance</h3>
+    Ensure that your wallet has sufficient balance.
+    <br>Username: {{prev.0}} 
+    <br>Existing Balance: {{prev.6}}
 
     <p style="color:red">{{ status|safe }}</p>
     <form method="POST" style="display: inline;">
@@ -123,10 +127,7 @@ h3   {
 
     <br> Problem: not able to get per order total for specific order. right now getting top of the list
     <br>
-    <h2>Wallet Balance</h2>
-    <br> Ensure that your wallet has sufficient balance.
-    <br>Username: {{prev.0}} 
-    <br>Existing Balance: {{prev.6}}
+
     <a href="/topup/{{un}}">Click to Top-Up wallet.</a>
     
     <br>
