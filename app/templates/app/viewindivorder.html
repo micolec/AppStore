@@ -88,8 +88,11 @@ h3   {
             <th>Username</th>
             <th>Group Order ID</th>
             <th>Order Total</th>
-            <th>Delivery Fee</th>
+            <th>Shop Delivery Fee</th>
+            <th>Users in Group Order</th>
+            <th>Delivery Fee Per User</th>
             <th>Total Price (incl. Delivery)</th>
+            <th>Delivery Status</th>
 		</thead>
 	</tr>
 		{% for order in records2 %}
@@ -100,6 +103,9 @@ h3   {
             <td> {{ order.2 }} </td>
             <td> {{ order.3 }} </td>
             <td> {{ order.4 }} </td>
+            <td> {{ order.5 }} </td>
+            <td> {{ order.6 }} </td>
+            <td> {{ order.7 }} </td>
 
         </tbody>
         </tr>
