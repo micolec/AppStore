@@ -175,6 +175,12 @@ def viewindivorder(request, id):
             money = cursor.fetchone()
             existing = money[0]
             existing = float(existing[1:])
+    
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+            prev = cursor.fetchone()
+            username = prev[0]
+            result_dict = {'prev': prev}
    
     
     status = ''
@@ -192,7 +198,7 @@ def viewindivorder(request, id):
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
