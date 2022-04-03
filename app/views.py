@@ -20,7 +20,7 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
             cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-            if cursor.fetchone() != None:
+            if cursor.fetchone()[0] != None:
                 password = cursor.fetchone()[0]
                 if password == request.POST['password']:
                     messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
