@@ -370,7 +370,7 @@ def addgrouporder(request, username):
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
             cursor.execute("SELECT hall FROM buyer WHERE username = %s", [username])
-            hall = cursor.fetchone()[0]
+            hall = '%s' % cursor.fetchone()[0]
             cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [username, hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
 ## No orderid with same details
@@ -391,7 +391,7 @@ def addgrouporder(request, username):
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
 
-    context = {'status' : status, 'username' : username, 'hall' : '%s' % hall}
+    context = {'status' : status, 'username' : username, 'hall' : hall}
 
     return render(request, "app/addgrouporder.html", context)
 
