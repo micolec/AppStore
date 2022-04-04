@@ -21,11 +21,11 @@
     padding: 10px;
 }
 h1   {
-	font: normal 40px Arial, sans-serif;}
+	font: normal 36px Verdana, sans-serif;}
 h2   {
-	font: normal 32px Arial, sans-serif;}
+	font: normal 32px Verdana, sans-serif;}
 h3   {
-	font: normal 20px Arial, sans-serif;}
+	font: normal 20px Verdana, sans-serif;}
 	</style>
 <html>
 <body>
@@ -81,15 +81,17 @@ h3   {
 	    </form> 
 	</table>
     <br> <h1>Current Order Total Price</h1>
-    
     <table class="zui-table">
 	<tr>
 		<thead>
             <th>Username</th>
             <th>Group Order ID</th>
             <th>Order Total</th>
-            <th>Delivery Fee</th>
+            <th>Shop Delivery Fee</th>
+            <th>Users in Group Order</th>
+            <th>Delivery Fee Per User</th>
             <th>Total Price (incl. Delivery)</th>
+            <th>Delivery Status</th>
 		</thead>
 	</tr>
 		{% for order in records2 %}
@@ -100,13 +102,21 @@ h3   {
             <td> {{ order.2 }} </td>
             <td> {{ order.3 }} </td>
             <td> {{ order.4 }} </td>
+            <td> {{ order.5 }} </td>
+            <td> {{ order.6 }} </td>
+            <td> {{ order.7 }} </td>
 
         </tbody>
         </tr>
         {% endfor %}
 	    
 	</table>
-    
+    <br>
+    <h3>Wallet Balance</h3>
+    Ensure that your wallet has sufficient balance.
+    <a href="/topup/{{un}}">Click to Top-Up wallet.</a>
+    <br>Existing Balance: {{prev.6}}
+
     <p style="color:red">{{ status|safe }}</p>
     <form method="POST" style="display: inline;">
     {% csrf_token %}
@@ -115,9 +125,9 @@ h3   {
     <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
     </form></td>
 
+    
+    <br>
     <br> Problem: not able to get per order total for specific order. right now getting top of the list
-    <br> Ensure that your wallet has sufficient balance.
-    <a href="/topup/{{un}}">Click to Top-Up wallet.</a>
     
     <br>
 </body>
