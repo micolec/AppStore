@@ -60,6 +60,61 @@ def loginseller(request):
 def logout(request):
     return render(request, 'app/logout.html')
 
+def stats(request):
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT buyer_hall, shopname, popularity, \
+                        RANK() OVER(PARTITION BY buyer_hall ORDER BY popularity DESC) Rank\
+                        FROM(\
+                            SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
+                            FROM orders \
+                            GROUP BY buyer_hall, shopname) AS t1\
+                        ORDER BY buyer_hall, rank	")
+        ranking = cursor.fetchall()
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size\
+                        FROM (SELECT \
+                            o.shopname,o.item, qty, price AS price_per_item, \
+                            (price * qty) AS total_price\
+                            FROM orders o, item i\
+                            WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price\
+                        GROUP BY shopname; ")
+        revenue = cursor.fetchall()
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT shopname, ROUND(AVG(CAST(shop_total AS DECIMAL(6,2))),2) AS avg_perday\
+                        FROM (\
+                                SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date\
+                                FROM (SELECT o.username,order_date,\
+                                    o.shopname,o.item, qty, price AS price_per_item, \
+                                    (price * qty) AS total_price\
+                                    FROM orders o, item i, orderid oi\
+                                    WHERE o.shopname = i.shopname AND o.item = i.item \
+                                    AND oi.group_order_id = o.group_order_id) AS orders_with_price\
+                                GROUP BY shopname, order_date\
+                                ORDER BY shopname, order_date ) AS t1\
+                        GROUP BY shopname")
+        avg_day = cursor.fetchall()
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date, AVG(CAST(total_price AS DECIMAL(10,2)))\
+                        FROM (SELECT o.username,order_date,\
+                            o.shopname,o.item, qty, price AS price_per_item, \
+                            (price * qty) AS total_price\
+                            FROM orders o, item i, orderid oi\
+                            WHERE o.shopname = i.shopname AND o.item = i.item \
+                            AND oi.group_order_id = o.group_order_id) AS orders_with_price\
+                        GROUP BY shopname, order_date\
+                        ORDER BY shopname, order_date;")
+        daily_stats = cursor.fetchall()
+    
+    
+
+    result_dict = {'records': ranking, 'records2': revenue, 'records3': avg_day, 'records4': daily_stats}
+
+    return render(request,'app/stats.html', result_dict)
+
 def promo(request):
 
     with connection.cursor() as cursor:
