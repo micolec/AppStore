@@ -67,7 +67,25 @@ def openorders(request, username):
     status = ''
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+        cursor.execute(";with t1 AS (\
+	                    SELECT *\
+	                    FROM orderid \
+	                    WHERE delivery_status = 'Order Open'\
+	                    ORDER BY group_order_id DESC ),\
+                    t2 AS (\
+	                    SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
+		                CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
+	                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
+		                    FROM orders o, item i, shop s\
+		                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+	                    GROUP BY group_order_id, delivery_fee\
+	                    ORDER BY group_order_id)\
+                    SELECT t1.group_order_id, t1.creator, t1.hall, t1.shopname, t1.order_date,\
+                        t1.order_by, t1.delivery_status, t2.delivery_fee, t2.users, t2.delivery_fee_per_pax\
+                    FROM t1\
+                    INNER JOIN t2\
+                    USING (group_order_id)\
+                    ORDER BY t1.group_order_id DESC ")
         grporders = cursor.fetchall()
         # list of tuples
 
