@@ -18,13 +18,13 @@
         Last Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" value="{{obj.3}}" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_phone_number" class="control-group"> <label for="id_phone_number" class="control-label requiredField">
         Phone Number<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="phone_number" value="{{obj.4}}" maxlength="64" class="textinput textInput" required="" id="id_phone_number"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" value="{{obj.5}}" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
-        Wallet Balance<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.6}}" maxlength="64" class="textinput textInput" required="" id="wallet_balance"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">     
         
-            <br>Top Up Wallet</br>
-            <br>Existing Balance: {{obj.6}}
+            <h2> Top Up Wallet </h2>
+            <br>Existing Balance in Wallet: {{obj.6}} <br/>
         
             <br> Scan QR Code below to Top Up Wallet:
             <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
+            <p> </p>
         
             <!-- Create a Form -->
             <form method="POST">
@@ -33,9 +33,8 @@
                 <!-- form -->
                 <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
                 Top-Up Amount:
-                <br> Ensure your wallet has at least $5 even after payment!
+                <br> Ensure your wallet has at least $5 at all times!
                     <span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
-                <button type="submit" value="update">Update</button>
             </form>
 
             <br>
