@@ -1,3 +1,4 @@
+from modulefinder import STORE_NAME
 from django.shortcuts import render, redirect
 from django.db import connection
 from django.contrib import messages
@@ -128,8 +129,8 @@ def filtered_openorders(request, uname, sname):
                     INNER JOIN t2\
                     USING (group_order_id)\
                     WHERE hall = (SELECT hall FROM buyer WHERE username = %s)\
-                    AND shopname = sname\
-                    ORDER BY t1.group_order_id DESC ", [uname])
+                    AND shopname = %s\
+                    ORDER BY t1.group_order_id DESC ", [uname, sname])
         grporders = cursor.fetchall()
     
     if request.POST:
