@@ -18,11 +18,10 @@
         Last Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" value="{{obj.3}}" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_phone_number" class="control-group"> <label for="id_phone_number" class="control-label requiredField">
         Phone Number<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="phone_number" value="{{obj.4}}" maxlength="64" class="textinput textInput" required="" id="id_phone_number"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" value="{{obj.5}}" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
-        
-            <h2> Top Up Wallet </h2>
-            <br>Existing Balance in Wallet: {{obj.6}} <br/>
-        
-            <br> Scan QR Code below to Top Up Wallet:
+        <p> </p>
+            <h2> Top Up Wallet via QR Code Scanning</h2>
+            <br>Existing Balance: {{obj.6}}
+    
             <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
             <p> </p>
         
