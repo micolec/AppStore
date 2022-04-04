@@ -1,63 +1,70 @@
 {% extends "app/baseseller.html" %}
 {% block content %}
-	<style>
-.zui-table {
-    border: solid 1px #5F788A;
-    border-collapse: collapse;
-    border-spacing: 0;
-    font: normal 13px Arial, sans-serif;
-}
-.zui-table thead th {
-    background-color: #5F788A;
-    border: solid 1px #5F788A;
-    color: white;
-    padding: 10px;
-    text-align: left;
-}
-.zui-table tbody td {
-    border: solid 1px #5F788A;
-    color: #333;
-    padding: 10px;
-}
-h2   {
-	font: normal 32px Arial, sans-serif;}
-h3   {
-	font: normal 20px Arial, sans-serif;}
-	</style>
-	<h2>Current Orders for <r class="2"></r>
-	</h2>
-	<body>
+<style>
+	.zui-table {
+		border: solid 1px #5F788A;
+		border-collapse: collapse;
+		border-spacing: 0;
+		font: normal 13px Arial, sans-serif;
+	}
+
+	.zui-table thead th {
+		background-color: #5F788A;
+		border: solid 1px #5F788A;
+		color: white;
+		padding: 10px;
+		text-align: left;
+	}
+
+	.zui-table tbody td {
+		border: solid 1px #5F788A;
+		color: #333;
+		padding: 10px;
+	}
+
+	h2 {
+		font: normal 32px Arial, sans-serif;
+	}
+
+	h3 {
+		font: normal 20px Arial, sans-serif;
+	}
+</style>
+<h2>Current Orders for {{ prev.2 }}</h2>
+
+<body>
 	<table class="zui-table">
-	<tr>
-		<thead>
-			<th>Order ID</th>
-			<th>Customer Username</th>
-			<th>Hall</th>
-			<th>Order Date</th>
-            <th>Order By</th>
-            <th>Delivery Status</th>
-			<th>Action</th>
-		</thead>
-	</tr>
+		<tr>
+			<thead>
+				<th>Order ID</th>
+				<th>Customer Username</th>
+				<th>Hall</th>
+				<th>Order Date</th>
+				<th>Order By</th>
+				<th>Delivery Status</th>
+				<th>Action</th>
+			</thead>
+		</tr>
 		{% for r in records %}
-	<tr>
-		<tbody>
-			<td> {{ r.0 }} </td>
-			<td> {{ r.1 }} </td>
-			<td> {{ r.2 }} </td>
-			<td> {{ r.6 }} </td>
-            <td> {{ r.7 }} </td>
-            <td> {{ r.8 }} </td>
-			<td>
-                <a href="seller_orderid/{{r.0}}"><button>Edit</button></a>
-                <!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
-                <form method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{r.8}}"/>
-              </form></td>
-		</tbody>
-	</tr>
+		<tr>
+			<tbody>
+				<td> {{ r.0 }} </td>
+				<td> {{ r.1 }} </td>
+				<td> {{ r.2 }} </td>
+				<td> {{ r.6 }} </td>
+				<td> {{ r.7 }} </td>
+				<td> {{ r.8 }} </td>
+				<td>
+					<a href="seller_orderid/{{r.0}}"><button>Edit</button></a>
+					<!-- NEED TO CHANGE ABV to  view indiv orders in the grp order, edit should only be accessible by creator to change status only -->
+					<form method="POST" style="display: inline;">
+						{% csrf_token %}
+						<input type="hidden" name="id" value="{{r.8}}" />
+					</form>
+				</td>
+			</tbody>
+		</tr>
 		{% endfor %}
-	</form>
-	</body>
+		</form>
+</body>
 {% endblock content %}
