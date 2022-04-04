@@ -375,7 +375,7 @@ def edit(request, id):
  
     return render(request, "app/edit.html", context)
 
-# vito: sellers
+# vito: seller's homepage
 def sellerorders(request):   
     return render(request,'app/sellerorders.html')
 
