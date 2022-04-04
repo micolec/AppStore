@@ -60,6 +60,32 @@ def loginseller(request):
 def logout(request):
     return render(request, 'app/logout.html')
 
+def promo(request):
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT buyer_hall, shopname, COUNT(shopname)  \
+                        FROM orders  \
+                        GROUP BY buyer_hall, shopname\
+                        HAVING (buyer_hall, COUNT(shopname)) IN (\
+	                        SELECT buyer_hall, MAX(popularity) \
+                            FROM ( \
+                                SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
+                                FROM orders \
+                                GROUP BY buyer_hall, shopname) AS t1\
+                            GROUP BY buyer_hall) ")
+        popular = cursor.fetchall()
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT b.first_name, b.last_name,  b.username, b.hall,b.phone_number\
+                        FROM buyer b\
+                        WHERE b.username NOT IN  (\
+	                        SELECT username\
+	                        FROM orders) ")
+        buyers = cursor.fetchall()
+
+    result_dict = {'records': popular, 'records2': buyers}
+
+    return render(request,'app/promo.html', result_dict)
 
 def openorders(request, username):
 
