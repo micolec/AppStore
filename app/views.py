@@ -263,6 +263,8 @@ def edit_indiv_order(request, id):
 def deliverystatus(request, username):
     context = {}
     status = ''
+    fee = ''
+    indivorders = ''
     
     with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT(oi.group_order_id) \
@@ -301,7 +303,7 @@ def deliverystatus(request, username):
                 ORDER BY group_order_id DESC", [username, grpid])
             fee = cursor.fetchall()
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid}
+    result_dict = {'records2': fee, 'status':status}
 
     return render(request,'app/deliverystatus.html',result_dict)
 
