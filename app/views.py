@@ -83,7 +83,7 @@ def stats(request):
         revenue = cursor.fetchall()
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT shopname, ROUND(AVG(CAST(shop_total AS DECIMAL(6,2))),2) AS avg_perday\
+        cursor.execute("SELECT shopname, CAST(ROUND(AVG(CAST(shop_total AS DECIMAL(6,2))),2) AS MONEY) AS avg_perday\
                         FROM (\
                                 SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date\
                                 FROM (SELECT o.username,order_date,\
@@ -98,7 +98,7 @@ def stats(request):
         avg_day = cursor.fetchall()
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date, ROUND(AVG(CAST(total_price AS DECIMAL(10,2))),2)\
+        cursor.execute("SELECT shopname, COUNT(*) AS group_size, SUM(total_price) AS shop_total, order_date, CAST(ROUND(AVG(CAST(total_price AS DECIMAL(10,2))),2) AS MONEY)\
                         FROM (SELECT o.username,order_date,\
                             o.shopname,o.item, qty, price AS price_per_item, \
                             (price * qty) AS total_price\
@@ -114,6 +114,7 @@ def stats(request):
     result_dict = {'records': ranking, 'records2': revenue, 'records3': avg_day, 'records4': daily_stats}
 
     return render(request,'app/stats.html', result_dict)
+
 
 def promo(request):
 
