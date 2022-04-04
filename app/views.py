@@ -176,13 +176,13 @@ def openorders(request, username):
     if request.POST:
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
-            if shopname in shops:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
-            else:
-                status = 'Unable to query. Shop name is incorrect.'
+            #cursor.execute("SELECT shopname FROM shop")
+            #shops = cursor.fetchall()
+            #if shopname in shops:
+            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+            return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+            #else:
+                #status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status, 'username' : username}
 
@@ -221,8 +221,8 @@ def filtered_openorders(request, username, shopname):
         # Check if hall is present
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
+            #cursor.execute("SELECT shopname FROM shop")
+            #shops = cursor.fetchall()
             #if shopname in shops:
             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
             return redirect('/filtered_openorders/%s/%s' %(username,shopname))
