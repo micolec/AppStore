@@ -257,7 +257,8 @@ def edit_indiv_order(request, id):
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/viewindivorder')
             
- 
+    result_dict = {'username' : id}
+
     return render(request, "app/edit_indiv_order.html", result_dict)
 
 def deliverystatus(request, username):
@@ -303,7 +304,7 @@ def deliverystatus(request, username):
                 ORDER BY group_order_id DESC", [username, grpid])
             fee = cursor.fetchall()
    
-    result_dict = {'records2': fee, 'status':status}
+    result_dict = {'records2': fee, 'status':status, 'username' : username}
 
     return render(request,'app/deliverystatus.html',result_dict)
 
@@ -375,7 +376,7 @@ def viewindivorder(request, username):
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':username, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':username, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
@@ -394,6 +395,8 @@ def topup(request, username):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % username)   
  
+    result_dict = {'username' : username}
+
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, username):
@@ -413,7 +416,9 @@ def addindivorder(request, username):
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
- 
+    
+    result_dict = {'username' : username}
+
     return render(request, "app/addindivorder.html", result_dict)
 
 def addgrouporder(request, username):
@@ -535,6 +540,7 @@ def edit(request, username):
 
     context["obj"] = obj
     context["status"] = status
+    context["username"] = username
  
     return render(request, "app/edit.html", context)
 
