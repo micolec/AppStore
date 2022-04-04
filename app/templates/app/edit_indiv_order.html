@@ -19,7 +19,7 @@
         {% csrf_token %}
         <!-- form -->
         <div username="div_id_qty" class="control-group"> <label for="id_qty" class="control-label requiredField">
-        Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" value="{{order.6}}" maxlength="64" class="textinput textInput" required="" id="id_qty"> </div> </div>
+        Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" value="{{order.6}}" maxlength="64" class="textinput textInput" required="" username="id_qty"> </div> </div>
         <br>
         <button type="submit" value="edit">Submit Change</button>
     </form>
