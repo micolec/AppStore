@@ -20,11 +20,10 @@ def login(request):
                 return redirect('buyerindex')
             with connection.cursor() as cursor: 
                 cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-                if cursor.fetchone()[0] != None:
-                    password = cursor.fetchone()[0]
-                    if password == request.POST['password']:
-                        messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                        return redirect(f'/openorders/%s' % username) 
+                password = cursor.fetchone()[0]
+                if password == request.POST['password']:
+                    messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                    return redirect(f'/openorders/%s' % username) 
                 else:
                     status = 'Unable to login. Either username or password is incorrect.'
 
@@ -45,11 +44,10 @@ def loginseller(request):
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
             cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
-            if cursor.fetchone()[0] != None:
-                password = cursor.fetchone()[0]
-                if password == request.POST['password']:
-                    messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
-                    return redirect('sellerorders')    
+            password = cursor.fetchone()[0]
+            if password == request.POST['password']:
+                messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
+                return redirect('sellerorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
