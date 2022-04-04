@@ -380,10 +380,10 @@ def viewindivorder(request, username):
 
     return render(request,'app/viewindivorder.html',result_dict)
 
-def topup(request, username):
+def topup(request, id):
     
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
@@ -393,16 +393,16 @@ def topup(request, username):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], prev[0]))
             messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % username)   
+            return redirect(f'/viewindivorder/%s' % id)   
  
-    result_dict = {'username' : username}
+    result_dict = {'username' : id}
 
     return render(request, "app/topup.html", result_dict)
 
-def addindivorder(request, username):
+def addindivorder(request, id):
     """links from open orders: join button"""
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [username])
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
             group_ord_id = prev[0]
             hall = prev[2]
@@ -414,12 +414,11 @@ def addindivorder(request, username):
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
-            return redirect(f'/viewindivorder/%s' % (request.POST['username']))
+            return redirect(f'/viewindivorder/%s' % (request.POST['id']))
             """should link to viewindivorder"""
     
-    result_dict = {'username' : username}
 
-    return render(request, "app/addindivorder.html", result_dict)
+    return render(request, "app/addindivorder.html")
 
 def addgrouporder(request, username):
     context = {}
