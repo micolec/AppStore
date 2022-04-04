@@ -239,6 +239,7 @@ def filtered_openorders(request, username, shopname):
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
+
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
     with connection.cursor() as cursor:
@@ -258,6 +259,64 @@ def edit_indiv_order(request, id):
             
  
     return render(request, "app/edit_indiv_order.html", result_dict)
+
+def deliverystatus(request, username):
+    context = {}
+    status = ''
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT DISTINCT(oi.group_order_id) \
+                        FROM orders o, orderid oi \
+                        WHERE oi.delivery_status != 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
+        indivorders = cursor.fetchall()
+        if indivorders:
+            grpid = indivorders[0]
+        #rn the second table is using orderid = grpid which is the first entry of first table
+        # list of tuples
+    with connection.cursor() as cursor:
+        if indivorders:
+            cursor.execute(";with t1 as ( \
+                SELECT group_order_id, SUM(total_price) AS group_total, order_date, order_by, \
+                ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
+                FROM ( \
+                    SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status, order_date, order_by \
+                    FROM orders o, item i, shop s, orderid oi \
+                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id \
+                    ORDER BY group_order_id, username) AS orders_with_price \
+                    GROUP BY group_order_id, delivery_fee, delivery_status, order_date, order_by \
+                    ORDER BY group_order_id \
+                    ), \
+                t2 as ( SELECT username, buyer_hall, shopname, group_order_id, SUM(total_price) AS indiv_total \
+                    FROM ( SELECT username, buyer_hall, o.shopname, group_order_id,(price * qty) AS total_price \
+                        FROM orders o, item i \
+                        WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price \
+                        GROUP BY username, group_order_id, buyer_hall, shopname \
+                        ORDER BY group_order_id) \
+                SELECT t2.group_order_id, t2.username, t2.buyer_hall, t2.shopname, t1.order_date, t1.order_by, \
+				(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
+				(CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
+                FROM t1,t2 \
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = 39 \
+                ORDER BY group_order_id DESC", [username, grpid])
+            fee = cursor.fetchall()
+            total = fee[0][6]
+            total = float(total[1:7])
+           
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
+            money = cursor.fetchone()
+            existing = money[0]
+            existing = float(existing[1:])
+    
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+            prev = cursor.fetchone()
+            username = prev[0]
+            result_dict = {'prev': prev}    
+   
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
+
+    return render(request,'app/deliverystatus.html',result_dict)
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also

@@ -28,6 +28,7 @@ urlpatterns = [
     path('openorders/<str:username>', app.views.openorders, name='openorders'),
     path('filtered_openorders/<str:username>/<str:shopname>', app.views.filtered_openorders, name = 'filtered_openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
+    path('deliverystatus/<str:username>', app.view.deliverystatus, name = 'deliverystatus'),
     path('topup/<str:id>', app.views.topup, name='topup'),
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
