@@ -1,0 +1,149 @@
+{% extends "app/basebuyer.html" %}
+{% block content %}
+{% load static %}
+<html>
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 28px Verdana, sans-serif;}
+h3   {
+	font: normal 24px Verdana, sans-serif;}
+	</style>
+    <br> <h1>Statistics for Shop Owners</h1>
+    <br>
+    <h3>Shops' Rankings Based on Popularity</h3>
+    <br>
+	
+    <body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Total Number of Individual Orders</th>
+                        <th>Ranking</th>
+     
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                 
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+	<br>
+	<br>
+
+    
+    <h3>Shops' Total Revenue</h3>
+    <br>
+	
+    <body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Shop Name</th>
+                        <th>Total Revenue</th>
+                        <th>Number of Individual Orders</th>
+     
+		</thead>
+	</tr>
+		{% for order in records2 %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                 
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+	<br>
+	<br>
+
+    
+    <h3>Shops' Average Daily Revenue </h3>
+    <br>
+    
+    
+    <br/>
+
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Shop Name</th>
+                        <th>Average Daily Revenue</th>
+                  
+		</thead>
+	</tr>
+		{% for order in records3 %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                 
+       
+		</tbody>
+	</tr>
+		{% endfor %}
+		</table>
+  
+    <h3> Daily Statistics</h3>
+    <br>
+    
+    
+    <br/>
+
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Shop Name</th>
+                        <th>Order Date</th>
+                        <th>Shop's Revenue</th>
+                        <th>Number of Individual Orders</th>
+                        <th>Average Individual Order Total</th>
+		</thead>
+	</tr>
+		{% for order in records4 %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.4 }} </td>
+       
+		</tbody>
+	</tr>
+		{% endfor %}
+		</table>
+  
+	</form>
+	</body>
+{% endblock content %}
