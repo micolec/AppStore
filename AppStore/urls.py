@@ -23,8 +23,8 @@ urlpatterns = [
     path('loginseller', app.views.loginseller, name = 'loginseller'),
     path('logout', app.views.logout, name = 'logout'),
 
-    path('openorders/<str:uname>', app.views.openorders, name='openorders'),
-    path('filtered_openorders/<str:uname>/<str:sname>', app.views.filtered_openorders, name = 'filtered_openorders'),
+    path('openorders/<str:username>', app.views.openorders, name='openorders'),
+    path('filtered_openorders/<str:username>/<str:shopname>', app.views.filtered_openorders, name = 'filtered_openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
     path('topup/<str:id>', app.views.topup, name='topup'),
     path('addgrouporder', app.views.addgrouporder, name='addgrouporder'),
