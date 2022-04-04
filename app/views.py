@@ -363,6 +363,7 @@ def addindivorder(request, id):
 def addgrouporder(request, username):
     context = {}
     status = ''
+    hall = ''
 
     if request.POST:
         ## Check if customerid is already in the table
