@@ -91,14 +91,13 @@ def openorders(request, username):
 
     ## Use raw query to get all objects
     if request.POST:
-        # Check if hall is present
         #with connection.cursor() as cursor:
         shopname = request.POST['shopname']
             #cursor.execute("SELECT shopname FROM shop")
             #shops = cursor.fetchall()
             #if shopname in shops:
         messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-        return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
+        return redirect(f'/filtered_openorders/%s/%s' %username %shopname)
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
@@ -118,7 +117,7 @@ def filtered_openorders(request, username, shopname):
     if request.POST:
         # Check if hall is present
         with connection.cursor() as cursor:
-            shopname = request.POST['username']
+            shopname = request.POST['shopname']
             #cursor.execute("SELECT shopname FROM shop")
             #shops = cursor.fetchall()
             #if shopname in shops:
