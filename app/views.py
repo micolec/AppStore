@@ -127,9 +127,9 @@ def filtered_openorders(request, uname, sname):
                     FROM t1\
                     INNER JOIN t2\
                     USING (group_order_id)\
-                    WHERE hall = (SELECT hall FROM buyer WHERE username = uname)\
+                    WHERE hall = (SELECT hall FROM buyer WHERE username = %s)\
                     AND shopname = sname\
-                    ORDER BY t1.group_order_id DESC ")
+                    ORDER BY t1.group_order_id DESC ", [uname])
         grporders = cursor.fetchall()
     
     if request.POST:
