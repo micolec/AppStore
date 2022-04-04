@@ -21,7 +21,6 @@
         <p> </p>
             <h2> Top Up Wallet via QR Code Scanning</h2>
             <br>Existing Balance: {{obj.6}} <br/>
-            <br>Ensure your wallet has at least $5 at all times!
 
             <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
             <p> </p>
@@ -35,7 +34,7 @@
                 Top-Up Amount: <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" id="id_wallet_balance"> </div> </div>
             </form>
 
-            <br>
+            <br>Ensure your wallet has at least $5 at all times!
         <button type="submit" value="Update">Update</button>
     </form>
 </body>

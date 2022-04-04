@@ -27,11 +27,11 @@ urlpatterns = [
 
     path('openorders/<str:username>', app.views.openorders, name='openorders'),
     path('filtered_openorders/<str:username>/<str:shopname>', app.views.filtered_openorders, name = 'filtered_openorders'),
-    path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
+    path('viewindivorder/<str:username>', app.views.viewindivorder, name='viewindivorder'),
     path('deliverystatus/<str:username>', app.views.deliverystatus, name = 'deliverystatus'),
-    path('topup/<str:id>', app.views.topup, name='topup'),
+    path('topup/<str:username>', app.views.topup, name='topup'),
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
-    path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
+    path('addindivorder/<str:username>', app.views.addindivorder, name='addindivorder'),
 
     path('sellerorders', app.views.sellerorders, name='sellerorders'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
@@ -42,7 +42,7 @@ urlpatterns = [
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
-    path('edit/<str:id>', app.views.edit, name='edit'),
+    path('edit/<str:username>', app.views.edit, name='edit'),
     path('promo', app.views.promo, name='promo'),
     path('stats', app.views.stats, name='stats')
 ]

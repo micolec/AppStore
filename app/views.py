@@ -307,7 +307,7 @@ def deliverystatus(request, username):
 
     return render(request,'app/deliverystatus.html',result_dict)
 
-def viewindivorder(request, id):
+def viewindivorder(request, username):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     context = {}
     status = ''
@@ -342,19 +342,19 @@ def viewindivorder(request, id):
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
-                ORDER BY group_order_id DESC", [id,grpid])
+                ORDER BY group_order_id DESC", [username,grpid])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
            
     with connection.cursor() as cursor:
-            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
+            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [username])
             money = cursor.fetchone()
             existing = money[0]
             existing = float(existing[1:])
     
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
             prev = cursor.fetchone()
             username = prev[0]
             result_dict = {'prev': prev}
@@ -365,24 +365,24 @@ def viewindivorder(request, id):
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
+                cursor.execute("DELETE FROM orders WHERE username = %s", [username])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
                 if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, username])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % id)    
+                    return redirect(f'/viewindivorder/%s' % username)    
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':username, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
-def topup(request, id):
+def topup(request, username):
     
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
@@ -392,14 +392,14 @@ def topup(request, id):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], prev[0]))
             messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % id)   
+            return redirect(f'/viewindivorder/%s' % username)   
  
     return render(request, "app/topup.html", result_dict)
 
-def addindivorder(request, id):
+def addindivorder(request, username):
     """links from open orders: join button"""
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [username])
             prev = cursor.fetchone()
             group_ord_id = prev[0]
             hall = prev[2]
@@ -508,7 +508,7 @@ def view(request, id):
     return render(request,'app/view.html',result_dict)
 
 # Create your views here.
-def edit(request, id):
+def edit(request, username):
 
     # dictionary for initial data with
     # field names as keys
@@ -516,7 +516,7 @@ def edit(request, id):
 
     # fetch the object related to passed id
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+        cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
         obj = cursor.fetchone()
         balance = float((obj[6])[1:])
 
@@ -528,9 +528,9 @@ def edit(request, id):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE buyer SET password = %s, first_name = %s, last_name = %s, phone_number = %s, hall = %s, wallet_balance = (%s + %s) WHERE username = %s"
                     , [request.POST['password'], request.POST['first_name'], request.POST['last_name'],
-                        request.POST['phone_number'] , request.POST['hall'], balance, request.POST['wallet_balance'], id ])
-            messages.success(request, f'%s has been updated successfully!' % id)
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
+                        request.POST['phone_number'] , request.POST['hall'], balance, request.POST['wallet_balance'], username ])
+            messages.success(request, f'%s has been updated successfully!' % username)
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
             obj = cursor.fetchone()
 
     context["obj"] = obj
