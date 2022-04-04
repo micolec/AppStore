@@ -27,14 +27,39 @@ h3   {
 	font: normal 20px Verdana, sans-serif;}
 	</style>
     <br> <h1>Targetted Advertising</h1>
-    <h2>List of buyers who have registered, but have not made an order. </h2>
+    <p>
+    <h3>Most Popular Shops from Each Hall</h3>
+	</p>
+    <body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Popularity</th>
+     
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                 
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	</body>
+    <p>
+    <h3>List of buyers who have registered, but have not made an order. </h3>
     Suggestion: Send a $5 Promotion Code to these buyers, to entice them to make a purchase. 
-    <p> 
     </p>
     
     <br/>
-
-	<body>
+	<br>
+        <body>
 	<table class="zui-table">
 	<tr>
 		<thead>
@@ -54,30 +79,6 @@ h3   {
                         <td> {{ order.3 }} </td>
                         <td> {{ order.4 }} </td>
        
-		</tbody>
-	</tr>
-		{% endfor %}
-	</form>
-	</body>
-	<br>
-	 <h2>Most Popular Shops from Each Hall</h2>
-	<body>
-	<table class="zui-table">
-	<tr>
-		<thead>
-                        <th>Hall</th>
-                        <th>Shop Name</th>
-                        <th>Popularity</th>
-     
-		</thead>
-	</tr>
-		{% for order in records %}
-	<tr>
-		<tbody>
-                        <td> {{ order.0 }} </td>
-                        <td> {{ order.1 }} </td>
-                        <td> {{ order.2 }} </td>
-                 
 		</tbody>
 	</tr>
 		{% endfor %}
