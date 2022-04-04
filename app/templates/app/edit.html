@@ -3,8 +3,7 @@
 {% load static %}
 <html>
 <body>
-    <h2>Edit {{obj.0}}</h2>
-    <a href="/">Back to home</a>
+    <h2>Update {{obj.0}}'s Profile</h2>
 
     <p style="color:red">{{ status|safe }}</p>
 
@@ -14,13 +13,32 @@
         {% csrf_token %}
         <!-- form -->
         <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-        Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="password" value="{{obj.1}}" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
+        Password<span class="asteriskField">*</span> </label> <div class="controls"> <input type="password" name="password" value="{{obj.1}}" maxlength="64" class="textinput textInput" required="" id="id_password"> </div> </div> <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
         First Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="first_name" value="{{obj.2}}" maxlength="64" class="textinput textInput" required="" id="id_first_name"> </div> </div> <div id="div_id_last_name" class="control-group"> <label for="id_last_name" class="control-label requiredField">
         Last Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="last_name" value="{{obj.3}}" maxlength="64" class="textinput textInput" required="" id="id_last_name"> </div> </div> <div id="div_id_phone_number" class="control-group"> <label for="id_phone_number" class="control-label requiredField">
         Phone Number<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="phone_number" value="{{obj.4}}" maxlength="64" class="textinput textInput" required="" id="id_phone_number"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" value="{{obj.5}}" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
         Wallet Balance<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.6}}" maxlength="64" class="textinput textInput" required="" id="wallet_balance"> </div> </div> <div id="div_id_username" class="control-group"> <label for="id_username" class="control-label requiredField">     
-        <br>
+        
+            <br>Top Up Wallet</br>
+            <br>Existing Balance: {{obj.6}}
+        
+            <br> Scan QR Code below to Top Up Wallet:
+            <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
+        
+            <!-- Create a Form -->
+            <form method="POST">
+                <!-- Security token by Django -->
+                {% csrf_token %}
+                <!-- form -->
+                <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
+                Top-Up Amount:
+                <br> Ensure your wallet has at least $5 even after payment!
+                    <span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
+                <button type="submit" value="update">Update</button>
+            </form>
+
+            <br>
         <button type="submit" value="Update">Update</button>
     </form>
 </body>

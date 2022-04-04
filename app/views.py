@@ -255,6 +255,7 @@ def edit_indiv_order(request, id):
             cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/viewindivorder')
+            
  
     return render(request, "app/edit_indiv_order.html", result_dict)
 
@@ -469,6 +470,7 @@ def edit(request, id):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
         obj = cursor.fetchone()
+        balance = float((obj[6])[1:])
 
     status = ''
     # save the data from the form
@@ -476,13 +478,12 @@ def edit(request, id):
     if request.POST:
         ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE buyer SET password = %s, first_name = %s, last_name = %s, phone_number = %s, hall = %s, wallet_balance = %s WHERE username = %s"
+            cursor.execute("UPDATE buyer SET password = %s, first_name = %s, last_name = %s, phone_number = %s, hall = %s, wallet_balance = (%s + %s) WHERE username = %s"
                     , [request.POST['password'], request.POST['first_name'], request.POST['last_name'],
-                        request.POST['phone_number'] , request.POST['hall'], request.POST['wallet_balance'], id ])
-            status = 'Buyer edited successfully!'
+                        request.POST['phone_number'] , request.POST['hall'], balance, request.POST['wallet_balance'], id ])
+            messages.success(request, f'%s has been updated successfully!' % id)
             cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             obj = cursor.fetchone()
-
 
     context["obj"] = obj
     context["status"] = status
