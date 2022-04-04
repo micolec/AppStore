@@ -127,9 +127,9 @@ def filtered_openorders(request, username, shopname):
                     SELECT t1.group_order_id, t1.creator, t1.hall, t1.shopname, t1.order_date,\
                         t1.order_by, t1.delivery_status, t2.delivery_fee, t2.users, t2.delivery_fee_per_pax\
                     FROM t1\
-                    WHERE hall = (SELECT hall FROM buyer WHERE username = username)\
                     INNER JOIN t2\
                     USING (group_order_id)\
+                    WHERE hall = (SELECT hall FROM buyer WHERE username = username)\
                     ORDER BY t1.group_order_id DESC ")
         grporders = cursor.fetchall()
     
