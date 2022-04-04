@@ -80,7 +80,8 @@ def promo(request):
                         FROM buyer b\
                         WHERE b.username NOT IN  (\
 	                        SELECT username\
-	                        FROM orders) ")
+	                        FROM orders) \
+		        GROUP BY b.hall, b.last_name, b.first_name")
         buyers = cursor.fetchall()
 
     result_dict = {'records': popular, 'records2': buyers}
