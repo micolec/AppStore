@@ -26,7 +26,6 @@ h2   {
 h3   {
 	font: normal 20px Verdana, sans-serif;}
 	</style>
-    <!--<h1>Existing Open Orders</h1>-->
     <br> <h1>Targetted Advertising</h1>
     <h2>List of buyers who have registered, but have not made an order. </h2>
     Suggestion: Send a $5 Promotion Code to these buyers, to entice them to make a purchase. 
@@ -44,7 +43,32 @@ h3   {
                         <th>Username</th>
                         <th>Hall</th>
                         <th>Phone Number</th>
-                        <th>Action</th>
+		</thead>
+	</tr>
+		{% for order in records2 %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.4 }} </td>
+       
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	</body>
+	<br>
+	 <h2>Most Popular Shops from Each Hall</h2>
+	<body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Popularity</th>
+     
 		</thead>
 	</tr>
 		{% for order in records %}
@@ -53,20 +77,7 @@ h3   {
                         <td> {{ order.0 }} </td>
                         <td> {{ order.1 }} </td>
                         <td> {{ order.2 }} </td>
-                        <td> {{ order.3 }} </td>
-                        <td> {{ order.4 }} </td>
-                        <td> {{ order.5 }} </td>
-                        <td> {{ order.6 }} </td>
-                        <td> {{ order.7 }} </td>
-                        <td> {{ order.8 }} </td>
-                        <td> {{ order.9 }} </td>
-                        <td>
-                <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
-                <a href="/seller_orderid/{{order.0}}"><button>Edit</button></a>
-                <form method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="un" value="{{order.0}}"/>
-              </form></td>
+                 
 		</tbody>
 	</tr>
 		{% endfor %}
