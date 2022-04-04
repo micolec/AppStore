@@ -5,6 +5,12 @@ from django.contrib import messages
 
 # Create your views here.
 
+def basebuyer(request, username):
+
+    context = {'username' : username}
+
+    return render(request, 'app/basebuyer.html', context)
+
 def index(request):
     return render(request,'app/index.html')
 
