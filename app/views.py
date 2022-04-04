@@ -177,13 +177,13 @@ def openorders(request, username):
         shopname = request.POST['shopname']
         cursor.execute("SELECT shopname FROM shop")
         shops = cursor.fetchall()
-        if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
-        else:
-            status = 'Unable to query. Shop name is incorrect.'
+        #if shopname in shops:
+        messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+        return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+        #else:
+            #status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status}
+    result_dict = {'records': grporders, 'status': status, 'username' : username}
 
     return render(request,'app/openorders.html', result_dict)
 
@@ -222,13 +222,13 @@ def filtered_openorders(request, username, shopname):
             shopname = request.POST['shopname']
             cursor.execute("SELECT shopname FROM shop")
             shops = cursor.fetchall()
-            if shopname in shops:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect('/filtered_openorders/%s/%s' %(username,shopname))
-            else:
-                status = 'Unable to query. Shop name is incorrect.'
+            #if shopname in shops:
+            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+            return redirect('/filtered_openorders/%s/%s' %(username,shopname))
+            #else:
+                #status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status}
+    result_dict = {'records': grporders, 'status': status, 'username' : username}
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
