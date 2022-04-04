@@ -273,6 +273,7 @@ def deliverystatus(request, username):
             grpid = indivorders[0]
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
+
     with connection.cursor() as cursor:
         if indivorders:
             cursor.execute(";with t1 as ( \
@@ -299,22 +300,8 @@ def deliverystatus(request, username):
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = 39 \
                 ORDER BY group_order_id DESC", [username, grpid])
             fee = cursor.fetchall()
-            total = fee[0][6]
-            total = float(total[1:7])
-           
-    with connection.cursor() as cursor:
-            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
-            money = cursor.fetchone()
-            existing = money[0]
-            existing = float(existing[1:])
-    
-    with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
-            prev = cursor.fetchone()
-            username = prev[0]
-            result_dict = {'prev': prev}    
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid}
 
     return render(request,'app/deliverystatus.html',result_dict)
 
