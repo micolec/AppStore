@@ -30,10 +30,10 @@
                 <!-- Security token by Django -->
                 {% csrf_token %}
                 <!-- form -->
-                <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
+                <div id="div_id_wallet_balance"> <label for="id_wallet_balance">
                 Top-Up Amount:
                 <br> Ensure your wallet has at least $5 at all times!
-                    <span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
+                    <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" id="id_wallet_balance"> </div> </div>
             </form>
 
             <br>
