@@ -227,7 +227,7 @@ def topup(request, id):
             cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             prev = cursor.fetchone()
             username = prev[0]
-            balance = prev[6]
+            balance = float(prev[6])
             result_dict = {'prev': prev}
 
     if request.POST:
