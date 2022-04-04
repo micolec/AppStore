@@ -62,7 +62,7 @@ def logout(request):
     return render(request, 'app/logout.html')
 
 
-def openorders(request, username):
+def openorders(request, uname):
 
     status = ''
 
@@ -97,7 +97,7 @@ def openorders(request, username):
             #shops = cursor.fetchall()
             #if shopname in shops:
         messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-        return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+        return redirect(f'/filtered_openorders/%s/%s' %(uname,shopname))
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
@@ -105,7 +105,7 @@ def openorders(request, username):
 
     return render(request,'app/openorders.html', result_dict)
 
-def filtered_openorders(request, username, shopname):
+def filtered_openorders(request, uname, sname):
 
     status = ''
 
@@ -129,7 +129,8 @@ def filtered_openorders(request, username, shopname):
                     FROM t1\
                     INNER JOIN t2\
                     USING (group_order_id)\
-                    WHERE hall = (SELECT hall FROM buyer WHERE username = username)\
+                    WHERE hall = (SELECT hall FROM buyer WHERE username = uname)\
+                    AND shopname = sname\
                     ORDER BY t1.group_order_id DESC ")
         grporders = cursor.fetchall()
     
@@ -141,7 +142,7 @@ def filtered_openorders(request, username, shopname):
             #shops = cursor.fetchall()
             #if shopname in shops:
             messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect('/filtered_openorders/%s/%s' %(username,shopname))
+            return redirect('/filtered_openorders/%s/%s' %(uname,shopname))
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
