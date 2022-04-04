@@ -389,7 +389,8 @@ def addgrouporder(request, username):
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
 
-    context['status'] = status
+    context = {'status' : status, 'username' : username, 'hall' : hall}
+
     return render(request, "app/addgrouporder.html", context)
 
 def buyerindex(request):
