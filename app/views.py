@@ -19,7 +19,7 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
             with connection.cursor() as cursor: 
-                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])    
+                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']]) 
                 password = cursor.fetchone()[0]
                 if password == request.POST['password']:
                     messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
@@ -44,10 +44,11 @@ def loginseller(request):
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
             cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password == request.POST['password']:
-                messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('sellerorders')    
+            if cursor.fetchone()[0] != None:
+                password = cursor.fetchone()[0]
+                if password == request.POST['password']:
+                    messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
+                    return redirect('sellerorders')    
             else:
                 status = 'Unable to login. Either username or password is incorrect.'
 
@@ -65,7 +66,25 @@ def openorders(request, username):
     status = ''
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' ORDER BY group_order_id DESC")
+        cursor.execute(";with t1 AS (\
+	                    SELECT *\
+	                    FROM orderid \
+	                    WHERE delivery_status = 'Order Open'\
+	                    ORDER BY group_order_id DESC ),\
+                    t2 AS (\
+	                    SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
+		                CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
+	                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
+		                    FROM orders o, item i, shop s\
+		                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+	                    GROUP BY group_order_id, delivery_fee\
+	                    ORDER BY group_order_id)\
+                    SELECT t1.group_order_id, t1.creator, t1.hall, t1.shopname, t1.order_date,\
+                        t1.order_by, t1.delivery_status, t2.delivery_fee, t2.users, t2.delivery_fee_per_pax\
+                    FROM t1\
+                    INNER JOIN t2\
+                    USING (group_order_id)\
+                    ORDER BY t1.group_order_id DESC ")
         grporders = cursor.fetchall()
         # list of tuples
 
@@ -73,14 +92,14 @@ def openorders(request, username):
     if request.POST:
         # Check if hall is present
         with connection.cursor() as cursor:
-            shopname = cursor.fetchone()[0]
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
-            if shopname in shops:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
-            else:
-                status = 'Unable to query. Shop name is incorrect.'
+            shopname = request.POST['username']
+            #cursor.execute("SELECT shopname FROM shop")
+            #shops = cursor.fetchall()
+            #if shopname in shops:
+            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+            return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
+            #else:
+                #status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status}
 
@@ -98,14 +117,14 @@ def filtered_openorders(request, username, shopname):
     if request.POST:
         # Check if hall is present
         with connection.cursor() as cursor:
-            shopname = cursor.fetchone()[0]
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
-            if shopname in shops:
-                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-                return redirect('/filtered_openorders/%s/%s' %username %shopname)
-            else:
-                status = 'Unable to query. Shop name is incorrect.'
+            shopname = request.POST['username']
+            #cursor.execute("SELECT shopname FROM shop")
+            #shops = cursor.fetchall()
+            #if shopname in shops:
+            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+            return redirect('/filtered_openorders/%s/%s' %username %shopname)
+            #else:
+                #status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status}
 
