@@ -19,11 +19,12 @@ def login(request):
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
             with connection.cursor() as cursor: 
-                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']]) 
-                password = cursor.fetchone()[0]
-                if password == request.POST['password']:
-                    messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                    return redirect(f'/openorders/%s' % username) 
+                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+                if cursor.fetchone()[0] != None:
+                    password = cursor.fetchone()[0]
+                    if password == request.POST['password']:
+                        messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                        return redirect(f'/openorders/%s' % username) 
                 else:
                     status = 'Unable to login. Either username or password is incorrect.'
 
@@ -73,13 +74,13 @@ def openorders(request, username):
     ## Use raw query to get all objects
     if request.POST:
         # Check if hall is present
-        with connection.cursor() as cursor:
-            shopname = request.POST['username']
+        #with connection.cursor() as cursor:
+        shopname = request.POST['shopname']
             #cursor.execute("SELECT shopname FROM shop")
             #shops = cursor.fetchall()
             #if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
+        messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+        return redirect(f'/filtered_openorders/%s/%s' % username % shopname)
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
