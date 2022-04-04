@@ -174,15 +174,15 @@ def openorders(request, username):
 
     ## Use raw query to get all objects
     if request.POST:
-        #with connection.cursor() as cursor:
-        shopname = request.POST['shopname']
-        cursor.execute("SELECT shopname FROM shop")
-        shops = cursor.fetchall()
-        #if shopname in shops:
-        messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-        return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
-        #else:
-            #status = 'Unable to query. Shop name is incorrect.'
+        with connection.cursor() as cursor:
+            shopname = request.POST['shopname']
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            if shopname in shops:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+            else:
+                status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status, 'username' : username}
 
@@ -391,7 +391,7 @@ def addgrouporder(request, username):
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
 
-    context = {'status' : status, 'username' : username, 'hall' : hall}
+    context = {'status' : status, 'username' : username, 'hall' : '%s' % hall}
 
     return render(request, "app/addgrouporder.html", context)
 
