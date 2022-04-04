@@ -1,4 +1,6 @@
-{% extends "app/basebuyer.html" %} 
+{% extends "app/basebuyer.html" %}
+{% block content %}
+{% load static %}
 <html>
 <body>
     <h2>Edit {{obj.0}}</h2>
@@ -23,4 +25,4 @@
     </form>
 </body>
 </html>
-
+{% endblock content %}
