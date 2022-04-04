@@ -53,27 +53,32 @@ h3   {
 	<table class="zui-table">
 	<tr>
 		<thead>
-                        <th>Group Order ID</th>
-                        <th>Creator's Username</th>
-                        <th>Hall</th>
-                        <th>Shop Name</th>
-                        <th>Order Date</th>
-                        <th>Order Closing Time</th>
-                        <th>Order Status</th>
-                        <th>Action</th>
-		</thead>
-	</tr>
-		{% for order in records %}
-	<tr>
-		<tbody>
-                        <td> {{ order.0 }} </td>
-                        <td> {{ order.1 }} </td>
-                        <td> {{ order.2 }} </td>
-                        <td> {{ order.3 }} </td>
-                        <td> {{ order.6 }} </td>
-                        <td> {{ order.7 }} </td>
-                        <td> {{ order.8 }} </td>
-                        <td>
+            <th>Group Order ID</th>
+            <th>Creator's Username</th>
+            <th>Hall</th>
+            <th>Shop Name</th>
+            <th>Order Date</th>
+            <th>Order Closing Time</th>
+            <th>Order Status</th>
+            <th>Shop Delivery Fee</th>
+            <th>Group Size</th>
+            <th>Delivery Fee Per User</th>
+            <th>Action</th>
+</thead>
+</tr>
+{% for order in records %}
+<tr>
+<tbody>
+            <td> {{ order.0 }} </td>
+            <td> {{ order.1 }} </td>
+            <td> {{ order.2 }} </td>
+            <td> {{ order.3 }} </td>
+            <td> {{ order.4 }} </td>
+            <td> {{ order.5 }} </td>
+            <td> {{ order.6 }} </td>
+            <td> {{ order.7 }} </td>
+            <td> {{ order.8 }} </td>
+            <td> {{ order.9 }} </td>
                 <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
                 <a href="/seller_orderid/{{order.0}}"><button>Edit</button></a>
                 <form method="POST" style="display: inline;">
