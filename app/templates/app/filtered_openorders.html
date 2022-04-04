@@ -39,7 +39,7 @@ h3   {
     
     <br/>
 
-    <h2>filtered See Orders from your Preferred Shop</h2>
+    <h2>See Orders from your Preferred Shop</h2>
 	<form method="POST">
         {% csrf_token %}
 		<label for="shopname">Shop Name:</label><br>
@@ -85,4 +85,5 @@ h3   {
 		{% endfor %}
 	</form>
 	</body>
+    <br>
 {% endblock content %}

@@ -84,7 +84,8 @@ def openorders(request, username):
                     FROM t1\
                     INNER JOIN t2\
                     USING (group_order_id)\
-                    ORDER BY t1.group_order_id DESC ")
+                    WHERE hall = (SELECT hall FROM buyer WHERE username = %s)\
+                    ORDER BY t1.group_order_id DESC ", [username])
         grporders = cursor.fetchall()
         # list of tuples
 
