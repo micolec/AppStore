@@ -1,0 +1,75 @@
+{% extends "app/basebuyer.html" %}
+{% block content %}
+{% load static %}
+<html>
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 32px Verdana, sans-serif;}
+h3   {
+	font: normal 20px Verdana, sans-serif;}
+	</style>
+    <!--<h1>Existing Open Orders</h1>-->
+    <br> <h1>Targetted Advertising</h1>
+    <h2>List of buyers who have registered, but have not made an order. </h2>
+    Suggestion: Send a $5 Promotion Code to these buyers, to entice them to make a purchase. 
+    <p> 
+    </p>
+    
+    <br/>
+
+	<body>
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                        <th>Hall</th>
+                        <th>Phone Number</th>
+                        <th>Action</th>
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.4 }} </td>
+                        <td> {{ order.5 }} </td>
+                        <td> {{ order.6 }} </td>
+                        <td> {{ order.7 }} </td>
+                        <td> {{ order.8 }} </td>
+                        <td> {{ order.9 }} </td>
+                        <td>
+                <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
+                <a href="/seller_orderid/{{order.0}}"><button>Edit</button></a>
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="un" value="{{order.0}}"/>
+              </form></td>
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	</body>
+{% endblock content %}
