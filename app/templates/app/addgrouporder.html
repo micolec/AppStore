@@ -14,8 +14,8 @@
         {% csrf_token %}
         <!-- form -->
         <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-        Creator's Username<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="creator" maxlength="32" class="textinput textInput" required="" id="id_creator"> </div> </div> <div id="div_id_creator" class="control-group"> <label for="id_creator" class="control-label requiredField">
-        Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" maxlength="32" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
+        <br> Creator's Username: {{username}} </br>
+        <br> Hall: {{hall}} </br>
         Shop Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="shopname" maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
         Order Date 
         <br>(Please input in YYYY-MM-DD format eg. 2022-03-21)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="order_date" maxlength="64" class="textinput textInput" required="" id="id_order_date"> </div> </div> <div id="div_id_order_date" class="control-group"> <label for="id_order_date" class="control-label requiredField">

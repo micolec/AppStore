@@ -93,13 +93,13 @@ def openorders(request, username):
     if request.POST:
         #with connection.cursor() as cursor:
         shopname = request.POST['shopname']
-            #cursor.execute("SELECT shopname FROM shop")
-            #shops = cursor.fetchall()
-            #if shopname in shops:
-        messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-        return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
-            #else:
-                #status = 'Unable to query. Shop name is incorrect.'
+        cursor.execute("SELECT shopname FROM shop")
+        shops = cursor.fetchall()
+        if shopname in shops:
+            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+            return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+        else:
+            status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status}
 
@@ -138,13 +138,13 @@ def filtered_openorders(request, username, shopname):
         # Check if hall is present
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            #cursor.execute("SELECT shopname FROM shop")
-            #shops = cursor.fetchall()
-            #if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect('/filtered_openorders/%s/%s' %(username,shopname))
-            #else:
-                #status = 'Unable to query. Shop name is incorrect.'
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            if shopname in shops:
+                messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                return redirect('/filtered_openorders/%s/%s' %(username,shopname))
+            else:
+                status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status}
 
@@ -278,14 +278,16 @@ def addindivorder(request, id):
  
     return render(request, "app/addindivorder.html", result_dict)
 
-def addgrouporder(request):
+def addgrouporder(request, username):
     context = {}
     status = ''
 
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], request.POST['hall'], request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
+            cursor.execute("SELECT hall FROM buyer WHERE username = %s", [username])
+            hall = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [username, hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
 ## No orderid with same details
             if orderid == None:
@@ -297,12 +299,12 @@ def addgrouporder(request):
                 closing = shopdet[4]
                 status = 'Order Open'
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                        , [curr_id, request.POST['creator'], request.POST['hall'], request.POST['shopname'], opening, closing,
+                        , [curr_id, username, hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'] , request.POST['order_by'],status])
-                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (request.POST['creator']))
+                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (username))
                 return redirect('openorders')
             else:
-                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], request.POST['creator'])
+                status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
 
     context['status'] = status
