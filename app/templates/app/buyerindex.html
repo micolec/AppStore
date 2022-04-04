@@ -2,6 +2,30 @@
 {% block content %}
 {% load static %}
 <html>
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 28px Verdana, sans-serif;}
+h3   {
+	font: normal 24px Verdana, sans-serif;}
+	</style>
 <body>
     <h1>WELCOME</h1>
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
@@ -9,7 +33,7 @@
     <br> <h2>Existing Buyers in HONUSuppers</h2>
     <a href="add">New Buyer? Register here!</a>
     <br/><br/>
-    <table border=1>
+    <table class="zui-table">
         <thead>
             <th>Username</th>
             <th>First Name</th>
