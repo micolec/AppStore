@@ -299,7 +299,7 @@ def deliverystatus(request, username):
 				(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
 				(CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
                 FROM t1,t2 \
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = 39 \
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s \
                 ORDER BY group_order_id DESC", [username, grpid])
             fee = cursor.fetchall()
    
