@@ -30,7 +30,6 @@
 		font: normal 20px Arial, sans-serif;
 	}
 </style>
-{% for r in records %}
 <h2>Current Orders for {{ r.2 }}</h2>
 
 <body>
@@ -46,6 +45,7 @@
 				<th>Action</th>
 			</thead>
 		</tr>
+		{% for r in records %}
 		<tr>
 			<tbody>
 				<td> {{ r.0 }} </td>
