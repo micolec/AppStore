@@ -364,13 +364,14 @@ def addindivorder(request, id):
 def addgrouporder(request, username):
     context = {}
     status = ''
-    hall = ''
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT hall FROM buyer WHERE username = %s", [username])
+        hall = cursor.fetchone()[0]
 
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT hall FROM buyer WHERE username = %s", [username])
-            hall = '%s' % cursor.fetchone()[0]
             cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [username, hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
 ## No orderid with same details
