@@ -227,11 +227,12 @@ def topup(request, id):
             cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             prev = cursor.fetchone()
             username = prev[0]
+            balance = prev[6]
             result_dict = {'prev': prev}
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE buyer SET wallet_balance = %s WHERE username = %s", (request.POST['wallet_balance'], prev[0]))
+            cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], prev[0]))
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
  
