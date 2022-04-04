@@ -98,7 +98,7 @@ def stats(request):
         avg_day = cursor.fetchall()
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date, AVG(CAST(total_price AS DECIMAL(10,2)))\
+        cursor.execute("SELECT shopname, SUM(total_price) AS shop_total, COUNT(*) AS group_size, order_date, ROUND(AVG(CAST(total_price AS DECIMAL(10,2))),2)\
                         FROM (SELECT o.username,order_date,\
                             o.shopname,o.item, qty, price AS price_per_item, \
                             (price * qty) AS total_price\
