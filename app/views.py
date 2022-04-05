@@ -258,7 +258,6 @@ def edit_indiv_order(request, id):
  
     return render(request, "app/edit_indiv_order.html", result_dict)
 
-
 def deliverystatus(request, username):
     context = {}
     status = ''
@@ -311,7 +310,7 @@ def viewindivorder(request, id):
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
@@ -339,8 +338,8 @@ def viewindivorder(request, id):
                 SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, t1.users,  \
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s\
-                ORDER BY group_order_id DESC", [id])
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
+                ORDER BY group_order_id DESC", [id,grpid])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
@@ -366,9 +365,8 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-                totals = request.POST['totals']
                 if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % id)    
                 else:
@@ -387,6 +385,7 @@ def topup(request, id):
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
+            result_dict = {'prev': prev}
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -394,7 +393,7 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
     
-    result_dict = {'username' : id, 'prev': prev}
+    result_dict = {'username' : id}
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
@@ -409,7 +408,7 @@ def addindivorder(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, 'Unpaid')"
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
@@ -443,7 +442,7 @@ def addgrouporder(request, username):
                         , [curr_id, username, hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'] , request.POST['order_by'],status])
                 messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (username))
-                return redirect('openorders')
+                return redirect(f'/openorders/%s' % (username))
             else:
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
