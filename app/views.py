@@ -598,7 +598,7 @@ def seller_menu(request):
 
         if request.POST['action'] == 'edit_menu':
                 with connection.cursor() as cursor:
-                    cursor.execute("SELECT * FROM item WHERE item = %s", [id])
+                    cursor.execute("SELECT * FROM item WHERE item = %s", search_string)
                     prev = cursor.fetchone()
                     shopname = prev[0]
                     item = prev[1]
