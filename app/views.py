@@ -366,7 +366,7 @@ def viewindivorder(request, id):
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
                 totals = request.POST['totals']
-		totals = float(totals[1:])
+                totals = float(totals[1:])
                 if (existing - totals) >= 5:
                     cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
