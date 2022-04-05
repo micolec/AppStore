@@ -307,7 +307,6 @@ def deliverystatus(request, username):
 
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
-    context = {}
     status = ''
     
     with connection.cursor() as cursor:
@@ -373,7 +372,7 @@ def viewindivorder(request, id):
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':id, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
 
@@ -393,7 +392,8 @@ def topup(request, id):
             cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], prev[0]))
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
- 
+    
+    result_dict = {'username' : id}
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
