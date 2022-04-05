@@ -19,24 +19,30 @@
         Phone Number<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="phone_number" value="{{obj.4}}" maxlength="64" class="textinput textInput" required="" id="id_phone_number"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" value="{{obj.5}}" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
         <p> </p>
-            <h2> Top Up Wallet via QR Code Scanning</h2>
-            <br>Existing Balance: {{obj.6}} <br/>
-
-            <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
-            <p> </p>
-        
-            <!-- Create a Form -->
-            <form method="POST">
-                <!-- Security token by Django -->
-                {% csrf_token %}
-                <!-- form -->
-                <div id="div_id_wallet_balance"> <label for="id_wallet_balance">
-                Top-Up Amount: <input type="text" name="wallet_balance" value="{{obj.8}}" maxlength="64" class="textinput textInput" id="id_wallet_balance"> </div> </div>
-            </form>
-
-            <br>Ensure your wallet has at least $5 at all times!<br/>
-        <button type="submit" value="Update">Update</button>
+        <button type="submit" value="Update">Update Profile</button>
     </form>
+
+    <p> </p>
+    
+    <h2> Top Up Wallet via QR Code Scanning</h2>
+    <br>Existing Balance: {{obj.6}} <br/>
+
+    <br> <img src="{% static 'app/images/qrcode.jpg' %}" width="30%"   alt="qrcode"/><br/>
+    <p> </p>
+
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_wallet_balance"> <label for="id_wallet_balance">
+         <div id="div_id_wallet_balance" class="control-group"> <label for="id_wallet_balance" class="control-label requiredField">
+        Top-Up Amount:
+        <br> Ensure your wallet has at least $5 even after payment!
+            <span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="wallet_balance" value="{{prev.8}}" maxlength="64" class="textinput textInput" required="" id="id_wallet_balance"> </div> </div>
+        <br><button type="submit" value="update">Top Up Wallet</button>
+    </form>
+<br>
 </body>
 </html>
 {% endblock content %}
