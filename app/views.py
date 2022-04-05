@@ -305,13 +305,13 @@ def deliverystatus(request, username):
 
     return render(request,'app/deliverystatus.html',result_dict)
 
-def viewindivorder(request, username):
+def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     context = {}
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [username])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
@@ -340,19 +340,19 @@ def viewindivorder(request, username):
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
-                ORDER BY group_order_id DESC", [username,grpid])
+                ORDER BY group_order_id DESC", [id,grpid])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
            
     with connection.cursor() as cursor:
-            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [username])
+            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
             money = cursor.fetchone()
             existing = money[0]
             existing = float(existing[1:])
     
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             prev = cursor.fetchone()
             username = prev[0]
             result_dict = {'prev': prev}
@@ -363,19 +363,21 @@ def viewindivorder(request, username):
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [username])
+                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
                 if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, username])
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % username)    
+                    return redirect(f'/viewindivorder/%s' % id)    
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':username, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
+
+
 
 def topup(request, id):
     
