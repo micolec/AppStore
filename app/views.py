@@ -386,7 +386,6 @@ def topup(request, id):
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
-            result_dict = {'prev': prev}
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -394,7 +393,7 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
     
-    result_dict = {'username' : id}
+    result_dict = {'username' : id, 'prev': prev}
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
