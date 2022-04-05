@@ -37,7 +37,7 @@ urlpatterns = [
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
     path('seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
     path('seller_menu', app.views.seller_menu, name='seller_menu'),
-    path('edit_menu', app.views.edit_menu, name='edit_menu'),
+    path('edit_menu/<str:id>', app.views.edit_menu, name='edit_menu'),
 
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('add', app.views.add, name='add'),

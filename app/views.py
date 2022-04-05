@@ -598,6 +598,7 @@ def seller_menu(request):
                     prev = cursor.fetchone()
                     shopname = prev[0]
                     item = prev[1]
+                    price = prev[2]
                     result_dict = {'prev': prev}
                     return redirect(f'/edit_menu')
 
@@ -617,8 +618,8 @@ def edit_menu(request, id):
     if request.POST:
         ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE item SET shopname = %s, item = %s, price = %s"
-                    , [request.POST['shopename'], request.POST['item'], request.POST['price'], id ])
+            cursor.execute("UPDATE item SET price = %s WHERE shopname = %s AND item = %s"
+                    , [request.POST['price'], 'shopname', 'item'])
             status = 'Item edited successfully!'
             cursor.execute("SELECT * FROM item WHERE item = %s", [id])
             obj = cursor.fetchone()
