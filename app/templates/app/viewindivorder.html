@@ -31,7 +31,7 @@ h3   {
 <body>
     <!--<h1>Existing Open Orders</h1>-->
     <img src="{% static 'app/images/supper image.jpg' %}" width="50%"   alt="supper logo"/><br/>
-    <br> <h2>Item(s) ordered</h2>
+    <br> <h1>Item(s) ordered</h1>
 	<h3>Here's a list of all items you ordered. </h3>
     Click to
     
@@ -72,7 +72,7 @@ h3   {
                 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
-                <input type="hidden" name="username" value="{{order.0}}"/>
+                <input type="hidden" name="un" value="{{order.0}}"/>
                 <button onclick="return confirm('Are you sure you want to delete {{order.0}}?');" type="submit" name="action" value="delete">Delete</button> 
               </form></td>
         </tbody>
@@ -80,7 +80,7 @@ h3   {
         {% endfor %}
 	    </form> 
 	</table>
-    <br> <h2>Current Order Total Price</h2>
+    <br> <h1>Current Order Total Price</h1>
     <table class="zui-table">
 	<tr>
 		<thead>
@@ -114,14 +114,14 @@ h3   {
     <br>
     <h3>Wallet Balance</h3>
     Ensure that your wallet has sufficient balance.
-    <a href="/topup/{{username}}}">Click to Top-Up wallet.</a>
+    <a href="/topup/{{un}}">Click to Top-Up wallet.</a>
     <br>Existing Balance: {{prev.6}}
 
     <p style="color:red">{{ status|safe }}</p>
     <form method="POST" style="display: inline;">
     {% csrf_token %}
 	    {{form.as_p}}
-    <input type="hidden" name="id" value="{{username}}"/>  
+    <input type="hidden" name="id" value="{{un}}"/>  
     <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
     </form></td>
 
