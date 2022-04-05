@@ -48,7 +48,7 @@ h3   {
             <td>
                 <a href="view/{{cust.0}}"><button>View</button></a> | 
                 <a href="edit/{{cust.0}}"><button>Edit</button></a>
-                | 
+                
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{cust.0}}"/>

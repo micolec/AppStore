@@ -20,11 +20,13 @@ import app.views
 urlpatterns = [
     path('basebuyer/<str:username>', app.views.basebuyer, name='basebuyer'),
 
+    #LOGIN/OUT
     path('', app.views.index, name='index'),
     path('login', app.views.login, name='login'),
     path('loginseller', app.views.loginseller, name = 'loginseller'),
     path('logout', app.views.logout, name = 'logout'),
 
+    #BUYERS
     path('openorders/<str:username>', app.views.openorders, name='openorders'),
     path('filtered_openorders/<str:username>/<str:shopname>', app.views.filtered_openorders, name = 'filtered_openorders'),
     path('viewindivorder/<str:id>', app.views.viewindivorder, name='viewindivorder'),
@@ -32,17 +34,20 @@ urlpatterns = [
     path('topup/<str:id>', app.views.topup, name='topup'),
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
+    path('promo', app.views.promo, name='promo'),
+    path('stats', app.views.stats, name='stats'),
 
+    #SELLERS
     path('sellerorders', app.views.sellerorders, name='sellerorders'),
     path('sellerindex', app.views.sellerindex, name='sellerindex'),
     path('seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
     path('seller_menu', app.views.seller_menu, name='seller_menu'),
     path('edit_menu/<str:id>', app.views.edit_menu, name='edit_menu'),
 
+    #SUPERADMIN
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
     path('edit/<str:username>', app.views.edit, name='edit'),
-    path('promo', app.views.promo, name='promo'),
-    path('stats', app.views.stats, name='stats')
+    path('ordersindex', app.views.ordersindex, name='ordersindex')
 ]

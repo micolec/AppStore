@@ -646,3 +646,18 @@ def edit_menu(request, id):
     context["status"] = status
  
     return render(request, "app/edit_menu.html", context)
+
+def ordersindex(request):             
+    
+    if request.POST:
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM seller WHERE username = %s", [request.POST['id']])
+
+    with connection.cursor() as cursor:
+        cursor.excecute("SELECT * FROM orderid ORDER BY group_order_id")
+        sellers = cursor.fetchall()
+    
+    result_dict = {'records': sellers}
+
+    return render(request,"app/ordersindex.html",result_dict)
