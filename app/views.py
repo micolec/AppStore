@@ -193,8 +193,12 @@ def openorders(request, username):
                     messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
                     return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
             status = 'Unable to query. Shop name is incorrect.'
+    
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND creator = %s ORDER BY group_order_id DESC", [username])
+        creator = cursor.fetchall()
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}}
 
     return render(request,'app/openorders.html', result_dict)
 
