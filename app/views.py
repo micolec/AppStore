@@ -579,7 +579,7 @@ def seller_orderid(request, id):
  
     return render(request, "app/seller_orderid.html", result_dict)
 
-def seller_menu(request, id):
+def seller_menu(request):
     search_string = request.GET.get('shopname','')
     users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
     c = connection.cursor()
