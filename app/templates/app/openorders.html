@@ -37,6 +37,7 @@ h3   {
     <br/>
 
     <h2>See Orders from your Preferred Shop</h2>
+    <p style="color:red">{{ status|safe }}</p>
 	<form method="POST">
         {% csrf_token %}
 		<label for="shopname">Shop Name:</label><br>
