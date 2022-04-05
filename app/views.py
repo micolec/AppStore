@@ -310,7 +310,7 @@ def viewindivorder(request, id):
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
