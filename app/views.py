@@ -412,7 +412,7 @@ def addindivorder(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, 'Unpaid')"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
