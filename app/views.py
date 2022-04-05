@@ -133,7 +133,7 @@ def promo(request):
                         FROM orders  \
                         GROUP BY buyer_hall, shopname\
                         HAVING (buyer_hall, COUNT(shopname)) IN (\
-	                        SELECT buyer_hall, MAX(popularity) \
+                            SELECT buyer_hall, MAX(popularity) \
                             FROM ( \
                                 SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
                                 FROM orders \
@@ -145,9 +145,9 @@ def promo(request):
         cursor.execute("SELECT b.first_name, b.last_name,  b.username, b.hall,b.phone_number\
                         FROM buyer b\
                         WHERE b.username NOT IN  (\
-	                        SELECT username\
-	                        FROM orders) \
-		        ORDER BY b.hall, b.last_name, b.first_name")
+                            SELECT username\
+                            FROM orders) \
+                ORDER BY b.hall, b.last_name, b.first_name")
         buyers = cursor.fetchall()
 
     result_dict = {'records': popular, 'records2': buyers}
@@ -160,18 +160,18 @@ def openorders(request, username):
 
     with connection.cursor() as cursor:
         cursor.execute(";with t1 AS (\
-	                    SELECT *\
-	                    FROM orderid \
-	                    WHERE delivery_status = 'Order Open'\
-	                    ORDER BY group_order_id DESC ),\
+                        SELECT *\
+                        FROM orderid \
+                        WHERE delivery_status = 'Order Open'\
+                        ORDER BY group_order_id DESC ),\
                     t2 AS (\
-	                    SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
-		                CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
-	                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
-		                    FROM orders o, item i, shop s\
-		                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
-	                    GROUP BY group_order_id, delivery_fee\
-	                    ORDER BY group_order_id)\
+                        SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
+                        CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
+                        FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                            FROM orders o, item i, shop s\
+                            WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                        GROUP BY group_order_id, delivery_fee\
+                        ORDER BY group_order_id)\
                     SELECT t1.group_order_id, t1.creator, t1.hall, t1.shopname, t1.order_date,\
                         t1.order_by, t1.delivery_status, t2.delivery_fee, t2.users, t2.delivery_fee_per_pax\
                     FROM t1\
@@ -189,7 +189,7 @@ def openorders(request, username):
             cursor.execute("SELECT shopname FROM shop")
             shops = cursor.fetchall()
             for index, tuple in enumerate(shops):
-	            if shopname == tuple[0]:
+                if shopname == tuple[0]:
                     messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
                     return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
             status = 'Unable to query. Shop name is incorrect.'
@@ -205,18 +205,18 @@ def filtered_openorders(request, username, shopname):
     # Use raw query to get all objects
     with connection.cursor() as cursor:
         cursor.execute(";with t1 AS (\
-	                    SELECT *\
-	                    FROM orderid \
-	                    WHERE delivery_status = 'Order Open'\
-	                    ORDER BY group_order_id DESC ),\
+                        SELECT *\
+                        FROM orderid \
+                        WHERE delivery_status = 'Order Open'\
+                        ORDER BY group_order_id DESC ),\
                     t2 AS (\
-	                    SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
-		                CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
-	                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
-		                    FROM orders o, item i, shop s\
-		                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
-	                    GROUP BY group_order_id, delivery_fee\
-	                    ORDER BY group_order_id)\
+                        SELECT group_order_id, CAST(delivery_fee AS MONEY), COUNT(DISTINCT username) AS users,\
+                        CAST(ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS MONEY) AS delivery_fee_per_pax\
+                        FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                            FROM orders o, item i, shop s\
+                            WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                        GROUP BY group_order_id, delivery_fee\
+                        ORDER BY group_order_id)\
                     SELECT t1.group_order_id, t1.creator, t1.hall, t1.shopname, t1.order_date,\
                         t1.order_by, t1.delivery_status, t2.delivery_fee, t2.users, t2.delivery_fee_per_pax\
                     FROM t1\
@@ -298,8 +298,8 @@ def deliverystatus(request, username):
                         GROUP BY username, group_order_id, buyer_hall, shopname \
                         ORDER BY group_order_id) \
                 SELECT t2.group_order_id, t2.username, t2.buyer_hall, t2.shopname, t1.order_date, t1.order_by, \
-				(t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
-				(CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
+                (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
+                (CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
                 FROM t1,t2 \
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s \
                 ORDER BY group_order_id DESC", [username, grpid])
