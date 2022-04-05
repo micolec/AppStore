@@ -579,7 +579,7 @@ def seller_orderid(request, id):
  
     return render(request, "app/seller_orderid.html", result_dict)
 
-def seller_menu(request):
+def seller_menu(request, id):
     search_string = request.GET.get('shopname','')
     users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
     c = connection.cursor()
@@ -596,16 +596,21 @@ def seller_menu(request):
         if request.POST['action'] == 'add_menu':
             return redirect(f'/add_menu')
 
+        if request.POST['action'] == 'edit_menu':
+                with connection.cursor() as cursor:
+                    cursor.execute("SELECT * FROM item WHERE item = %s", [id])
+                    prev = cursor.fetchone()
+                    shopname = prev[0]
+                    item = prev[1]
+                    result_dict = {'prev': prev}
+                    return redirect(f'/edit_menu')
+
 
     return render(request,"app/seller_menu.html",result_dict)
 
 def edit_menu(request, id):
-
-    # dictionary for initial data with
-    # field names as keys
     context ={}
 
-    # fetch the object related to passed id
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM item WHERE item = %s", [id])
         obj = cursor.fetchone()
