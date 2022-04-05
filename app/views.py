@@ -532,13 +532,13 @@ def edit(request, username):
             messages.success(request, f'%s profile has been updated successfully!' % username)
             cursor.execute("SELECT password, first_name, last_name, phone_number, hall FROM buyer WHERE username = %s", [username])
             obj = cursor.fetchone()
-
+            return redirect(f'/edit/%s' % username)
 
     if request.POST:
         with connection.cursor() as cursor:
             cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], obj[0]))
             messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % username)
+            return redirect(f'/edit/%s' % username)
 
 
     context["obj"] = obj
