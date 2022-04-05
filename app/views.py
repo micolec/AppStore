@@ -25,15 +25,17 @@ def login(request):
             if username == 'superadmin' and password == 'superadmin':
                 messages.success(request, f'Welcome superadmin back to HONUSupper!')
                 return redirect('buyerindex')
-            with connection.cursor() as cursor: 
-                cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
-                password = cursor.fetchone()[0]
-                if password == request.POST['password']:
-                    messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
-                    return redirect(f'/openorders/%s' % username) 
-                else:
-                    status = 'Unable to login. Either username or password is incorrect.'
-
+            with connection.cursor() as cursor:
+                try:
+                    cursor.execute("SELECT password FROM buyer WHERE username = %s", [request.POST['username']])
+                    password = cursor.fetchone()[0]
+                    if password == request.POST['password']:
+                        messages.success(request, f'Welcome buyer %s back to HONUSupper!' % (request.POST['username']))
+                        return redirect(f'/openorders/%s' % username) 
+                    else:
+                        status = 'Unable to login. Password is incorrect.'
+                except:
+                    status = 'Unable to login. Username is incorrect.'
     context['status'] = status
 
     return render(request, "app/login.html", context)
