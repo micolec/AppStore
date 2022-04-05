@@ -655,7 +655,7 @@ def ordersindex(request):
                 cursor.execute("DELETE FROM seller WHERE username = %s", [request.POST['id']])
 
     with connection.cursor() as cursor:
-        cursor.excecute("SELECT * FROM orderid ORDER BY group_order_id")
+        cursor.execute("SELECT * FROM orderid ORDER BY group_order_id")
         sellers = cursor.fetchall()
     
     result_dict = {'records': sellers}
