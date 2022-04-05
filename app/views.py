@@ -239,7 +239,6 @@ def filtered_openorders(request, username, shopname):
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
-
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
     with connection.cursor() as cursor:
@@ -256,9 +255,7 @@ def edit_indiv_order(request, id):
             cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/viewindivorder')
-            
-    result_dict = {'username' : id}
-
+ 
     return render(request, "app/edit_indiv_order.html", result_dict)
 
 def deliverystatus(request, username):
@@ -395,8 +392,6 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
  
-    result_dict = {'username' : id}
-
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
@@ -414,11 +409,10 @@ def addindivorder(request, id):
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
-            return redirect(f'/viewindivorder/%s' % (request.POST['id']))
+            return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
-    
-
-    return render(request, "app/addindivorder.html")
+ 
+    return render(request, "app/addindivorder.html", result_dict)
 
 def addgrouporder(request, username):
     context = {}
