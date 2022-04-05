@@ -258,22 +258,6 @@ def edit_indiv_order(request, id):
  
     return render(request, "app/edit_indiv_order.html", result_dict)
 
-def topup(request, id):
-    
-    with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
-            prev = cursor.fetchone()
-            username = prev[0]
-            balance = float((prev[6])[1:])
-            result_dict = {'prev': prev}
-
-    if request.POST:
-        with connection.cursor() as cursor:
-            cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], prev[0]))
-            messages.success(request, f'Wallet Balance has been updated!')
-            return redirect(f'/viewindivorder/%s' % id)   
- 
-    return render(request, "app/topup.html", result_dict)
 
 def deliverystatus(request, username):
     context = {}
