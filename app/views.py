@@ -239,7 +239,6 @@ def filtered_openorders(request, username, shopname):
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
-
 def edit_indiv_order(request, id):
     """links from viewindivorder: edit button"""
     with connection.cursor() as cursor:
@@ -256,9 +255,7 @@ def edit_indiv_order(request, id):
             cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/viewindivorder')
-            
-    result_dict = {'username' : id}
-
+ 
     return render(request, "app/edit_indiv_order.html", result_dict)
 
 def deliverystatus(request, username):
@@ -308,13 +305,13 @@ def deliverystatus(request, username):
 
     return render(request,'app/deliverystatus.html',result_dict)
 
-def viewindivorder(request, username):
+def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     context = {}
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [username])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
@@ -343,19 +340,19 @@ def viewindivorder(request, username):
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
-                ORDER BY group_order_id DESC", [username,grpid])
+                ORDER BY group_order_id DESC", [id,grpid])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
            
     with connection.cursor() as cursor:
-            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [username])
+            cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
             money = cursor.fetchone()
             existing = money[0]
             existing = float(existing[1:])
     
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM buyer WHERE username = %s", [username])
+            cursor.execute("SELECT * FROM buyer WHERE username = %s", [id])
             prev = cursor.fetchone()
             username = prev[0]
             result_dict = {'prev': prev}
@@ -366,19 +363,21 @@ def viewindivorder(request, username):
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [username])
+                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
                 if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, username])
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % username)    
+                    return redirect(f'/viewindivorder/%s' % id)    
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
-    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':username, 'prev': prev}
+    result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'un':id, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)
+
+
 
 def topup(request, id):
     
@@ -395,8 +394,6 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
  
-    result_dict = {'username' : id}
-
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
@@ -414,11 +411,10 @@ def addindivorder(request, id):
             cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
-            return redirect(f'/viewindivorder/%s' % (request.POST['id']))
+            return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
-    
-
-    return render(request, "app/addindivorder.html")
+ 
+    return render(request, "app/addindivorder.html", result_dict)
 
 def addgrouporder(request, username):
     context = {}
@@ -579,7 +575,7 @@ def seller_orderid(request, id):
  
     return render(request, "app/seller_orderid.html", result_dict)
 
-def seller_menu(request, id):
+def seller_menu(request):
     search_string = request.GET.get('shopname','')
     users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
     c = connection.cursor()
@@ -598,7 +594,7 @@ def seller_menu(request, id):
 
         if request.POST['action'] == 'edit_menu':
                 with connection.cursor() as cursor:
-                    cursor.execute("SELECT * FROM item WHERE item = %s", [id])
+                    cursor.execute("SELECT * FROM item WHERE item = %s", search_string)
                     prev = cursor.fetchone()
                     shopname = prev[0]
                     item = prev[1]
