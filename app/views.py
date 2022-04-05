@@ -75,7 +75,7 @@ def stats(request):
                             SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
                             FROM orders \
                             GROUP BY buyer_hall, shopname) AS t1\
-                        ORDER BY buyer_hall, rank	")
+                        ORDER BY buyer_hall, rank")
         ranking = cursor.fetchall()
     
     with connection.cursor() as cursor:
@@ -129,7 +129,7 @@ def promo(request):
                         FROM orders  \
                         GROUP BY buyer_hall, shopname\
                         HAVING (buyer_hall, COUNT(shopname)) IN (\
-	                        SELECT buyer_hall, MAX(popularity) \
+                            SELECT buyer_hall, MAX(popularity) \
                             FROM ( \
                                 SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
                                 FROM orders \
@@ -365,7 +365,7 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-		totals = request.POST['totals']
+                totals = request.POST['totals']
                 if (existing - totals) >= 5:
                     cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
