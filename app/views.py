@@ -198,7 +198,7 @@ def openorders(request, username):
                     return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
             status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}
 
     return render(request,'app/openorders.html', result_dict)
 
