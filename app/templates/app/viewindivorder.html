@@ -115,7 +115,8 @@ h3   {
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
 	        {{form.as_p}}
-                <input type="hidden" name="id" value="{{username}}"/>  
+                <input type="hidden" name="curgrp" value="{{order.1}}"/> 
+                <input type="hidden" name="totals" value="{{order.6}}"/>  
                 <button onclick="return confirm('Confirm purchase?');" type="submit" name="action" value="deduct">Pay!</button> 
                 </form></td>
 

@@ -75,7 +75,7 @@ def stats(request):
                             SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
                             FROM orders \
                             GROUP BY buyer_hall, shopname) AS t1\
-                        ORDER BY buyer_hall, rank	")
+                        ORDER BY buyer_hall, rank")
         ranking = cursor.fetchall()
     
     with connection.cursor() as cursor:
@@ -129,7 +129,7 @@ def promo(request):
                         FROM orders  \
                         GROUP BY buyer_hall, shopname\
                         HAVING (buyer_hall, COUNT(shopname)) IN (\
-	                        SELECT buyer_hall, MAX(popularity) \
+                            SELECT buyer_hall, MAX(popularity) \
                             FROM ( \
                                 SELECT buyer_hall, shopname, COUNT(shopname) AS popularity\
                                 FROM orders \
@@ -177,6 +177,9 @@ def openorders(request, username):
                     ORDER BY t1.group_order_id DESC ", [username])
         grporders = cursor.fetchall()
         # list of tuples
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND creator = %s ORDER BY group_order_id DESC", [username])
+        creator = cursor.fetchall()
 
     ## Use raw query to get all objects
     if request.POST:
@@ -190,7 +193,7 @@ def openorders(request, username):
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}
 
     return render(request,'app/openorders.html', result_dict)
 
@@ -310,7 +313,7 @@ def viewindivorder(request, id):
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
@@ -338,8 +341,8 @@ def viewindivorder(request, id):
                 SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, t1.users,  \
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
-                ORDER BY group_order_id DESC", [id,grpid])
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s\
+                ORDER BY group_order_id DESC", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
@@ -365,8 +368,12 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-                if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
+                curgrp = request.POST['curgrp']
+                totals = request.POST['totals']
+                totals = float(totals[1:])
+                if (existing - totals) >= 5:
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
+                    cursor.execute("UPDATE orders SET paid = 'Paid' WHERE username = %s AND group_order_id = %s", [id, curgrp])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % id)    
                 else:
@@ -385,7 +392,6 @@ def topup(request, id):
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
-            result_dict = {'prev': prev}
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -393,7 +399,7 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
     
-    result_dict = {'username' : id}
+    result_dict = {'username' : id, 'prev':prev}
     return render(request, "app/topup.html", result_dict)
 
 def addindivorder(request, id):
@@ -408,7 +414,7 @@ def addindivorder(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, 'Unpaid')"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
