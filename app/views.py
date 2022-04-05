@@ -52,14 +52,16 @@ def loginseller(request):
             return redirect('buyerindex')
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
-            password = cursor.fetchone()[0]
-            if password == request.POST['password']:
-                messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
-                return redirect('sellerorders')    
-            else:
-                status = 'Unable to login. Either username or password is incorrect.'
-
+            try:
+                cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
+                password = cursor.fetchone()[0]
+                if password == request.POST['password']:
+                    messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
+                    return redirect('sellerorders')    
+                else:
+                    status = 'Unable to login. Password is incorrect.'
+            except:
+                status = 'Unable to login. Username is incorrect.'
 
     context['status'] = status
  
@@ -184,13 +186,13 @@ def openorders(request, username):
     if request.POST:
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            #cursor.execute("SELECT shopname FROM shop")
-            #shops = cursor.fetchall()
-            #if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
-            #else:
-                #status = 'Unable to query. Shop name is incorrect.'
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            for index, tuple in enumerate(shops):
+	            if shopname == tuple[0]:
+                    messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                    return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+            status = 'Unable to query. Shop name is incorrect.'
 
     result_dict = {'records': grporders, 'status': status, 'username' : username}
 
