@@ -177,6 +177,9 @@ def openorders(request, username):
                     ORDER BY t1.group_order_id DESC ", [username])
         grporders = cursor.fetchall()
         # list of tuples
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND creator = %s ORDER BY group_order_id DESC", [username])
+        creator = cursor.fetchall()
 
     ## Use raw query to get all objects
     if request.POST:
@@ -190,7 +193,7 @@ def openorders(request, username):
             #else:
                 #status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}
 
     return render(request,'app/openorders.html', result_dict)
 
