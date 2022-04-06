@@ -886,7 +886,7 @@ def indivorderindex(request, group_order_id):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s", [request.POST['id']], group_order_id)
+                cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s", [request.POST['id'], group_order_id])
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
@@ -938,7 +938,7 @@ def indivorderedit(request, group_order_id, username, item):
     status = ''
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id, username, item])
         obj = cursor.fetchone()
 
     status = ''
