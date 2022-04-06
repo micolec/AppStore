@@ -805,6 +805,9 @@ def ordersindex(request):
 def orderadd(request):
     context = {}
     curr_id = ''
+    hall = ''
+    opening = ''
+    closing = ''
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT MAX(group_order_id) FROM orderid")
@@ -843,6 +846,9 @@ def orderadd(request):
 def orderedit(request, group_order_id):
 
     context ={}
+    hall = ''
+    opening = ''
+    closing = ''
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
@@ -894,6 +900,9 @@ def indivorderindex(request, group_order_id):
 
 def indivorderadd(request, group_order_id):
     context = {}
+    creator_hall = ''
+    buyer_hall = ''
+    shopname = ''
 
     if request.POST:
         ## Check if customerid is already in the table
@@ -926,6 +935,7 @@ def indivorderadd(request, group_order_id):
 def indivorderedit(request, group_order_id, username, item):
 
     context ={}
+    status = ''
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
