@@ -819,9 +819,9 @@ def orderedit(request, group_order_id):
 
     if request.POST:
             with connection.cursor() as cursor:
-                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, opening = %s, closing = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
+                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
                         , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
-                            request.POST['opening'] , request.POST['closing'], request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
+                           request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
                 messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
                 cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
                 obj = cursor.fetchone()
