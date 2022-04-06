@@ -939,7 +939,7 @@ def indivorderadd(request, group_order_id):
                         , [request.POST['username'], buyer_hall, group_order_id,
                         creator_hall , shopname, request.POST['item'], request.POST['qty'],
                         request.POST['paid']])
-                messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
+                messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % (request.POST['username'], request.POST['qty'], request.POST['item'], group_order_id))
                 return redirect(f'/indivorderindex/%s' % group_order_id)    
 
 
@@ -976,4 +976,4 @@ def indivorderedit(request, group_order_id, username, item):
     context['group_order_id'] = group_order_id
     context['item'] = item
  
-    return render(request, "app/orderedit.html", context)
+    return render(request, "app/indivorderedit.html", context)
