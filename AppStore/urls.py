@@ -52,6 +52,6 @@ urlpatterns = [
     path('view/<str:id>', app.views.view, name='view'),
     path('edit/<str:username>', app.views.edit, name='edit'),
     path('ordersindex', app.views.ordersindex, name='ordersindex'),
-    path('orderadd', app.views.orderadd, name='orderadd'),
-    path('orderedit', app.views.orderedit, name='orderedit')
+    path('orderadd', app.views.orderadd, name='orderadd')
+    #path('orderedit', app.views.orderedit, name='orderedit')
 ]
