@@ -696,23 +696,17 @@ def orderadd(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [request.POST['group_order_id']])
-            order = cursor.fetchone()
-            ## No customer with same id
-            if order == None:
-                ##TODO: date validation
-                cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                        , [request.POST['group_order_id'], request.POST['creator'], request.POST['hall'],
-                           request.POST['shopname'] , request.POST['opening'], request.POST['closing'], request.POST['order_date'],
-                           [request.POST['order_by'], [request.POST['delivery_status']]]])
-                messages.success(request, f'Group Order Id %s added!' % (request.POST['group_order_id']))
-                return redirect('ordersindex')    
-            else:
-                status = 'Group Order Id %s already exists' % (request.POST['group_order_id'])
+            cursor.execute("SELECT MAX(group_order_id) FROM orderid")
+            curr_id = cursor.fetchone()[0] + 1
+            cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    , [curr_id, request.POST['creator'], request.POST['hall'],
+                    request.POST['shopname'] , request.POST['opening'], request.POST['closing'], request.POST['order_date'],
+                    [request.POST['order_by'], [request.POST['delivery_status']]]])
+            messages.success(request, f'Group Order Id %s added!' % (curr_id))
+            return redirect('ordersindex')    
 
 
-    context['status'] = status
+    context['curr_id'] = curr_id
  
     return render(request, "app/orderadd.html", context)
 
