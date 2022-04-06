@@ -792,18 +792,33 @@ def orderadd(request):
         cursor.execute("SELECT MAX(group_order_id) FROM orderid")
         curr_id = cursor.fetchone()[0] + 1
 
+
+
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    , [curr_id, request.POST['creator'], request.POST['hall'],
-                    request.POST['shopname'] , request.POST['opening'], request.POST['closing'], request.POST['order_date'],
+            cursor.execute("SELECT hall FROM buyer WHERE username = %s", request.POST['creator'])
+            hall = cursor.fetchone()[0]
+            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
+            orderid = cursor.fetchone()
+        ## No orderid with same details
+            if orderid == None:
+                cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
+                shopdet = cursor.fetchone()
+                opening = shopdet[3]
+                closing = shopdet[4]
+                cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    , [curr_id, request.POST['creator'], hall,
+                    request.POST['shopname'] , opening, closing, request.POST['order_date'],
                     [request.POST['order_by'], [request.POST['delivery_status']]]])
             messages.success(request, f'Group Order Id %s added!' % (curr_id))
             return redirect('ordersindex')    
 
 
     context['curr_id'] = curr_id
+    context['hall'] = hall
+    context['opening'] = opening
+    context['closing'] = closing
  
     return render(request, "app/orderadd.html", context)
 
@@ -819,8 +834,14 @@ def orderedit(request, group_order_id):
 
     if request.POST:
             with connection.cursor() as cursor:
-                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
-                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['creator'])
+                hall = cursor.fetchone()
+                cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
+                shopdet = cursor.fetchone()
+                opening = shopdet[3]
+                closing = shopdet[4]
+                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, opening = %s, closing = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
+                        , [request.POST['creator'], hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
                 messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
                 cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
@@ -830,6 +851,9 @@ def orderedit(request, group_order_id):
     context["obj"] = obj
     context["status"] = status
     context["group_order_id"] = group_order_id
+    context['hall'] = hall
+    context['opening'] = opening
+    context['closing'] = closing
  
     return render(request, "app/orderedit.html", context)
 
@@ -856,40 +880,54 @@ def indivorderadd(request, group_order_id):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    , [request.POST['username'], request.POST['buyer_hall'], group_order_id,
-                    request.POST['creator_hall'] , request.POST['shopname'], request.POST['item'], request.POST['qty'],
-                    [request.POST['paid']]])
-            messages.success(request, f'Individual Order S%s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
-            return redirect('indivorderindex')    
+            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s, username = %s, item = %s", [request.POST['group_order_id'], request.POST['username'], request.POST['item']])
+            indivorder = cursor.fetchone()
+            if indivorder == None:
+                cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
+                order = cursor.fetchone()
+                creator_hall = order[2]
+                shopname = order[3]
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['username'])
+                buyer_hall = cursor.fetchone()
+
+                cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                        , [request.POST['username'], buyer_hall, group_order_id,
+                        creator_hall , shopname, request.POST['item'], request.POST['qty'],
+                        [request.POST['paid']]])
+                messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
+                return redirect('indivorderindex')    
 
 
     context['group_order_id'] = group_order_id
+    context['creator_hall'] = creator_hall
+    context['buyer_hall'] = buyer_hall
+    context['shopname'] = shopname
  
     return render(request, "app/indivorderadd.html", context)
 
-def indivorderedit(request, group_order_id, item):
+def indivorderedit(request, group_order_id, username, item):
 
     context ={}
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND item = %s", [group_order_id], item)
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
         obj = cursor.fetchone()
 
     status = ''
 
     if request.POST:
             with connection.cursor() as cursor:
-                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
-                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
-                           request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
-                messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
-                cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
+                cursor.execute("UPDATE orders SET qty = %s, paid = %s WHERE group_order_id = %s, username = %s, item = %s "
+                        , [request.POST['qty'], request.POST['paid'], group_order_id, username, item])
+                messages.success(request, f'Buyer %s order in Group Order Id %s has been updated successfully!' % (username, group_order_id))
+                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
                 obj = cursor.fetchone()
 
 
     context["obj"] = obj
     context["status"] = status
-    context["group_order_id"] = group_order_id
+    context['username'] = username
+    context['group_order_id'] = group_order_id
+    context['item'] = item
  
     return render(request, "app/orderedit.html", context)
