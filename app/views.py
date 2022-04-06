@@ -329,6 +329,7 @@ def viewindivorder(request, id):
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
     with connection.cursor() as cursor:
+        fee = 0
         if indivorders:
             cursor.execute(";with t1 as ( \
                 SELECT group_order_id, SUM(total_price) AS group_total, \
