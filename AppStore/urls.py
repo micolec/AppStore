@@ -39,7 +39,8 @@ urlpatterns = [
     path('buyerstats/<str:username>', app.views.buyerstats, name='buyerstats'),
     path('buyer_menu_choice', app.views.buyer_menu_choice, name='buyer_menu_choice'),
     path('buyer_menu', app.views.buyer_menu, name='buyer_menu'),
-    
+    path('submit_group_order/<str:id>', app.views.submit_group_order, name='submit_group_order'),
+
 
     #SELLERS
  #   path('sellerorders/<str:username>', app.views.sellerorders, name='sellerorders'),
