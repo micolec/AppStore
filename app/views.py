@@ -29,7 +29,7 @@ def buyerstats(request, username):
                             GROUP BY group_order_id, delivery_fee ) AS t1")
             tot = cursor.fetchone()
             tot = tot[0]
-    with connection.cursor() as cursor:
+   with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT group_order_id, username, CAST(user_saved AS MONEY)\
                         FROM orders \
                         INNER JOIN (SELECT group_order_id, delivery_fee, COUNT(DISTINCT username) AS users,\
