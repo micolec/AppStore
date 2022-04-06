@@ -851,7 +851,7 @@ def orderedit(request, group_order_id):
     closing = ''
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
+        cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
         obj = cursor.fetchone()
 
     status = ''
@@ -907,7 +907,7 @@ def indivorderadd(request, group_order_id):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s, username = %s, item = %s", [request.POST['group_order_id'], request.POST['username'], request.POST['item']])
+            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s, username = %s, item = %s", [group_order_id, request.POST['username'], request.POST['item']])
             indivorder = cursor.fetchone()
             if indivorder == None:
                 cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
