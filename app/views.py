@@ -866,4 +866,4 @@ def indivorderadd(request, group_order_id):
 
     context['group_order_id'] = group_order_id
  
-    return render(request, "app/orderadd.html", context)
+    return render(request, "app/indivorderadd.html", context)
