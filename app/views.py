@@ -561,6 +561,24 @@ def addgrouporder(request, username):
 
     return render(request, "app/addgrouporder.html", context)
 
+def submit_group_order(request, id, username):
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_order_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], prev[0]))
+            messages.success(request, f'Delivery Status has been updated!')
+            return redirect(f'/openorders/%s' % username)
+    result_dict['username'] = id
+
+    return render(request, "app/submit_group_order.html", result_dict)
+
 def buyerindex(request):
     ## Delete customer
     if request.POST:
@@ -694,7 +712,7 @@ def loginseller(request):
 
 def sellerindex(request, shopname):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname = %s", [shopname])
+        cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND NOT delivery_status = 'Order Open' AND shopname = %s", [shopname])
         results = cursor.fetchall()
         result_dict = {'records': results}
 
