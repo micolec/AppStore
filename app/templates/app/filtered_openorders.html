@@ -22,14 +22,11 @@
     padding: 10px;
 }
 h2   {
-	font: normal 32px Arial, sans-serif;}
+	font: normal 32px Verdana, sans-serif;}
 h3   {
-	font: normal 20px Arial, sans-serif;}
+	font: normal 20px Verdana, sans-serif;}
 	</style>
-    <!--<h1>Existing Open Orders</h1>-->
-    <br> <h2>Create New Group Order</h2>
-    Don't see a group order from your hall to the restaurant your are eyeing? 
-    <a href="/addgrouporder/{{ username }}">Click to start new group order! </a> 
+    
     
     <p> 
     </p>
@@ -40,6 +37,7 @@ h3   {
     <br/>
 
     <h2>See Orders from your Preferred Shop</h2>
+    <p style="color:red">{{ status|safe }}</p>
 	<form method="POST">
         {% csrf_token %}
 		<label for="shopname">Shop Name:</label><br>
@@ -48,38 +46,38 @@ h3   {
 	</form>	
 	
 </form>
-
+    <h2>Existing Open Orders</h2>
 	<body>
 	<table class="zui-table">
 	<tr>
 		<thead>
-            <th>Group Order ID</th>
-            <th>Creator's Username</th>
-            <th>Hall</th>
-            <th>Shop Name</th>
-            <th>Order Date</th>
-            <th>Order Closing Time</th>
-            <th>Order Status</th>
-            <th>Shop Delivery Fee</th>
-            <th>Group Size</th>
-            <th>Delivery Fee Per User</th>
-            <th>Action</th>
-</thead>
-</tr>
-{% for order in records %}
-<tr>
-<tbody>
-            <td> {{ order.0 }} </td>
-            <td> {{ order.1 }} </td>
-            <td> {{ order.2 }} </td>
-            <td> {{ order.3 }} </td>
-            <td> {{ order.4 }} </td>
-            <td> {{ order.5 }} </td>
-            <td> {{ order.6 }} </td>
-            <td> {{ order.7 }} </td>
-            <td> {{ order.8 }} </td>
-            <td> {{ order.9 }} </td>
-            <td>
+                        <th>Group Order ID</th>
+                        <th>Creator's Username</th>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Order Date</th>
+                        <th>Order Closing Time</th>
+                        <th>Order Status</th>
+                        <th>Shop Delivery Fee</th>
+                        <th>Group Size</th>
+                        <th>Delivery Fee Per User</th>
+                        <th>Action</th>
+		</thead>
+	</tr>
+		{% for order in records %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.4 }} </td>
+                        <td> {{ order.5 }} </td>
+                        <td> {{ order.6 }} </td>
+                        <td> {{ order.7 }} </td>
+                        <td> {{ order.8 }} </td>
+                        <td> {{ order.9 }} </td>
+                        <td>
                 <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
                 <a href="/seller_orderid/{{order.0}}"><button>Edit</button></a>
                 <form method="POST" style="display: inline;">
@@ -90,6 +88,52 @@ h3   {
 	</tr>
 		{% endfor %}
 	</form>
+		</table>
+
+
+</form>
+<br>
+	<br> <h2>Create New Group Order</h2>
+    Don't see a group order from your hall to the restaurant your are eyeing? 
+    <br> <a href="/addgrouporder/{{ username }}">Click to start new group order! </a> 
+<br>
+<br><h2> Group Orders Created By You </h2>
+
+	<table class="zui-table">
+	<tr>
+		<thead>
+                        <th>Group Order ID</th>
+                        <th>Creator's Username</th>
+                        <th>Hall</th>
+                        <th>Shop Name</th>
+                        <th>Order Date</th>
+                        <th>Order Closing Time</th>
+                        <th>Order Status</th>
+                        <th>Action</th>
+		</thead>
+	</tr>
+		{% for order in records2 %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                        <td> {{ order.2 }} </td>
+                        <td> {{ order.3 }} </td>
+                        <td> {{ order.6 }} </td>
+                        <td> {{ order.7 }} </td>
+                        <td> {{ order.8 }} </td>
+                        <td>
+                <a href="addindivorder/{{order.0}}"><button>Submit</button></a>
+                <a href="seller_orderid/{{order.0}}"><button>Edit</button></a>
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="un" value="{{order.0}}"/>
+              </form></td>
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+</table>
 	</body>
     <br>
 {% endblock content %}
