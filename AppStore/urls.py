@@ -36,7 +36,8 @@ urlpatterns = [
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
     path('promo', app.views.promo, name='promo'),
-    path('stats', app.views.stats, name='stats'),
+    path('buyerstats', app.views.buyerstats, name='buyerstats'),
+    
 
     #SELLERS
  #   path('sellerorders/<str:username>', app.views.sellerorders, name='sellerorders'),
@@ -54,5 +55,6 @@ urlpatterns = [
     path('ordersindex', app.views.ordersindex, name='ordersindex'),
     path('orderadd', app.views.orderadd, name='orderadd'),
     path('orderedit/<str:group_order_id>', app.views.orderedit, name='orderedit'),
+    path('stats', app.views.stats, name='stats'),
     #path('indivorderindex/<str:group_order_id>', app.views.indivorderindex, name='indivorderindex')
 ]
