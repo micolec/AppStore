@@ -26,19 +26,19 @@ h2   {
 h3   {
 	font: normal 24px Verdana, sans-serif;}
 	</style>
-    <br> <h1>Statistics</h1>
+    <br> <h1>Buyer Statistics</h1>
     <br>
-    <h3>Shops' Rankings Based on Popularity</h3>
+	<br> You have saved a total of <strong>${{total}}</strong> by using our app!
+    <h3>Money Saved Per Order</h3>
     <br>
 	
     <body>
 	<table class="zui-table">
 	<tr>
 		<thead>
-                        <th>Hall</th>
-                        <th>Shop Name</th>
-                        <th>Total Number of Individual Orders</th>
-                        <th>Ranking</th>
+                        <th>Group Order ID</th>
+                        <th>Username</th>
+                        <th>Money Saved</th>
      
 		</thead>
 	</tr>
@@ -48,7 +48,6 @@ h3   {
                         <td> {{ order.0 }} </td>
                         <td> {{ order.1 }} </td>
                         <td> {{ order.2 }} </td>
-                        <td> {{ order.3 }} </td>
                  
 		</tbody>
 	</tr>
@@ -58,93 +57,6 @@ h3   {
 	<br>
 	<br>
 
-    
-    <h3>Shops' Total Revenue</h3>
-    <br>
-	
-    <body>
-	<table class="zui-table">
-	<tr>
-		<thead>
-                        <th>Shop Name</th>
-                        <th>Total Revenue</th>
-                        <th>Number of Individual Orders</th>
-     
-		</thead>
-	</tr>
-		{% for order in records2 %}
-	<tr>
-		<tbody>
-                        <td> {{ order.0 }} </td>
-                        <td> {{ order.1 }} </td>
-                        <td> {{ order.2 }} </td>
-                 
-		</tbody>
-	</tr>
-		{% endfor %}
-	</form>
-	    </table>
-	<br>
-	<br>
-
-    
-    <h3>Shops' Average Daily Revenue </h3>
-
-    
-    
-    <br/>
-
-	<table class="zui-table">
-	<tr>
-		<thead>
-                        <th>Shop Name</th>
-                        <th>Average Daily Revenue</th>
-                  
-		</thead>
-	</tr>
-		{% for order in records3 %}
-	<tr>
-		<tbody>
-                        <td> {{ order.0 }} </td>
-                        <td> {{ order.1 }} </td>
-                 
-       
-		</tbody>
-	</tr>
-		{% endfor %}
-		</table>
-    <br>
-    <br>
-    <h3> Daily Statistics</h3>
-
-    
-    
-    <br/>
-
-	<table class="zui-table">
-	<tr>
-		<thead>
-                        <th>Shop Name</th>
-                        <th>Order Date</th>
-                        <th>Shop's Revenue</th>
-                        <th>Number of Individual Orders</th>
-                        <th>Average Individual Order Total</th>
-		</thead>
-	</tr>
-		{% for order in records4 %}
-	<tr>
-		<tbody>
-                        <td> {{ order.0 }} </td>
-                        <td> {{ order.3 }} </td>
-                        <td> {{ order.2 }} </td>
-                        <td> {{ order.1 }} </td>
-                        <td> {{ order.4 }} </td>
-       
-		</tbody>
-	</tr>
-		{% endfor %}
-		</table>
   
-	</form>
 	</body>
 {% endblock content %}
