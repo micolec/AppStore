@@ -42,6 +42,27 @@ h3   {
     <br> Each user saves an average of <strong>${{avg_order}} </strong>on every order.
     <br>
     <h3>Top users of the month: </h3>
+    <table class="zui-table">
+	<tr>
+		<thead>
+                        <th>User</th>
+                        <th>Total Saved</th>
+    
+		</thead>
+	</tr>
+		{% for order in top %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                 
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+	<br>
+	<br>
     
 </body>
 </html>
