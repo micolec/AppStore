@@ -778,4 +778,4 @@ def orderedit(request, group_order_id):
     context["status"] = status
     context["group_order_id"] = group_order_id
  
-    return render(request, "app/edit.html", context)
+    return render(request, "app/orderedit.html", context)
