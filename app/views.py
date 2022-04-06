@@ -831,7 +831,7 @@ def orderadd(request):
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     , [curr_id, request.POST['creator'], hall,
                     request.POST['shopname'] , opening, closing, request.POST['order_date'],
-                    [request.POST['order_by'], [request.POST['delivery_status']]]])
+                    request.POST['order_by'], request.POST['delivery_status']])
                 messages.success(request, f'Group Order Id %s added!' % (curr_id))
                 return redirect('ordersindex')    
 
