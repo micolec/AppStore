@@ -860,7 +860,7 @@ def indivorderadd(request, group_order_id):
                     , [request.POST['username'], request.POST['buyer_hall'], group_order_id,
                     request.POST['creator_hall'] , request.POST['shopname'], request.POST['item'], request.POST['qty'],
                     [request.POST['paid']]])
-            messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
+            messages.success(request, f'Individual Order S%s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
             return redirect('indivorderindex')    
 
 
