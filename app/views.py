@@ -940,7 +940,7 @@ def indivorderadd(request, group_order_id):
                         creator_hall , shopname, request.POST['item'], request.POST['qty'],
                         request.POST['paid']])
                 messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
-                return redirect('indivorderindex')    
+                return redirect(f'/indivorderindex/%s' % group_order_id)    
 
 
     context['group_order_id'] = group_order_id
