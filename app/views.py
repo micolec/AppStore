@@ -527,12 +527,14 @@ def addindivorder(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, 'Unpaid')"
-                    , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+                    , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'], 'Unpaid' ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
             """should link to viewindivorder"""
- 
+    
+    result_dict = {'username' : id, 'prev' : prev}
+
     return render(request, "app/addindivorder.html", result_dict)
 
 def addgrouporder(request, username):
