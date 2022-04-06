@@ -975,7 +975,7 @@ def indivorderedit(request, group_order_id, username, item):
                 cursor.execute("UPDATE orders SET qty = %s, paid = %s WHERE group_order_id = %s AND username = %s AND item = %s "
                         , [request.POST['qty'], request.POST['paid'], group_order_id, username, item])
                 messages.success(request, f'Buyer %s order in Group Order Id %s has been updated successfully!' % (username, group_order_id))
-                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [[group_order_id], username, item])
+                cursor.execute("SELECT qty, paid FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id, username, item])
                 obj = cursor.fetchone()
 
 
