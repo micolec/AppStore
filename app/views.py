@@ -712,7 +712,7 @@ def loginseller(request):
 
 def sellerindex(request, shopname):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname = %s", [shopname])
+        cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND NOT delivery_status = 'Order Open' AND shopname = %s", [shopname])
         results = cursor.fetchall()
         result_dict = {'records': results}
 
