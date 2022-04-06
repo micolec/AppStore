@@ -46,7 +46,7 @@ h3   {
             <td> {{ cust.6 }} </td>
             <td> {{ cust.7 }} </td>
             <td>
-                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                <a href="/indivorderedit/{{group_order_id}}/{{cust.0}}/{cust.5}}"><button>Edit</button></a>
                 
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}

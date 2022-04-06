@@ -57,5 +57,6 @@ urlpatterns = [
     path('orderedit/<str:group_order_id>', app.views.orderedit, name='orderedit'),
     path('stats', app.views.stats, name='stats'),
     path('indivorderindex/<str:group_order_id>', app.views.indivorderindex, name='indivorderindex'),
-    path('indivorderadd/<str:group_order_id>', app.views.indivorderadd, name='indivorderadd')
+    path('indivorderadd/<str:group_order_id>', app.views.indivorderadd, name='indivorderadd'),
+    path('indivorderedit/<str:group_order_id>/<str:username>/<str:item>', app.views.indivorderedit, name='indivorderedit')
 ]

@@ -867,3 +867,29 @@ def indivorderadd(request, group_order_id):
     context['group_order_id'] = group_order_id
  
     return render(request, "app/indivorderadd.html", context)
+
+def indivorderedit(request, group_order_id, item):
+
+    context ={}
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND item = %s", [group_order_id], item)
+        obj = cursor.fetchone()
+
+    status = ''
+
+    if request.POST:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
+                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
+                           request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
+                messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
+                cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
+                obj = cursor.fetchone()
+
+
+    context["obj"] = obj
+    context["status"] = status
+    context["group_order_id"] = group_order_id
+ 
+    return render(request, "app/orderedit.html", context)
