@@ -820,7 +820,7 @@ def orderadd(request):
         with connection.cursor() as cursor:
             cursor.execute("SELECT hall FROM buyer WHERE username = %s", [request.POST['creator']])
             hall = cursor.fetchone()[0]
-            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
+            cursor.execute("SELECT creator, shopname, order_date, order_by, delivery_status FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
         ## No orderid with same details
             if orderid == None:
@@ -832,8 +832,8 @@ def orderadd(request):
                     , [curr_id, request.POST['creator'], hall,
                     request.POST['shopname'] , opening, closing, request.POST['order_date'],
                     [request.POST['order_by'], [request.POST['delivery_status']]]])
-            messages.success(request, f'Group Order Id %s added!' % (curr_id))
-            return redirect('ordersindex')    
+                messages.success(request, f'Group Order Id %s added!' % (curr_id))
+                return redirect('ordersindex')    
 
 
     context['curr_id'] = curr_id
