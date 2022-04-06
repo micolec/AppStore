@@ -57,7 +57,24 @@ def index(request):
             order = cursor.fetchone()
             order = order[0]
     
-    result_dict = {'tot_users': users, 'tot_amt': tot, 'avg_users':avg, 'avg_order': order}
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT username, SUM(user_saved)\
+                        FROM ( SELECT DISTINCT group_order_id, username, CAST(user_saved AS MONEY)\
+                                FROM orders \
+                                INNER JOIN (SELECT group_order_id, delivery_fee, COUNT(DISTINCT username) AS users,\
+                                            ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, \
+                                            (delivery_fee - ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) ) AS user_saved\
+                                            FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                                                    FROM orders o, item i, shop s\
+                                                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                                            GROUP BY group_order_id, delivery_fee ) AS t1\
+                                USING(group_order_id) ) AS t2\
+                        GROUP BY username\
+                        ORDER BY sum DESC\
+                        LIMIT 3")
+        top3 = cursor.fetchall()
+    
+    result_dict = {'tot_users': users, 'tot_amt': tot, 'avg_users':avg, 'avg_order': order, 'top': top3}
 
 
     return render(request,'app/index.html', result_dict)

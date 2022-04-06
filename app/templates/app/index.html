@@ -37,11 +37,33 @@ h3   {
     </p> 
     <br>
     <h2> Stats for Geeks </h2>
-    As of right now, a total of <strong>{{tot_users}}</strong> users have saved <strong>${{tot_amt}}</strong> by using our app! 
+    Over the past month, <strong>{{tot_users}} users</strong> have saved <strong>a total of ${{tot_amt}}</strong> on delivery fees by using our app! 
     <br> On average, a group order contains approximately <strong>{{avg_users}} users</strong>. 
     <br> Each user saves an average of <strong>${{avg_order}} </strong>on every order.
     <br>
-    <h3>Top users of the month: </h3>
+    <br>
+    <h3>Top 3 Users of the Month: </h3>
+    <table class="zui-table">
+	<tr>
+		<thead>
+                        <th>User</th>
+                        <th>Total Saved</th>
+    
+		</thead>
+	</tr>
+		{% for order in top %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+                        <td> {{ order.1 }} </td>
+                 
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+	<br>
+	<br>
     
 </body>
 </html>
