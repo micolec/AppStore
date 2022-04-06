@@ -18,7 +18,49 @@ def baseseller(request, username):
     return render(request, 'app/baseseller.html', context)
 
 def index(request):
-    return render(request,'app/index.html')
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT COUNT(DISTINCT username) FROM orders")
+            users = cursor.fetchone()
+            users = users[0]
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT SUM(users*user_saved)\
+                            FROM (	SELECT group_order_id, delivery_fee, COUNT(DISTINCT username) AS users,\
+                            ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, \
+                            (delivery_fee - ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) ) AS user_saved\
+                            FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                                FROM orders o, item i, shop s\
+                                WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                            GROUP BY group_order_id, delivery_fee ) AS t1")
+            tot = cursor.fetchone()
+            tot = tot[0]
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT ROUND(AVG(users),0)\
+                            FROM (  SELECT group_order_id, COUNT(DISTINCT username) AS users\
+                                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                                            FROM orders o, item i, shop s\
+                                            WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item\
+                                            GROUP BY group_order_id, delivery_fee, o.username) AS orders_with_price\
+                                    GROUP BY group_order_id, delivery_fee) AS t1")
+            avg = cursor.fetchone()
+            avg = avg[0]
+
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT CAST(ROUND(SUM(users*user_saved)/SUM(users),2) AS MONEY)\
+                            FROM (	SELECT group_order_id, delivery_fee, COUNT(DISTINCT username) AS users,\
+                                    ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, \
+                                    (delivery_fee - ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) ) AS user_saved\
+                                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                                        FROM orders o, item i, shop s\
+                                        WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                                    GROUP BY group_order_id, delivery_fee ) AS t1")
+
+            order = cursor.fetchone()
+            order = order[0]
+    
+    result_dict = {'tot_users': users, 'tot_amt': tot, 'avg_users':avg, 'avg_order': order}
+
+
+    return render(request,'app/index.html', result_dict)
 
 def login(request):
     context = {}
