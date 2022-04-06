@@ -818,7 +818,7 @@ def orderadd(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT hall FROM buyer WHERE username = %s", request.POST['creator'])
+            cursor.execute("SELECT hall FROM buyer WHERE username = %s", [request.POST['creator']])
             hall = cursor.fetchone()[0]
             cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
@@ -858,7 +858,7 @@ def orderedit(request, group_order_id):
 
     if request.POST:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['creator'])
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,[request.POST['creator']])
                 hall = cursor.fetchone()
                 cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
                 shopdet = cursor.fetchone()
@@ -890,7 +890,7 @@ def indivorderindex(request, group_order_id):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s ORDER BY username", group_order_id)
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s ORDER BY username", [group_order_id])
         indivorder = cursor.fetchall()
         # list of tuples
 
@@ -914,7 +914,7 @@ def indivorderadd(request, group_order_id):
                 order = cursor.fetchone()
                 creator_hall = order[2]
                 shopname = order[3]
-                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['username'])
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,[request.POST['username']])
                 buyer_hall = cursor.fetchone()
 
                 cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -948,7 +948,7 @@ def indivorderedit(request, group_order_id, username, item):
                 cursor.execute("UPDATE orders SET qty = %s, paid = %s WHERE group_order_id = %s, username = %s, item = %s "
                         , [request.POST['qty'], request.POST['paid'], group_order_id, username, item])
                 messages.success(request, f'Buyer %s order in Group Order Id %s has been updated successfully!' % (username, group_order_id))
-                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
+                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [[group_order_id], username, item])
                 obj = cursor.fetchone()
 
 
