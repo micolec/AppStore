@@ -17,7 +17,7 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
-def buyerstats(request):
+def buyerstats(request, username):
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT group_order_id, username, CAST(user_saved AS MONEY)\
@@ -31,7 +31,7 @@ def buyerstats(request):
                                     GROUP BY group_order_id, delivery_fee\
                                     ORDER BY group_order_id ) AS t1\
                         USING(group_order_id)\
-                        where username = 'abbott14'")
+                        where username = %s", [username])
         ranking = cursor.fetchall()
 
     result_dict = {'records': ranking}
