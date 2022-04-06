@@ -849,3 +849,21 @@ def indivorderindex(request, group_order_id):
     result_dict = {'records': indivorder, 'group_order_id' : group_order_id}
 
     return render(request,'app/indivorderindex.html',result_dict)
+
+def indivorderadd(request, group_order_id):
+    context = {}
+
+    if request.POST:
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+            cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    , [request.POST['username'], request.POST['buyer_hall'], group_order_id,
+                    request.POST['creator_hall'] , request.POST['shopname'], request.POST['item'], request.POST['qty'],
+                    [request.POST['paid']]])
+            messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
+            return redirect('indivorderindex')    
+
+
+    context['group_order_id'] = group_order_id
+ 
+    return render(request, "app/orderadd.html", context)
