@@ -17,7 +17,7 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
-def buyer_menu_choice(request, username):
+def buyer_menu_choice(request):
     with connection.cursor() as cursor:
         cursor.execute("SELECT shopname FROM shop")
         results = cursor.fetchall()
@@ -701,7 +701,6 @@ def sellerindex(request, shopname):
     if request.POST:
         if request.POST['action'] == 'edit':
             return redirect(f'/seller_orderid/%s' % id)
-    
     result_dict['shopname'] = shopname
 
     return render(request, "app/sellerindex.html", result_dict)
@@ -752,14 +751,23 @@ def seller_menu(request, shopname):
 
     return render(request,"app/seller_menu.html",result_dict)
 
-def add_menu(request, shopname):
+def add_menu(request, id):
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_ord_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
+
     if request.POST:
         with connection.cursor() as cursor:
             cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
-                ,   [shopname, request.POST['item'], request.POST['price']])
+                    , id, request.POST['item'], request.POST['price'])
             messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
-            return redirect(f'/seller_menu/%s' % (shopname))
-    return render(request, "app/add_menu.html")
+            return redirect(f'/seller_menu/%s' % (id))
+ 
+    return render(request, "app/add_menu.html", result_dict)
 
 def edit_menu(request, item):
     with connection.cursor() as cursor:
@@ -784,7 +792,7 @@ def ordersindex(request):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM seller WHERE username = %s", [request.POST['id']])
+                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid ORDER BY group_order_id")
@@ -810,9 +818,9 @@ def orderadd(request):
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT hall FROM buyer WHERE username = %s", request.POST['creator'])
+            cursor.execute("SELECT hall FROM buyer WHERE username = %s", [request.POST['creator']])
             hall = cursor.fetchone()[0]
-            cursor.execute("SELECT * FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
+            cursor.execute("SELECT creator, shopname, order_date, order_by, delivery_status FROM orderid WHERE creator = %s AND hall = %s AND shopname = %s AND order_date = %s AND order_by = %s", [request.POST['creator'], hall, request.POST['shopname'],request.POST['order_date'], request.POST['order_by']])
             orderid = cursor.fetchone()
         ## No orderid with same details
             if orderid == None:
@@ -823,9 +831,9 @@ def orderadd(request):
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     , [curr_id, request.POST['creator'], hall,
                     request.POST['shopname'] , opening, closing, request.POST['order_date'],
-                    [request.POST['order_by'], [request.POST['delivery_status']]]])
-            messages.success(request, f'Group Order Id %s added!' % (curr_id))
-            return redirect('ordersindex')    
+                    request.POST['order_by'], request.POST['delivery_status']])
+                messages.success(request, f'Group Order Id %s added!' % (curr_id))
+                return redirect('ordersindex')    
 
 
     context['curr_id'] = curr_id
@@ -850,7 +858,7 @@ def orderedit(request, group_order_id):
 
     if request.POST:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['creator'])
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,[request.POST['creator']])
                 hall = cursor.fetchone()
                 cursor.execute("SELECT * FROM shop WHERE shopname = %s", [request.POST['shopname']])
                 shopdet = cursor.fetchone()
@@ -882,7 +890,7 @@ def indivorderindex(request, group_order_id):
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s ORDER BY username", group_order_id)
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s ORDER BY username", [group_order_id])
         indivorder = cursor.fetchall()
         # list of tuples
 
@@ -906,7 +914,7 @@ def indivorderadd(request, group_order_id):
                 order = cursor.fetchone()
                 creator_hall = order[2]
                 shopname = order[3]
-                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,request.POST['username'])
+                cursor.execute("SELECT hall FROM buyer WHERE username = %s" ,[request.POST['username']])
                 buyer_hall = cursor.fetchone()
 
                 cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
@@ -940,7 +948,7 @@ def indivorderedit(request, group_order_id, username, item):
                 cursor.execute("UPDATE orders SET qty = %s, paid = %s WHERE group_order_id = %s, username = %s, item = %s "
                         , [request.POST['qty'], request.POST['paid'], group_order_id, username, item])
                 messages.success(request, f'Buyer %s order in Group Order Id %s has been updated successfully!' % (username, group_order_id))
-                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id], username, item)
+                cursor.execute("SELECT qty, paid FROM orderid WHERE group_order_id = %s AND username = %s AND item = %s", [[group_order_id], username, item])
                 obj = cursor.fetchone()
 
 

@@ -37,7 +37,7 @@ urlpatterns = [
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
     path('promo', app.views.promo, name='promo'),
     path('buyerstats/<str:username>', app.views.buyerstats, name='buyerstats'),
-    path('buyer_menu_choice/<str:username>', app.views.buyer_menu_choice, name='buyer_menu_choice'),
+    path('buyer_menu_choice', app.views.buyer_menu_choice, name='buyer_menu_choice'),
     path('buyer_menu', app.views.buyer_menu, name='buyer_menu'),
     
 
@@ -47,7 +47,7 @@ urlpatterns = [
     path('sellerindex/seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
     path('seller_menu/<str:shopname>', app.views.seller_menu, name='seller_menu'),
     path('seller_menu/edit_menu/<str:item>', app.views.edit_menu, name='edit_menu'),
-    path('seller_menu/add_menu/<str:shopname>', app.views.add_menu, name='add_menu'),
+    path('add_menu/<str:shopname>', app.views.add_menu, name='add_menu'),
 
     #SUPERADMIN
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
