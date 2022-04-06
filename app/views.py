@@ -34,7 +34,7 @@ def buyerstats(request, username):
                         where username = %s", [username])
         ranking = cursor.fetchall()
 
-    result_dict = {'records': ranking}
+    result_dict = {'records': ranking, 'username':username}
 
     return render(request,'app/buyerstats.html', result_dict)
 
