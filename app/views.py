@@ -797,19 +797,19 @@ def orderedit(request, group_order_id):
  
     return render(request, "app/orderedit.html", context)
 
-def indivorderindex(request):
+def indivorderindex(request, group_order_id):
     ## Delete customer
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM buyer WHERE username = %s", [request.POST['id']])
+                cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s", [request.POST['id']], group_order_id)
 
     ## Use raw query to get all objects
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM buyer ORDER BY first_name")
-        buyers = cursor.fetchall()
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s ORDER BY username", group_order_id)
+        indivorder = cursor.fetchall()
         # list of tuples
 
-    result_dict = {'records': buyers}
+    result_dict = {'records': indivorder, 'group_order_id' : group_order_id}
 
     return render(request,'app/indivorderindex.html',result_dict)

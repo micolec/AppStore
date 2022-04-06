@@ -1,0 +1,63 @@
+{% extends "app/baseadmin.html" %}
+{% block content %}
+{% load static %}
+<html>
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 28px Verdana, sans-serif;}
+h3   {
+	font: normal 24px Verdana, sans-serif;}
+	</style>
+<body>
+    
+    <br> <h2>Existing Orders Per Buyer from Group Order Id {{grp_order_id}} in HONUSuppers</h2>
+    <a href="add">Add New Order.</a>
+    <br/><br/>
+    <table class="zui-table">
+        <thead>
+            <th>Username</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Paid</th>
+            <th>Hall</th>
+            <th>Action</th>
+        </thead>
+        {% for cust in records %}
+        <tr>
+            <td> {{ cust.0 }} </td>
+            <td> {{ cust.5 }} </td>
+            <td> {{ cust.6 }} </td>
+            <td> {{ cust.7 }} </td>
+            <td>
+                <a href="edit/{{cust.0}}"><button>Edit</button></a>
+                
+                <form method="POST" style="display: inline;">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{cust.0}}"/>
+                <button onclick="return confirm('Are you sure you want to delete {{cust.0}} {{cust.6}} {{cust.5}}?');" type="submit" name="action" value="delete">Delete</button> 
+              </form></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+{% endblock content %}
