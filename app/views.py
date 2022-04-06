@@ -920,7 +920,7 @@ def indivorderadd(request, group_order_id):
                 cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
                         , [request.POST['username'], buyer_hall, group_order_id,
                         creator_hall , shopname, request.POST['item'], request.POST['qty'],
-                        [request.POST['paid']]])
+                        request.POST['paid']])
                 messages.success(request, f'Individual Order %s %s %s added to Group Order Id %s!' % ([request.POST['username']], request.POST['qty'], request.POST['item'], group_order_id))
                 return redirect('indivorderindex')    
 
