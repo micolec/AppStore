@@ -17,7 +17,7 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
-def buyer_menu_choice(request):
+def buyer_menu_choice(request, username):
     with connection.cursor() as cursor:
         cursor.execute("SELECT shopname FROM shop")
         results = cursor.fetchall()
