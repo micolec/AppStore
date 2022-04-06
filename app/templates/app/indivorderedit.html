@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends "app/basebuyer.html" %}
+{% extends "app/baseadmin.html" %}
 {% block content %}
 {% load static %}
 <html>
@@ -16,11 +16,10 @@
         <!-- form -->
         <div id="div_id_group_order_id" class="control-group"> <label for="id_group_order_id" class="control-label requiredField">
         Username: {{obj.0}} <p> </p>
-        Buyer Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="buyer_hall" value="{{obj.1}} maxlength="64" class="textinput textInput" required="" id="id_buyer_hall"> </div> </div> <div id="div_id_buyer_hall" class="control-group"> <label for="id_buyer_hall" class="control-label requiredField">
-        Group Order Id: {{group_order_id}} <p> </p>
-        Creator Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="creator_hall" value="{{obj.3}} maxlength="64" class="textinput textInput" required="" id="id_creator_hall"> </div> </div> <div id="div_id_creator_hall" class="control-group"> <label for="id_creator_hall" class="control-label requiredField">
-        Shop Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="shopname" value="{{obj.4}} maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
-        Item: {{obj.5}}
+        Buyer Hall: {{obj.1}} <p> </p>
+        Group Order Id: {{obj.3}} <p> </p>
+        Shop Name: {{obj.4}} <p> </p>
+        Item: {{obj.5}} <p> </p>
         Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" value="{{obj.6}} maxlength="64" class="textinput textInput" required="" id="id_qty"> </div> </div> <div id="div_id_qty" class="control-group"> <label for="id_qty" class="control-label requiredField">
         Paid<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="paid" value="{{obj.7}} maxlength="64" class="textinput textInput" required="" id="id_paid"> </div> </div> <div id="div_id_paid" class="control-group"> <label for="id_paid" class="control-label requiredField">
         

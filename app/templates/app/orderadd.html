@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-{% extends "app/basebuyer.html" %}
+{% extends "app/baseadmin.html" %}
 {% block content %}
 {% load static %}
 <html>
@@ -17,12 +17,11 @@
         <div id="div_id_group_order_id" class="control-group"> <label for="id_group_order_id" class="control-label requiredField">
         Group Order Id: {{curr_id}} <p> </p>
         Creator<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="creator" maxlength="64" class="textinput textInput" required="" id="id_creator"> </div> </div> <div id="div_id_creator" class="control-group"> <label for="id_creator" class="control-label requiredField">
-        Hall<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="hall" maxlength="64" class="textinput textInput" required="" id="id_hall"> </div> </div> <div id="div_id_hall" class="control-group"> <label for="id_hall" class="control-label requiredField">
         Shop Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="shopname" maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
-        Opening<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="opening" maxlength="64" class="textinput textInput" required="" id="id_opening"> </div> </div> <div id="div_id_opening" class="control-group"> <label for="id_opening" class="control-label requiredField">
-        Closing<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="closing" maxlength="64" class="textinput textInput" required="" id="id_closing"> </div> </div> <div id="div_id_closing" class="control-group"> <label for="id_closing" class="control-label requiredField">
-        Order Date<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="order_date" maxlength="64" class="textinput textInput" required="" id="id_order_date"> </div> </div> <div id="div_id_order_date" class="control-group"> <label for="id_order_date" class="control-label requiredField">
-        Order By<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="order_by" maxlength="64" class="textinput textInput" required="" id="id_order_by"> </div> </div> <div id="div_id_order_by" class="control-group"> <label for="id_order_by" class="control-label requiredField">
+        Order Date
+        <br>(Please input in YYYY-MM-DD format eg. 2022-03-21)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="order_date" maxlength="64" class="textinput textInput" required="" id="id_order_date"> </div> </div> <div id="div_id_order_date" class="control-group"> <label for="id_order_date" class="control-label requiredField">
+        Order Closing Time
+        <br>(Please input in HH:MM:SS format eg. 19:30:00)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="order_by" maxlength="64" class="textinput textInput" required="" id="id_order_by"> </div> </div> <div id="div_id_order_by" class="control-group"> <label for="id_order_by" class="control-label requiredField">
         Delivery Status<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="delivery_status" maxlength="64" class="textinput textInput" required="" id="id_delivery_status"> </div> </div> <div id="div_id_delivery_status" class="control-group"> <label for="id_delivery_status" class="control-label requiredField">
         
 
