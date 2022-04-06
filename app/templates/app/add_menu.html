@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
-{% extends "app/base.html" %} 
+{% extends "app/base.html" %}
 {% block content %}
 {% load static %}
 <html>
+
 <body>
     <h2>Add NEW item into the menu</h2>
 
@@ -13,13 +14,22 @@
         <!-- Security token by Django -->
         {% csrf_token %}
         <!-- form -->
-        <div id="div_id_first_name" class="control-group"> <label for="id_first_name" class="control-label requiredField">
-        Shop Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="shopname" maxlength="64" class="textinput textInput" required="" id="id_shopname"> </div> </div> <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
-        Item Name<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="item" maxlength="32" class="textinput textInput" required="" id="id_item"> </div> </div> <div id="div_id_item" class="control-group"> <label for="id_item" class="control-label requiredField">
-        Price (in $X.X)<span class="asteriskField">*</span> </label> <div class="controls"> <input type="money" name="price" maxlength="32" class="textinput textInput" required="" id="id_price"> </div> </div> <div id="div_id_price" class="control-group"> <label for="id_price" class="control-label requiredField">
-        <br>
-        <button type="submit" value="add_menu">Add</button>
+        <div id="div_id_shopname" class="control-group"> <label for="id_shopname" class="control-label requiredField">
+                Item Name<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="text" name="item" maxlength="32" class="textinput textInput" required=""
+                    id="id_item"> </div>
+        </div>
+
+        <div id="div_id_item" class="control-group"> <label for="id_item" class="control-label requiredField">
+                Price<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="money" name="price" maxlength="32" class="textinput textInput"
+                    required="" id="id_price"> </div>
+        </div>
+        <div id="div_id_price" class="control-group"> <label for="id_price" class="control-label requiredField">
+                <br>
+                <button type="submit" value="add_menu">Add</button>
     </form>
 </body>
+
 </html>
 {% endblock content %}

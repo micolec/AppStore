@@ -1,59 +1,67 @@
 {% extends "app/baseseller.html" %}
 {% block content %}
-	<style>
-.zui-table {
-    border: solid 1px #5F788A;
-    border-collapse: collapse;
-    border-spacing: 0;
-    font: normal 13px Arial, sans-serif;
-}
-.zui-table thead th {
-    background-color: #5F788A;
-    border: solid 1px #5F788A;
-    color: white;
-    padding: 10px;
-    text-align: left;
-}
-.zui-table tbody td {
-    border: solid 1px #5F788A;
-    color: #333;
-    padding: 10px;
-}
-h2   {
-	font: normal 32px Arial, sans-serif;}
-h3   {
-	font: normal 20px Arial, sans-serif;}
-	</style>
-	<h2>Current Orders
-	</h2>
-	<body>
-	<a href="add_menu">Add new item into menu!</a>
-	
-	<br/><br/>
+<style>
+	.zui-table {
+		border: solid 1px #5F788A;
+		border-collapse: collapse;
+		border-spacing: 0;
+		font: normal 13px Arial, sans-serif;
+	}
+
+	.zui-table thead th {
+		background-color: #5F788A;
+		border: solid 1px #5F788A;
+		color: white;
+		padding: 10px;
+		text-align: left;
+	}
+
+	.zui-table tbody td {
+		border: solid 1px #5F788A;
+		color: #333;
+		padding: 10px;
+	}
+
+	h2 {
+		font: normal 32px Arial, sans-serif;
+	}
+
+	h3 {
+		font: normal 20px Arial, sans-serif;
+	}
+</style>
+<h2>Current Orders
+</h2>
+
+<body>
+	<a href="add_menu/{{shopname}}">Add new item into menu!</a>
+
+	<br /><br />
 	<table class="zui-table">
-	<tr>
-		<thead>
-			<th>Item</th>
-			<th>Price</th>
-			<th>Action</th>
-		</thead>
-	</tr>
+		<tr>
+			<thead>
+				<th>Item</th>
+				<th>Price</th>
+				<th>Action</th>
+			</thead>
+		</tr>
 		{% for r in records %}
-	<tr>
-		<tbody>
-			<td> {{ r.1 }} </td>
-			<td> {{ r.2 }} </td>
-			<td>
-                <a href="edit_menu/{{r.1}}"><button>Edit</button></a>
-                
-                <form method="POST" style="display: inline;">
-                {% csrf_token %}
-                <input type="hidden" name="id" value="{{r.1}}"/>
-                <button onclick type="submit" name="action" value="delete">Delete</button> 
-              </form></td>
-		</tbody>
-	</tr>
+		<tr>
+			<tbody>
+				<td> {{ r.1 }} </td>
+				<td> {{ r.2 }} </td>
+				<td>
+					<a href="edit_menu/{{r.1}}"><button>Edit</button></a>
+
+					<form method="POST" style="display: inline;">
+						{% csrf_token %}
+						<input type="hidden" name="id" value="{{r.1}}" />
+						<button onclick type="submit" name="action" value="delete">Delete</button>
+					</form>
+				</td>
+			</tbody>
+		</tr>
 		{% endfor %}
-	</form>
-	</body>
+		</form>
+</body>
 {% endblock content %}

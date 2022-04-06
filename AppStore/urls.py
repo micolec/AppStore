@@ -47,7 +47,7 @@ urlpatterns = [
     path('sellerindex/seller_orderid/<str:id>', app.views.seller_orderid, name='seller_orderid'),
     path('seller_menu/<str:shopname>', app.views.seller_menu, name='seller_menu'),
     path('seller_menu/edit_menu/<str:item>', app.views.edit_menu, name='edit_menu'),
-    path('add_menu/<str:shopname>', app.views.add_menu, name='add_menu'),
+    path('seller_menu/add_menu/<str:shopname>', app.views.add_menu, name='add_menu'),
 
     #SUPERADMIN
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
