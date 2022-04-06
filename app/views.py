@@ -230,20 +230,24 @@ def filtered_openorders(request, username, shopname):
                     AND shopname = %s\
                     ORDER BY t1.group_order_id DESC ", [username, shopname])
         grporders = cursor.fetchall()
-    
+ 
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND creator = %s ORDER BY group_order_id DESC", [username])
+        creator = cursor.fetchall()
+
+    ## Use raw query to get all objects
     if request.POST:
-        # Check if hall is present
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            #cursor.execute("SELECT shopname FROM shop")
-            #shops = cursor.fetchall()
-            #if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect('/filtered_openorders/%s/%s' %(username,shopname))
-            #else:
-                #status = 'Unable to query. Shop name is incorrect.'
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            for index, tuple in enumerate(shops):
+                if shopname == tuple[0]:
+                    messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                    return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+            status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}   
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
