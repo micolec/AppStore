@@ -36,7 +36,7 @@ urlpatterns = [
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
     path('promo', app.views.promo, name='promo'),
-    path('buyerstats', app.views.buyerstats, name='buyerstats'),
+    path('buyerstats/<str:username>', app.views.buyerstats, name='buyerstats'),
     
 
     #SELLERS
