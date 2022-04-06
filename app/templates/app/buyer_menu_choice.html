@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+{% extends "app/basebuyer.html" %}
+{% block content %}
+
+<style>
+	h2 {
+		font: normal 32px Arial, sans-serif;
+	}
+
+	h3 {
+		font: normal 20px Arial, sans-serif;
+	}
+</style>
+
+<body>
+	<h3>Pick the store</h3>
+	<form action="buyer_menu" method="GET">
+		<label for="shopname">Shop Name:</label><br>
+		<input type="text" name="shopname" placeholder="Insert Shop Name" /><br><br>
+		<input type="submit" value="Search!" /><br><br>
+	</form>
+
+	<table class="zui-table">
+		<tr>
+			<thead>
+				<th>Shop Name</th>
+			</thead>
+		</tr>
+		{% for s in shopname %}
+		<tr>
+			<tbody>
+				<td> {{ s.0 }} </td>
+				</form>
+				</td>
+			</tbody>
+		</tr>
+</body>
+{% endfor %}
+{% endblock content %}
