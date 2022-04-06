@@ -693,11 +693,13 @@ def orderadd(request):
     context = {}
     curr_id = ''
 
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT MAX(group_order_id) FROM orderid")
+        curr_id = cursor.fetchone()[0] + 1
+
     if request.POST:
         ## Check if customerid is already in the table
         with connection.cursor() as cursor:
-            cursor.execute("SELECT MAX(group_order_id) FROM orderid")
-            curr_id = cursor.fetchone()[0] + 1
             cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                     , [curr_id, request.POST['creator'], request.POST['hall'],
                     request.POST['shopname'] , request.POST['opening'], request.POST['closing'], request.POST['order_date'],
