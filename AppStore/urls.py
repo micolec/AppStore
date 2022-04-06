@@ -35,6 +35,7 @@ urlpatterns = [
     path('topup/<str:id>', app.views.topup, name='topup'),
     path('addgrouporder/<str:username>', app.views.addgrouporder, name='addgrouporder'),
     path('addindivorder/<str:id>', app.views.addindivorder, name='addindivorder'),
+    path('addindivorder/buyer_menu/<str:id>', app.views.buyer_menu, name='buyer_menu'),
     path('promo', app.views.promo, name='promo'),
     path('buyerstats/<str:username>', app.views.buyerstats, name='buyerstats'),
     path('buyer_menu_choice', app.views.buyer_menu_choice, name='buyer_menu_choice'),
