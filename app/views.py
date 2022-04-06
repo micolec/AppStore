@@ -11,6 +11,12 @@ def basebuyer(request, username):
 
     return render(request, 'app/basebuyer.html', context)
 
+def baseseller(request, username):
+
+    context = {'username' : username}
+
+    return render(request, 'app/baseseller.html', context)
+
 def index(request):
     return render(request,'app/index.html')
 
@@ -39,33 +45,6 @@ def login(request):
     context['status'] = status
 
     return render(request, "app/login.html", context)
-
-def loginseller(request):
-    context = {}
-    status = ''
-
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
-        if username == 'superadmin' and password == 'superadmin':
-            messages.success(request, f'Welcome superadmin back to HONUSupper!')
-            return redirect('buyerindex')
-        ## Check if customerid is already in the table
-        with connection.cursor() as cursor:
-            try:
-                cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
-                password = cursor.fetchone()[0]
-                if password == request.POST['password']:
-                    messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
-                    return redirect('sellerorders')    
-                else:
-                    status = 'Unable to login. Password is incorrect.'
-            except:
-                status = 'Unable to login. Username is incorrect.'
-
-    context['status'] = status
- 
-    return render(request, "app/loginseller.html", context)
 
 def logout(request):
     return render(request, 'app/logout.html')
@@ -230,20 +209,24 @@ def filtered_openorders(request, username, shopname):
                     AND shopname = %s\
                     ORDER BY t1.group_order_id DESC ", [username, shopname])
         grporders = cursor.fetchall()
-    
+ 
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE delivery_status = 'Order Open' AND creator = %s ORDER BY group_order_id DESC", [username])
+        creator = cursor.fetchall()
+
+    ## Use raw query to get all objects
     if request.POST:
-        # Check if hall is present
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            #cursor.execute("SELECT shopname FROM shop")
-            #shops = cursor.fetchall()
-            #if shopname in shops:
-            messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
-            return redirect('/filtered_openorders/%s/%s' %(username,shopname))
-            #else:
-                #status = 'Unable to query. Shop name is incorrect.'
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            for index, tuple in enumerate(shops):
+                if shopname == tuple[0]:
+                    messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                    return redirect(f'/filtered_openorders/%s/%s' %(username,shopname))
+            status = 'Unable to query. Shop name is incorrect.'
 
-    result_dict = {'records': grporders, 'status': status, 'username' : username}
+    result_dict = {'records': grporders, 'status': status, 'username' : username, 'records2':creator}   
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
@@ -318,13 +301,14 @@ def viewindivorder(request, id):
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s" , [id])
+        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s ORDER BY group_order_id DESC" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
     with connection.cursor() as cursor:
+        fee = 0
         if indivorders:
             cursor.execute(";with t1 as ( \
                 SELECT group_order_id, SUM(total_price) AS group_total, \
@@ -346,8 +330,8 @@ def viewindivorder(request, id):
                 SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, t1.users,  \
                     t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
                 FROM t1,t2\
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s\
-                ORDER BY group_order_id DESC", [id,grpid])
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s\
+                ORDER BY group_order_id DESC", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
@@ -373,8 +357,12 @@ def viewindivorder(request, id):
                 cursor.execute("DELETE FROM orders WHERE username = %s", [id])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
-                if (existing - total) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, total, id])
+                curgrp = request.POST['curgrp']
+                totals = request.POST['totals']
+                totals = float(totals[1:])
+                if (existing - totals) >= 5:
+                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
+                    cursor.execute("UPDATE orders SET paid = 'Paid' WHERE username = %s AND group_order_id = %s", [id, curgrp])
                     messages.success(request, f'Paid! Wallet Balance has been updated.')
                     return redirect(f'/viewindivorder/%s' % id)    
                 else:
@@ -393,7 +381,6 @@ def topup(request, id):
             prev = cursor.fetchone()
             username = prev[0]
             balance = float((prev[6])[1:])
-            result_dict = {'prev': prev}
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -401,8 +388,10 @@ def topup(request, id):
             messages.success(request, f'Wallet Balance has been updated!')
             return redirect(f'/viewindivorder/%s' % id)   
     
-    result_dict = {'username' : id}
+    result_dict = {'username' : id, 'prev':prev}
     return render(request, "app/topup.html", result_dict)
+
+
 
 def addindivorder(request, id):
     """links from open orders: join button"""
@@ -416,7 +405,7 @@ def addindivorder(request, id):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            cursor.execute("INSERT INTO orders VALUES (%s, %s, %s, %s, %s, %s, %s, 'Unpaid')"
                     , [request.POST['username'], hall, group_ord_id, hall, shopname, request.POST['item'], request.POST['qty'] ])
             messages.success(request, f'%s added to Group Order! Feel free to order more items.' % (request.POST['item']))
             return redirect(f'/viewindivorder/%s' % (request.POST['username']))
@@ -532,26 +521,54 @@ def edit(request, username):
  
     return render(request, "app/edit.html", context)
 
-# vito: seller's homepage
-def sellerorders(request):   
-    return render(request,'app/sellerorders.html')
+## SELLER
 
-def sellerindex(request):             
-    search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname ~ \'%s\'"% (search_string)
-    c = connection.cursor()
-    c.execute(users)
-    results = c.fetchall()
-    result_dict = {'records': results}
+# Seller's homepage
+def loginseller(request):
+    context = {}
+    status = ''
+
+    if request.POST:
+        username = request.POST['username']
+        password = request.POST['password']
+        if username == 'superadmin' and password == 'superadmin':
+            messages.success(request, f'Welcome superadmin back to HONUSupper!')
+            context['username'] = username
+            return redirect('sellerindex')
+        ## Check if customerid is already in the table
+        with connection.cursor() as cursor:
+            try:
+                cursor.execute("SELECT password FROM shop WHERE username = %s", [request.POST['username']])
+                password = cursor.fetchone()[0]
+                if password == request.POST['password']:
+                    messages.success(request, f'Welcome seller %s back to HONUSupper!' % (request.POST['username']))
+                    with connection.cursor() as cursor:
+                        cursor.execute("SELECT shopname FROM shop WHERE username = %s", [username])
+                        shopname = cursor.fetchone()
+                    return redirect(f'/sellerindex/%s' % shopname)    
+                else:
+                    status = 'Unable to login. Password is incorrect.'
+            except:
+                status = 'Unable to login. Username is incorrect.'
+
+    context['status'] = status
+ 
+    return render(request, "app/loginseller.html")
+
+def sellerindex(request, shopname):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND shopname = %s", [shopname])
+        results = cursor.fetchall()
+        result_dict = {'records': results}
 
     if request.POST:
         if request.POST['action'] == 'edit':
-            return render(request,"app/seller_orderid.html",result_dict)
+            return redirect(f'/seller_orderid/%s' % id)
+    result_dict['shopname'] = shopname
 
-    return render(request,"app/sellerindex.html",result_dict)
+    return render(request, "app/sellerindex.html", result_dict)
 
 def seller_orderid(request, id):
-    """links from sellerindex: edit button"""
     with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
@@ -564,64 +581,74 @@ def seller_orderid(request, id):
         with connection.cursor() as cursor:
             cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], prev[0]))
             messages.success(request, f'Delivery Status has been updated!')
-            return redirect(f'/sellerindex')
- 
+            return redirect(f'/sellerindex/%s' % shopname)
+    result_dict['username'] = id
+
     return render(request, "app/seller_orderid.html", result_dict)
 
-def seller_menu(request):
-    search_string = request.GET.get('shopname','')
-    users = "SELECT * FROM item WHERE shopname ~ \'%s\'"% (search_string)
-    c = connection.cursor()
-    c.execute(users)
-    results = c.fetchall()
-    result_dict = {'records': results}
+def seller_menu(request, shopname):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM item WHERE shopname = %s", [shopname])
+        results = cursor.fetchall()
+        result_dict = {'records': results}
 
     ## Delete customer
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
+                messages.success(request, f'Item has been deleted!')
+                return redirect(f'/seller_menu/%s' % shopname)
+        
 
         if request.POST['action'] == 'add_menu':
-            return redirect(f'/add_menu')
+            with connection.cursor() as cursor:
+                return redirect(f'/add_menu/%s' % shopname)
 
         if request.POST['action'] == 'edit_menu':
-                with connection.cursor() as cursor:
-                    cursor.execute("SELECT * FROM item WHERE item = %s", search_string)
-                    prev = cursor.fetchone()
-                    shopname = prev[0]
-                    item = prev[1]
-                    price = prev[2]
-                    result_dict = {'prev': prev}
-                    return redirect(f'/edit_menu')
+            with connection.cursor() as cursor:
+                item = cursor.fetchone()
+            return redirect(f'/edit_menu/%s' % item)
 
+    result_dict['shopname'] = shopname
 
     return render(request,"app/seller_menu.html",result_dict)
 
-def edit_menu(request, id):
-    context ={}
-
+def add_menu(request, id):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE item = %s", [id])
-        obj = cursor.fetchone()
-
-    status = ''
-    # save the data from the form
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            prev = cursor.fetchone()
+            group_ord_id = prev[0]
+            hall = prev[2]
+            shopname = prev[3]
+            result_dict = {'prev': prev}
 
     if request.POST:
-        ##TODO: date validation
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE item SET price = %s WHERE shopname = %s AND item = %s"
-                    , [request.POST['price'], 'shopname', 'item'])
-            status = 'Item edited successfully!'
-            cursor.execute("SELECT * FROM item WHERE item = %s", [id])
-            obj = cursor.fetchone()
-
-
-    context["obj"] = obj
-    context["status"] = status
+            cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
+                    , id, request.POST['item'], request.POST['price'])
+            messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
+            return redirect(f'/seller_menu/%s' % (id))
  
-    return render(request, "app/edit_menu.html", context)
+    return render(request, "app/add_menu.html", result_dict)
+
+def edit_menu(request, item):
+    with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM item WHERE item = %s", [item])
+            prev = cursor.fetchone()
+            shopname = prev[0]
+            item = prev[1]
+            price = prev[2]
+            result_dict = {'prev': prev}
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE item SET price = %s WHERE item = %s", (request.POST['price'], item))
+            messages.success(request, f'Item has been updated!')
+            return redirect(f'/seller_menu/%s' % (shopname))
+    result_dict['item'] = item
+
+    return render(request, "app/edit_menu.html", result_dict)
 
 def ordersindex(request):             
     
