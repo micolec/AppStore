@@ -22,7 +22,7 @@ def buyer_menu_choice(request, username):
         cursor.execute("SELECT shopname FROM shop")
         results = cursor.fetchall()
 
-    result_dict = {'shopname': results}
+    result_dict = {'shopname': results, 'username' : username}
 
     return render(request, "app/buyer_menu_choice.html", result_dict)
 
