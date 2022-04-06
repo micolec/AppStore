@@ -792,7 +792,7 @@ def ordersindex(request):
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM seller WHERE username = %s", [request.POST['id']])
+                cursor.execute("DELETE FROM orderid WHERE group_order_id = %s", [request.POST['id']])
 
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid ORDER BY group_order_id")
