@@ -17,6 +17,27 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
+def buyerstats(request):
+
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT DISTINCT group_order_id, username, CAST(user_saved AS MONEY)\
+                        FROM orders \
+                        INNER JOIN (SELECT group_order_id, delivery_fee, COUNT(DISTINCT username) AS users,\
+                                    ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, \
+                                    (delivery_fee - ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) ) AS user_saved\
+                                    FROM (SELECT o.group_order_id, delivery_fee, o.username\
+                                            FROM orders o, item i, shop s\
+                                            WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item) AS orders_with_price\
+                                    GROUP BY group_order_id, delivery_fee\
+                                    ORDER BY group_order_id ) AS t1\
+                        USING(group_order_id)\
+                        where username = 'abbott14'")
+        ranking = cursor.fetchall()
+
+    result_dict = {'records': ranking}
+
+    return render(request,'app/buyerstats.html', result_dict)
+
 def index(request):
     with connection.cursor() as cursor:
             cursor.execute("SELECT COUNT(DISTINCT username) FROM orders")
