@@ -691,7 +691,7 @@ def ordersindex(request):
 
 def orderadd(request):
     context = {}
-    status = ''
+    curr_id = ''
 
     if request.POST:
         ## Check if customerid is already in the table
@@ -710,41 +710,28 @@ def orderadd(request):
  
     return render(request, "app/orderadd.html", context)
 
-# def orderedit(request, group_order_id):
+def orderedit(request, group_order_id):
 
-#     dictionary for initial data with
-#     field names as keys
-#     context ={}
+    context ={}
 
-#     fetch the object related to passed id
-#     with connection.cursor() as cursor:
-#         cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
-#         obj = cursor.fetchone()
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
+        obj = cursor.fetchone()
 
-#     status = ''
-#     save the data from the form
+    status = ''
 
-#     if request.POST:
-#         #TODO: date validation
-#         try:
-#             with connection.cursor() as cursor:
-#                 cursor.execute("UPDATE orderid SET password = %s, first_name = %s, last_name = %s, phone_number = %s, hall = %s WHERE username = %s"
-#                         , [request.POST['password'], request.POST['first_name'], request.POST['last_name'],
-#                             request.POST['phone_number'] , request.POST['hall'], username ])
-#                 messages.success(request, f'%s profile has been updated successfully!' % username)
-#                 cursor.execute("SELECT password, first_name, last_name, phone_number, hall FROM buyer WHERE username = %s", [username])
-#                 obj = cursor.fetchone()
-#                 return redirect(f'/edit/%s' % username)
-
-#         except:
-#             with connection.cursor() as cursor:
-#                 cursor.execute("UPDATE buyer SET wallet_balance = (%s + %s)  WHERE username = %s", (balance, request.POST['wallet_balance'], obj[0]))
-#                 messages.success(request, f'Wallet Balance has been updated!')
-#                 return redirect(f'/edit/%s' % username)
+    if request.POST:
+            with connection.cursor() as cursor:
+                cursor.execute("UPDATE orderid SET creator = %s, hall = %s, shopname = %s, opening = %s, closing = %s, order_date = %s, order_by = %s, delivery_status = %s WHERE group_order_id = %s"
+                        , [request.POST['creator'], request.POST['hall'], request.POST['shopname'],
+                            request.POST['opening'] , request.POST['closing'], request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
+                messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
+                cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
+                obj = cursor.fetchone()
 
 
-#     context["obj"] = obj
-#     context["status"] = status
-#     context["username"] = username
+    context["obj"] = obj
+    context["status"] = status
+    context["group_order_id"] = group_order_id
  
-#     return render(request, "app/edit.html", context)
+    return render(request, "app/edit.html", context)
