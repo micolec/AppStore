@@ -17,6 +17,16 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
+def buyer_menu(request, shopname):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM item WHERE shopname = %s", [shopname])
+        results = cursor.fetchall()
+        result_dict = {'records': results}
+
+    result_dict['shopname'] = shopname
+
+    return render(request,"app/buyer_menu.html",result_dict)
+
 def buyerstats(request, username):
     with connection.cursor() as cursor:
             cursor.execute("SELECT SUM(user_saved)\
