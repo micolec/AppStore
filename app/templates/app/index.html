@@ -5,18 +5,43 @@
 
 {% load static %}
 <html>
+<style>
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 28px Verdana, sans-serif;}
+h3   {
+	font: normal 24px Verdana, sans-serif;}
+	</style>
 <body>
     <h2> Join a food order of your choice! </h2> 
     <img src="{% static 'app/images/supper image.jpg' %}" width="120%"   alt="supper logo"/><br/>
-    <p> For hungry residents from NUS Halls to join group orders & split delivery fees :D
+    <br>
+    <p> A place for hungry residents from NUS Halls to join group orders & split delivery fees :D
     </p> 
     <br>
-    <h3> Stats for Geeks </h3>
-    <br> As of right now, a total of <strong>{{tot_users}}</strong> users have saved <strong>${{tot_amt}}</strong> by using our app! 
-    <br> On average, a group order contains approximately <strong>{{avg_users}}</strong>. 
+    <h2> Stats for Geeks </h2>
+    As of right now, a total of <strong>{{tot_users}}</strong> users have saved <strong>${{tot_amt}}</strong> by using our app! 
+    <br> On average, a group order contains approximately <strong>{{avg_users}} users</strong>. 
     <br> Each user saves an average of <strong>${{avg_order}} </strong>on every order.
     <br>
-    <h2>Top users of the month: </h2>
+    <h3>Top users of the month: </h3>
     
 </body>
 </html>
