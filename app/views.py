@@ -436,7 +436,7 @@ def viewindivorder(request, id):
                 SELECT group_order_id, SUM(total_price) AS group_total, delivery_status, \
                 ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
                 FROM (\
-                    SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status\
+                    SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, oi.delivery_status\
                     FROM orders o, item i, shop s, orderid oi\
                     WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id\
                     ORDER BY group_order_id, username) AS orders_with_price\
