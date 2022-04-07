@@ -428,7 +428,7 @@ def viewindivorder(request, id):
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
-            item = indivorders[0][5]
+            item = indivorders[0][4]
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
     with connection.cursor() as cursor:
