@@ -380,7 +380,7 @@ def deliverystatus(request, username):
     with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT(oi.group_order_id) \
                         FROM orders o, orderid oi \
-                        WHERE oi.delivery_status != 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
+                        WHERE oi.delivery_status <> 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0]
@@ -597,7 +597,7 @@ def submit_group_order(request, id, username):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", [request.POST['delivery_status'], id])
+            cursor.execute("UPDATE orderid SET delivery_status = 'Order Closed and Received' WHERE group_order_id = %s", [id])
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/deliverystatus/%s' % username)
     

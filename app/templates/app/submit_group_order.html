@@ -11,18 +11,13 @@
     <br>Order Closing Time: {{prev.7}} 
     <br>Order Creator: {{prev.1}} 
     <br>Current Order Status: {{prev.8}}
-    <br>
-    <br>Available Order Status: Order Closed and Received
 
     <!-- Create a Form -->
     <form method="POST">
         <!-- Security token by Django -->
         {% csrf_token %}
         <!-- form -->
-        <div id="div_id_delivery_status" class="control-group"> <label for="id_delivery_status" class="control-label requiredField">
-        Order Status<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="delivery_status" value="{{r.8}}" maxlength="64" class="textinput textInput" required="" id="id_delivery_status"> </div> </div>
-        <br>
-        <button type="submit" value="edit">Edit</button>
+        <button type="submit" value="edit">Close & Submit Order</button>
     </form>
 </body>
 </html>
