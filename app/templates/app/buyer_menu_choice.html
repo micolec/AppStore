@@ -36,21 +36,27 @@ h3   {
 		<input type="submit" value="Search!" /><br><br>
 	</form>
 
+
 	<table class="zui-table">
-		<tr>
-			<thead>
-				<th>Shop Name</th>
-			</thead>
-		</tr>
-		{% for shop in shops %}
-		<tr>
-			<tbody>
-				<td> {{shop.0}} </td>
-				</form>
-				</td>
-			</tbody>
-		</tr>
-</table>
-</body>
+	<tr>
+		<thead>
+                        <th>Shop Name</th>
+     
+		</thead>
+	</tr>
+		{% for order in shops %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+        <br>
+	<br>
+
+  
+	</body>
 {% endfor %}
 {% endblock content %}
