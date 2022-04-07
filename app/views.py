@@ -366,7 +366,7 @@ def edit_indiv_order(request, group_order_id, username, item):
             return redirect(f'/viewindivorder/%s' %group_order_id)
     
     context = {'group_order_id' : group_order_id, 'username' : username, 'item' : item}
-    return render(request, "app/edit_indiv_order.html", result_dict)
+    return render(request, "app/edit_indiv_order.html", context)
 
 def deliverystatus(request, username):
     context = {}
