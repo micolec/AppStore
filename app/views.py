@@ -366,6 +366,7 @@ def edit_indiv_order(request, group_order_id, username, item):
             return redirect(f'/viewindivorder/%s' %group_order_id)
     
     context = {'group_order_id' : group_order_id, 'username' : username, 'item' : item, 'obj' :obj}
+
     return render(request, "app/edit_indiv_order.html", context)
 
 def deliverystatus(request, username):
@@ -418,7 +419,7 @@ def deliverystatus(request, username):
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     status = ''
-
+    grpid = ''
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, oi.group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid \
                         FROM orders o, item i, orderid oi\
