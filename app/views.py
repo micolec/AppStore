@@ -420,7 +420,11 @@ def viewindivorder(request, id):
     status = ''
     
     with connection.cursor() as cursor:
-        cursor.execute("SELECT username, buyer_hall, group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid FROM orders o, item i WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s ORDER BY group_order_id DESC" , [id])
+        cursor.execute("SELECT username, buyer_hall, oi.group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid \
+                        FROM orders o, item i, orderid oi\
+                        WHERE o.shopname = i.shopname AND o.item=i.item AND username = %s \
+                        AND oi.group_order_id = o.group_order_id AND delivery_status = 'Order Open'\
+                        ORDER BY oi.group_order_id DESC" , [id])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
@@ -454,7 +458,7 @@ def viewindivorder(request, id):
                         t1.users,  t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, \
                         delivery_status \
                         FROM t1,t2\
-                        WHERE t1.group_order_id = t2.group_order_id AND t2.username = 'micolechan' AND delivery_status <> 'Food Delivered'\
+                        WHERE t1.group_order_id = t2.group_order_id AND t2.username = 'micolechan' AND delivery_status = 'Order Open'\
                         ORDER BY group_order_id", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
