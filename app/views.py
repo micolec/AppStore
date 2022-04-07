@@ -24,6 +24,7 @@ def buyer_menu_choice(request, username):
     with connection.cursor() as cursor:
         cursor.execute("SELECT shopname FROM shop")
         shops = cursor.fetchall()
+        shopname = shops[0]
 
     if request.POST:
         with connection.cursor() as cursor:
@@ -36,6 +37,7 @@ def buyer_menu_choice(request, username):
     context['status'] = status
     context['shops'] = shops
     context['username'] = username
+    context['shopname'] = shopname
     return render(request, "app/buyer_menu_choice.html", context)
 
 def buyer_menu(request, username, shopname):
