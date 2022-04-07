@@ -573,20 +573,22 @@ def addgrouporder(request, username):
     return render(request, "app/addgrouporder.html", context)
 
 def submit_group_order(request, id, username):
+    
+    result_dict = {}
+
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", id)
             prev = cursor.fetchone()
-            group_order_id = prev[0]
-            hall = prev[2]
-            shopname = prev[3]
-            result_dict = {'prev': prev}
+            result_dict['prev'] = prev
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], prev[0]))
+            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], id))
             messages.success(request, f'Delivery Status has been updated!')
-            return redirect(f'/openorders/%s' % username)
-    result_dict['username'] = id
+            return redirect(f'/deliverystatus/%s' % username)
+    
+    result_dict['username'] = username
+    result_dict['group_order_id'] = id
 
     return render(request, "app/submit_group_order.html", result_dict)
 
