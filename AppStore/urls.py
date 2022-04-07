@@ -41,7 +41,7 @@ urlpatterns = [
     path('buyer_menu_choice', app.views.buyer_menu_choice, name='buyer_menu_choice'),
     path('buyer_menu', app.views.buyer_menu, name='buyer_menu'),
     path('submit_group_order/<str:id>/<str:username>', app.views.submit_group_order, name='submit_group_order'),
-    path('edit_indiv_order/<str:id>/<str:username>/<str:item>', app.views.submit_group_order, name='submit_group_order'),
+    path('edit_indiv_order/<str:id>/<str:username>/<str:item>', app.views.edit_indiv_order, name='edit_indiv_order'),
 
 
     #SELLERS
