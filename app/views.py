@@ -465,6 +465,9 @@ def viewindivorder(request, id):
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
+        else:
+            status = 'Buyer %s has not joined any group orders' %id
+
            
     with connection.cursor() as cursor:
             cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
