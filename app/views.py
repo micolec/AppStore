@@ -450,7 +450,7 @@ def viewindivorder(request, id):
                         GROUP BY username, group_order_id\
                         ORDER BY group_order_id) \
                 SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, t1.users,  \
-                    t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.delivery_status\
+                    t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, delivery_status\
                 FROM t1,t2\
                 WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.delivery_status<> 'Food Delivered'\
                 ORDER BY group_order_id DESC", [id])
