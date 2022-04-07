@@ -882,7 +882,7 @@ def orderedit(request, group_order_id):
     closing = ''
 
     with connection.cursor() as cursor:
-        cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
+        cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
         obj = cursor.fetchone()
 
     status = ''
