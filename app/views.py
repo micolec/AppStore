@@ -352,22 +352,17 @@ def filtered_openorders(request, username, shopname):
 
     return render(request,'app/filtered_openorders.html', result_dict)
 
-def edit_indiv_order(request, id):
+def edit_indiv_order(request, group_order_id, username, item):
     """links from viewindivorder: edit button"""
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orders WHERE group_order_id = %s", [id])
-            prev = cursor.fetchone()
-            group_order_id = prev[0]
-            hall = prev[2]
-
-            shopname = prev[3]
-            result_dict = {'prev': prev}
+        cursor.execute("SELECT * FROM orders WHERE group_order_id = %s AND username = %s AND item = %s", [group_order_id, username, item])
+        obj = cursor.fetchone()
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s", (request.POST['qty'], prev[0]))
-            messages.success(request, f'Delivery Status has been updated!')
-            return redirect(f'/viewindivorder')
+            cursor.execute("UPDATE orders SET qty = %s WHERE group_order_id = %s AND username = %s AND item = %s", [request.POST['qty'], group_order_id, username, item])
+            messages.success(request, f'Buyer %s order in Group Order Id %s has been updated successfully!' % (username, group_order_id))
+            return redirect(f'/viewindivorder/%s' %group_order_id)
  
     return render(request, "app/edit_indiv_order.html", result_dict)
 
