@@ -394,7 +394,7 @@ def deliverystatus(request, username):
                 ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
                 FROM ( \
                     SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status, order_date, order_by \
-                    FROaM orders o, item i, shop s, orderid oi \
+                    FROM orders o, item i, shop s, orderid oi \
                     WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id \
                     ORDER BY group_order_id, username) AS orders_with_price \
                     GROUP BY group_order_id, delivery_fee, delivery_status, order_date, order_by \
@@ -562,8 +562,8 @@ def addgrouporder(request, username):
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         , [curr_id, username, hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'] , request.POST['order_by'],status])
-                messages.success(request, f'New Group Order created for %s! Please add your order and remember to submit your group order.' % (username))
-                return redirect(f'/addindivorder/%s' % (curr_id))
+                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (username))
+                return redirect(f'/openorders/%s' % (username))
             else:
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
@@ -577,13 +577,13 @@ def submit_group_order(request, id, username):
     result_dict = {}
 
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", id)
+            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
             prev = cursor.fetchone()
             result_dict['prev'] = prev
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", (request.POST['delivery_status'], id))
+            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", [request.POST['delivery_status'], id])
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/deliverystatus/%s' % username)
     
