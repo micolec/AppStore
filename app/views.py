@@ -483,23 +483,22 @@ def viewindivorder(request, id):
    
     
     status = ''
-    if request.POST:
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s AND item = %s", [id, grpid, item])
-        if request.POST['action'] == 'deduct':
-            with connection.cursor() as cursor:
-                curgrp = request.POST['curgrp']
-                totals = request.POST['totals']
-                totals = float(totals[1:])
-                if (existing - totals) >= 5:
-                    cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
-                    cursor.execute("UPDATE orders SET paid = 'Paid' WHERE username = %s AND group_order_id = %s", [id, curgrp])
-                    messages.success(request, f'Paid! Wallet Balance has been updated.')
-                    return redirect(f'/viewindivorder/%s' % id)    
-                else:
-                    status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
+    if request.POST['action'] == 'delete':
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s AND item = %s", [id, grpid, item])
+    if request.POST['action'] == 'deduct':
+        with connection.cursor() as cursor:
+            curgrp = request.POST['curgrp']
+            totals = request.POST['totals']
+            totals = float(totals[1:])
+            if (existing - totals) >= 5:
+                cursor.execute("UPDATE buyer SET wallet_balance = (%s - %s) WHERE username = %s", [existing, totals, id])
+                cursor.execute("UPDATE orders SET paid = 'Paid' WHERE username = %s AND group_order_id = %s", [id, curgrp])
+                messages.success(request, f'Paid! Wallet Balance has been updated.')
+                return redirect(f'/viewindivorder/%s' % id)    
+            else:
+                status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
 
     result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':id, 'prev': prev}
