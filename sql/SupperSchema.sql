@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS orderid(
 							   'Food Dispatched', 'Food Delivered')),
 	FOREIGN KEY(shopname, opening, closing) REFERENCES shop(shopname, opening, closing) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
 	FOREIGN KEY (creator, hall) REFERENCES buyer(username, hall) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
-	UNIQUE(group_order_id, hall)
+	UNIQUE(group_order_id, hall),
+	UNIQUE(creator, hall, shopname, order_date, order_by)
 	
 );
 

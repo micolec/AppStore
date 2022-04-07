@@ -394,7 +394,7 @@ def deliverystatus(request, username):
                 ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
                 FROM ( \
                     SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status, order_date, order_by \
-                    FROM orders o, item i, shop s, orderid oi \
+                    FROaM orders o, item i, shop s, orderid oi \
                     WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id \
                     ORDER BY group_order_id, username) AS orders_with_price \
                     GROUP BY group_order_id, delivery_fee, delivery_status, order_date, order_by \
@@ -562,8 +562,8 @@ def addgrouporder(request, username):
                 cursor.execute("INSERT INTO orderid VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
                         , [curr_id, username, hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'] , request.POST['order_by'],status])
-                messages.success(request, f'New Group Order created for %s! Please remember to close and send your group order.' % (username))
-                return redirect(f'/openorders/%s' % (username))
+                messages.success(request, f'New Group Order created for %s! Please add your order and remember to submit your group order.' % (username))
+                return redirect(f'/addindivorder/%s' % (curr_id))
             else:
                 status = '%s Group Order created by Username %s already exists' % (request.POST['shopname'], username)
 
