@@ -731,6 +731,33 @@ def loginseller(request):
  
     return render(request, "app/loginseller.html")
 
+def seller_profile(request, shopname):
+
+    context ={}
+
+    # fetch the object related to passed id
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM shop WHERE shopname = %s", [shopname])
+        results = cursor.fetchone()
+
+    status = ''
+    # save the data from the form
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE shop SET password = %s, opening = %s, closing = %s, delivery_fee = %s WHERE shopname = %s"
+                    , [request.POST['password'], request.POST['opening'], request.POST['closing'], request.POST['delivery_fee'], [shopname]])
+            messages.success(request, f'%s profile has been updated successfully!' % shopname)
+            cursor.execute("SELECT password, opening, closing, delivery_fee FROM shop WHERE shopname = %s", [shopname])
+            obj = cursor.fetchone()
+
+            context["obj"] = obj
+            context["status"] = status
+
+    result_dict = {'prev': results}
+         
+    return render(request, "app/seller_profile.html", result_dict)
+
 def sellerindex(request, shopname):
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM orderid WHERE NOT delivery_status = 'Food Delivered' AND NOT delivery_status = 'Order Open' AND shopname = %s", [shopname])
@@ -740,8 +767,8 @@ def sellerindex(request, shopname):
     if request.POST:
         if request.POST['action'] == 'edit':
             return redirect(f'/seller_orderid/%s' % id)
+    
     result_dict['shopname'] = shopname
-
     return render(request, "app/sellerindex.html", result_dict)
 
 def seller_orderid(request, id):
