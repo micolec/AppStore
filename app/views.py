@@ -899,7 +899,7 @@ def orderedit(request, group_order_id):
                         , [request.POST['creator'], hall, request.POST['shopname'], opening, closing,
                            request.POST['order_date'], request.POST['order_by'], request.POST['delivery_status'], group_order_id ])
                 messages.success(request, f'Group Order Id %s has been updated successfully!' % group_order_id)
-                cursor.execute("SELECT creator, hall, shopname, opening, closing, order_date, order_by, delivery_status FROM orderid WHERE group_order_id = %s", [group_order_id])
+                cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [group_order_id])
                 obj = cursor.fetchone()
 
 
