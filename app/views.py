@@ -380,7 +380,7 @@ def deliverystatus(request, username):
     with connection.cursor() as cursor:
         cursor.execute("SELECT DISTINCT(oi.group_order_id) \
                         FROM orders o, orderid oi \
-                        WHERE oi.delivery_status != 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
+                        WHERE oi.delivery_status <> 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0]
