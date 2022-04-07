@@ -33,7 +33,7 @@ def buyer_menu_choice(request, username):
                     return redirect(f'/buyer_menu/%s/%s' %(username,shopname))
             status = 'Unable to query. Shop name is incorrect.'
     context['status'] = status
-    context['shops'] = shops
+    context['shops'] = enumerate(shops)
 
     return render(request, "app/buyer_menu_choice.html", context)
 
