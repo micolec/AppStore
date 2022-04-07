@@ -410,8 +410,8 @@ def deliverystatus(request, username):
                 (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
                 (CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
                 FROM t1,t2 \
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s \
-                ORDER BY group_order_id DESC", [username, grpid])
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s  \
+                ORDER BY group_order_id DESC", [username])
             fee = cursor.fetchall()
    
     result_dict = {'records2': fee, 'status':status, 'username' : username}
@@ -597,7 +597,7 @@ def submit_group_order(request, id, username):
 
     if request.POST:
         with connection.cursor() as cursor:
-            cursor.execute("UPDATE orderid SET delivery_status = %s WHERE group_order_id = %s", [request.POST['delivery_status'], id])
+            cursor.execute("UPDATE orderid SET delivery_status = 'Order Closed and Received' WHERE group_order_id = %s", [id])
             messages.success(request, f'Delivery Status has been updated!')
             return redirect(f'/deliverystatus/%s' % username)
     
@@ -837,7 +837,7 @@ def seller_menu(request, shopname):
         results = cursor.fetchall()
         result_dict = {'records': results}
 
-    ## Delete customer
+    ## Delete item
     if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
@@ -859,23 +859,16 @@ def seller_menu(request, shopname):
 
     return render(request,"app/seller_menu.html",result_dict)
 
-def add_menu(request, id):
+def add_menu(request, shopname):
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
-            prev = cursor.fetchone()
-            group_ord_id = prev[0]
-            hall = prev[2]
-            shopname = prev[3]
-            result_dict = {'prev': prev}
-
-    if request.POST:
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
-                    , id, request.POST['item'], request.POST['price'])
-            messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
-            return redirect(f'/seller_menu/%s' % (id))
+        if request.POST:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
+                        , [shopname, request.POST['item'], request.POST['price']])
+                messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
+                return redirect(f'/seller_menu/%s' % (shopname))
  
-    return render(request, "app/add_menu.html", result_dict)
+    return render(request, "app/add_menu.html")
 
 def edit_menu(request, item):
     with connection.cursor() as cursor:
