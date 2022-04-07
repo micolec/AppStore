@@ -427,28 +427,33 @@ def viewindivorder(request, id):
     with connection.cursor() as cursor:
         fee = 0
         if indivorders:
-            cursor.execute(";with t1 as ( \
-                SELECT group_order_id, SUM(total_price) AS group_total, delivery_status, \
-                ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
-                FROM (\
-                    SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, oi.delivery_status\
-                    FROM orders o, item i, shop s, orderid oi\
-                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id\
-                    ORDER BY group_order_id, username) AS orders_with_price\
-                    GROUP BY group_order_id, delivery_fee, delivery_status \
-                    ORDER BY group_order_id \
-                    ),\
-                t2 as ( SELECT username, group_order_id, SUM(total_price) AS indiv_total \
-                    FROM ( SELECT username, group_order_id,(price * qty) AS total_price\
-                        FROM orders o, item i\
-                        WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price\
-                        GROUP BY username, group_order_id\
-                        ORDER BY group_order_id) \
-                SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, t1.users,  \
-                    t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, delivery_status\
-                FROM t1,t2\
-                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.delivery_status<> 'Food Delivered'\
-                ORDER BY group_order_id DESC", [id])
+            cursor.execute(";with t1 as (\
+                            SELECT group_order_id, delivery_status,\
+                                    SUM(total_price) AS group_total, \
+                                    ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee\
+                            FROM (\
+                                SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, oi.delivery_status\
+                                FROM orders o, item i, shop s, orderid oi\
+                                WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id\
+                                ORDER BY group_order_id, username) AS orders_with_price\
+                            GROUP BY group_order_id, delivery_fee, delivery_status \
+                            ORDER BY group_order_id\
+                        ),\
+                        t2 as ( \
+                            SELECT username, group_order_id, SUM(total_price) AS indiv_total\
+                            FROM (\
+                                SELECT username, group_order_id,(price * qty) AS total_price\
+                                FROM orders o, item i\
+                                WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price\
+                            GROUP BY username, group_order_id\
+                            ORDER BY group_order_id) \
+                            \
+                        SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, \
+                        t1.users,  t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, \
+                        delivery_status \
+                        FROM t1,t2\
+                        WHERE t1.group_order_id = t2.group_order_id AND t2.username = 'micolechan' AND delivery_status <> 'Food Delivered'\
+                        ORDER BY group_order_id", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
