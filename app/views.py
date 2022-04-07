@@ -21,12 +21,13 @@ def buyer_menu_choice(request, username):
     context = {}
     status = ''
     shops = ''
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT shopname FROM shop")
+        shops = cursor.fetchall()
 
     if request.POST:
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
             for index, tuple in enumerate(shops):
                 if shopname == tuple[0]:
                     messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
