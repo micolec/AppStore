@@ -458,7 +458,7 @@ def viewindivorder(request, id):
                         t1.users,  t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, \
                         delivery_status \
                         FROM t1,t2\
-                        WHERE t1.group_order_id = t2.group_order_id AND t2.username = 'micolechan' AND delivery_status = 'Order Open'\
+                        WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND delivery_status = 'Order Open'\
                         ORDER BY group_order_id", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
