@@ -433,7 +433,7 @@ def viewindivorder(request, id):
         fee = 0
         if indivorders:
             cursor.execute(";with t1 as ( \
-                SELECT group_order_id, SUM(total_price) AS group_total, delivery_status \
+                SELECT group_order_id, SUM(total_price) AS group_total, delivery_status, \
                 ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
                 FROM (\
                     SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status\
