@@ -418,7 +418,7 @@ def deliverystatus(request, username):
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     status = ''
-    
+
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, oi.group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid \
                         FROM orders o, item i, orderid oi\
@@ -428,6 +428,7 @@ def viewindivorder(request, id):
         indivorders = cursor.fetchall()
         if indivorders:
             grpid = indivorders[0][2]
+            item = indivorders[0][5]
         #rn the second table is using orderid = grpid which is the first entry of first table
         # list of tuples
     with connection.cursor() as cursor:
@@ -482,7 +483,7 @@ def viewindivorder(request, id):
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM orders WHERE username = %s", [id])
+                cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s AND item = %s", [id, grpid, item])
         if request.POST['action'] == 'deduct':
             with connection.cursor() as cursor:
                 curgrp = request.POST['curgrp']
@@ -496,6 +497,7 @@ def viewindivorder(request, id):
                 else:
                     status = 'Wallet has insufficient balance. Please Top Up! Ensure wallet has minimum $5 after payment.'       
    
+
     result_dict = {'records': indivorders, 'records2': fee, 'status':status, 'groupid':grpid, 'username':id, 'prev': prev}
 
     return render(request,'app/viewindivorder.html',result_dict)

@@ -32,14 +32,7 @@ CREATE TABLE IF NOT EXISTS item(
 
 --table 4: orderid
 CREATE TABLE IF NOT EXISTS orderid(
-	group_order_id INTEGER PRIMARY KEY,
-	creator VARCHAR(32),
-	hall VARCHAR(32),
-	shopname VARCHAR(128),
-	opening TIME(0),
-	closing TIME(0),
-	order_date DATE,
-	order_by TIME(0)
+	g
 	CHECK (order_by > opening AND order_by < closing),
 	delivery_status VARCHAR(32)
 	CHECK (delivery_status IN ('Order Open', 'Order Closed and Received', 'Vendor Preparing', 
