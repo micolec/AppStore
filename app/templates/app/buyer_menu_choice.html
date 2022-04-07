@@ -14,8 +14,9 @@
 </style>
 
 <body>
-	<h3>Pick the store</h3>
-	<form action="buyer_menu" method="GET">
+	<h3>See the Menu from your Preferred Shop</h3>
+	<form method="POST">
+		{% csrf_token %}
 		<label for="shopname">Shop Name:</label><br>
 		<input type="text" name="shopname" placeholder="Insert Shop Name" /><br><br>
 		<input type="submit" value="Search!" /><br><br>

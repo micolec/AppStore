@@ -18,29 +18,29 @@ def baseseller(request, username):
     return render(request, 'app/baseseller.html', context)
 
 def buyer_menu_choice(request, username):
+    context = {}
+    status = ''
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            shopname = request.POST['shopname']
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            for index, tuple in enumerate(shops):
+                if shopname == tuple[0]:
+                    messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                    return redirect(f'/buyer_menu/%s/%s' %(username,shopname))
+            status = 'Unable to query. Shop name is incorrect.'
+    context['status'] = status
+
+    return render(request, "app/buyer_menu_choice.html", context)
+
+def buyer_menu(request, username, shopname):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT shopname FROM shop")
-        results = cursor.fetchall()
-
-    result_dict = {'shopname': results, 'username' : username}
-
-    return render(request, "app/buyer_menu_choice.html", result_dict)
-
-def buyer_menu(request, username):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE shopname = %s", [request.GET['shopname']])
+        cursor.execute("SELECT * FROM item WHERE shopname = %s", [shopname])
         results = cursor.fetchall()
         
-    result_dict = {'menu': results, 'shopname': request.GET['shopname'], 'username' : username}
-
-    return render(request,"app/buyer_menu.html", result_dict)
-
-def buyer_menu(request, id):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE shopname = %s", [id])
-        results = cursor.fetchall()
-        
-    result_dict = {'menu': results, 'shopname': id}
+    result_dict = {'menu': results, 'username' : username}
 
     return render(request,"app/buyer_menu.html", result_dict)
 
