@@ -596,9 +596,10 @@ def submit_group_order(request, id, username):
             result_dict['prev'] = prev
 
     if request.POST:
-        cursor.execute("UPDATE orderid SET delivery_status = 'Order Closed and Received' WHERE group_order_id = %s", [id])
-        messages.success(request, f'Delivery Status has been updated!')
-        return redirect(f'/deliverystatus/%s' % username)
+        with connection.cursor() as cursor:
+            cursor.execute("UPDATE orderid SET delivery_status = 'Order Closed and Received' WHERE group_order_id = %s", [id])
+            messages.success(request, f'Delivery Status has been updated!')
+            return redirect(f'/deliverystatus/%s' % username)
     
     result_dict['username'] = username
     result_dict['group_order_id'] = id
