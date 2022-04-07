@@ -24,7 +24,7 @@ def buyer_menu_choice(request, username):
     with connection.cursor() as cursor:
         cursor.execute("SELECT shopname FROM shop")
         shops = cursor.fetchall()
-        shopname = shops[0]
+        shopname = shops
 
     if request.POST:
         with connection.cursor() as cursor:
