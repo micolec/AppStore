@@ -372,43 +372,51 @@ def edit_indiv_order(request, group_order_id, username, item):
     return render(request, "app/edit_indiv_order.html", context)
 
 def deliverystatus(request, username):
-    fee = ""
-    status = ""    
+    context = {}
+    status = ''
+    fee = ''
+    indivorders = ''
+    
     with connection.cursor() as cursor:
-        cursor.execute(";with t1 as (\
-                        SELECT group_order_id, delivery_status,\
-                                SUM(total_price) AS group_total, \
-                                ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee\
-                                \
-                        FROM (\
-                            SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, oi.delivery_status\
-                            FROM orders o, item i, shop s, orderid oi\
-                            WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id\
-                            ORDER BY group_order_id, username) AS orders_with_price\
-                        GROUP BY group_order_id, delivery_fee, delivery_status \
-                        ORDER BY group_order_id\
-                    ),\
-                    t2 as ( \
-                        SELECT username, group_order_id, SUM(total_price) AS indiv_total\
-                        FROM (\
-                            SELECT username, group_order_id,(price * qty) AS total_price\
-                            FROM orders o, item i\
-                            WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price\
-                        GROUP BY username, group_order_id\
+        cursor.execute("SELECT DISTINCT(oi.group_order_id) \
+                        FROM orders o, orderid oi \
+                        WHERE oi.delivery_status != 'Order Open' AND o.group_order_id = oi.group_order_id AND username = %s" , [username])
+        indivorders = cursor.fetchall()
+        if indivorders:
+            grpid = indivorders[0]
+        #rn the second table is using orderid = grpid which is the first entry of first table
+        # list of tuples
+
+    with connection.cursor() as cursor:
+        if indivorders:
+            cursor.execute(";with t1 as ( \
+                SELECT group_order_id, SUM(total_price) AS group_total, order_date, order_by, \
+                ROUND((delivery_fee *1.0)/ COUNT(DISTINCT username), 2) AS delivery_fee_per_pax, COUNT(DISTINCT username) AS users, delivery_fee, delivery_status \
+                FROM ( \
+                    SELECT o.username, o.group_order_id, (price * qty) AS total_price, delivery_fee, delivery_status, order_date, order_by \
+                    FROM orders o, item i, shop s, orderid oi \
+                    WHERE o.shopname = i.shopname AND o.shopname = s.shopname AND o.item = i.item AND oi.group_order_id = o.group_order_id \
+                    ORDER BY group_order_id, username) AS orders_with_price \
+                    GROUP BY group_order_id, delivery_fee, delivery_status, order_date, order_by \
+                    ORDER BY group_order_id \
+                    ), \
+                t2 as ( SELECT username, buyer_hall, shopname, group_order_id, SUM(total_price) AS indiv_total \
+                    FROM ( SELECT username, buyer_hall, o.shopname, group_order_id,(price * qty) AS total_price \
+                        FROM orders o, item i \
+                        WHERE o.shopname = i.shopname AND o.item = i.item) AS orders_with_price \
+                        GROUP BY username, group_order_id, buyer_hall, shopname \
                         ORDER BY group_order_id) \
-\
-                    SELECT t2.username, t2.group_order_id, t2.indiv_total, t1.delivery_fee, \
-                    t1.users,  t1.delivery_fee_per_pax, (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, \
-                    delivery_status \
-                    FROM t1,t2\
-                    WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND delivery_status <> 'Order Open'\
-                    ORDER BY group_order_id DESC", [username])
-        fee = cursor.fetchall()
+                SELECT t2.group_order_id, t2.username, t2.buyer_hall, t2.shopname, t1.order_date, t1.order_by, \
+                (t2.indiv_total + CAST(t1.delivery_fee_per_pax AS MONEY)) AS Total, t1.users,  \
+                (CAST(t1.delivery_fee - t1.delivery_fee_per_pax AS MONEY)) AS delivery_saved, t1.delivery_status \
+                FROM t1,t2 \
+                WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND t1.group_order_id = %s \
+                ORDER BY group_order_id DESC", [username, grpid])
+            fee = cursor.fetchall()
    
     result_dict = {'records2': fee, 'status':status, 'username' : username}
 
     return render(request,'app/deliverystatus.html',result_dict)
-
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     status = ''
