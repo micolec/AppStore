@@ -1,0 +1,54 @@
+{% extends "app/baseseller.html" %}
+{% block content %}
+{% load static %}
+<html>
+
+<body>
+    <h2>Update {{obj.0}}'s Profile</h2>
+
+    <p style="color:red">{{ status|safe }}</p>
+
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+        <div id="div_id_password" class="control-group"> <label for="id_password"
+                class="control-label requiredField">
+                Password<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="password" name="password" value="{{obj.1}}" maxlength="64"
+                    class="textinput textInput" required="" id="id_password"> </div>
+        </div>
+        <div id="div_id_shopname" class="control-group"> <label for="id_shopname"
+                class="control-label requiredField">
+                Shop Name<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="text" name="shopname" value="{{obj.2}}" maxlength="64"
+                    class="textinput textInput" required="" id="shopname"> </div>
+        </div>
+        <div id="div_id_opening" class="control-group"> <label for="id_opening" class="control-label requiredField">
+                Opening<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="text" name="opening" value="{{obj.3}}" maxlength="64"
+                    class="textinput textInput" required="" id="id_opening"> </div>
+        </div>
+        <div id="div_id_closing" class="control-group"> <label for="id_closing"
+                class="control-label requiredField">
+                Closing<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="text" name="closing" value="{{obj.4}}" maxlength="64"
+                    class="textinput textInput" required="" id="id_closing"> </div>
+        </div>
+        <div id="div_id_delivery_fee" class="control-group"> <label for="id_delivery_fee" class="control-label requiredField">
+                Delivery Fee<span class="asteriskField">*</span> </label>
+            <div class="controls"> <input type="text" name="delivery_fee" value="{{obj.5}}" maxlength="64"
+                    class="textinput textInput" required="" id="id_delivery_fee"> </div>
+        </div>
+                <p> </p>
+                <button type="submit" value="Update">Update Profile</button>
+    </form>
+
+    <p> </p>
+
+    <br>
+</body>
+
+</html>
+{% endblock content %}
