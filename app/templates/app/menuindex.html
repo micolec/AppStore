@@ -31,6 +31,7 @@
 	}
 </style>
 <h2>Menu</h2>
+<a href="add">Register New Menu Items</a>
 
 <body>
 	<table class="zui-table">
@@ -54,6 +55,7 @@
 					<form method="POST" style="display: inline;">
 						{% csrf_token %}
 						<input type="hidden" name="id" value="{{r.8}}" />
+                    <a href="edit/{{cust.0}}"><button>Edit</button></a>
 					</form>
 				</td>
 			</tbody>
