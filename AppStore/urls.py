@@ -55,6 +55,7 @@ urlpatterns = [
 
     #SUPERADMIN
     path('buyerindex', app.views.buyerindex, name='buyerindex'),
+    path('menuindex', app.views.menuindex, name='menuindex'),
     path('su_sellerindex', app.views.su_sellerindex, name='su_sellerindex'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
