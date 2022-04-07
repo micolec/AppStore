@@ -1,18 +1,32 @@
 <!DOCTYPE html>
-
 {% extends "app/basebuyer.html" %}
 {% block content %}
-
+{% load static %}
+<html>
 <style>
-	h2 {
-		font: normal 32px Arial, sans-serif;
-	}
-
-	h3 {
-		font: normal 20px Arial, sans-serif;
-	}
-</style>
-
+.zui-table {
+    border: solid 1px #5F788A;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font: normal 13px Arial, sans-serif;
+}
+.zui-table thead th {
+    background-color: #5F788A;
+    border: solid 1px #5F788A;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+.zui-table tbody td {
+    border: solid 1px #5F788A;
+    color: #333;
+    padding: 10px;
+}
+h2   {
+	font: normal 32px Verdana, sans-serif;}
+h3   {
+	font: normal 20px Verdana, sans-serif;}
+	</style>
 <body>
 	<h3>See the Menu from your Preferred Shop</h3>
 	<form method="POST">
@@ -22,20 +36,27 @@
 		<input type="submit" value="Search!" /><br><br>
 	</form>
 
+
 	<table class="zui-table">
-		<tr>
-			<thead>
-				<th>Shop Name</th>
-			</thead>
-		</tr>
-		{% for shop in shops %}
-		<tr>
-			<tbody>
-				<td> {{shop.0}} </td>
-				</form>
-				</td>
-			</tbody>
-		</tr>
-</body>
-{% endfor %}
+	<tr>
+		<thead>
+                        <th>Shop Name</th>
+     
+		</thead>
+	</tr>
+		{% for order in shopname %}
+	<tr>
+		<tbody>
+                        <td> {{ order.0 }} </td>
+		</tbody>
+	</tr>
+		{% endfor %}
+	</form>
+	    </table>
+        <br>
+	<br>
+
+  
+	</body>
+
 {% endblock content %}

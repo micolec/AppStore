@@ -21,12 +21,14 @@ def buyer_menu_choice(request, username):
     context = {}
     status = ''
     shops = ''
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT shopname FROM shop")
+        shops = cursor.fetchall()
+        shopname = shops
 
     if request.POST:
         with connection.cursor() as cursor:
             shopname = request.POST['shopname']
-            cursor.execute("SELECT shopname FROM shop")
-            shops = cursor.fetchall()
             for index, tuple in enumerate(shops):
                 if shopname == tuple[0]:
                     messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
@@ -35,6 +37,7 @@ def buyer_menu_choice(request, username):
     context['status'] = status
     context['shops'] = shops
     context['username'] = username
+    context['shopname'] = shopname
     return render(request, "app/buyer_menu_choice.html", context)
 
 def buyer_menu(request, username, shopname):
