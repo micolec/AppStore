@@ -79,7 +79,7 @@ h3   {
                         <td> {{ order.9 }} </td>
                         <td>
                 <a href="/addindivorder/{{order.0}}"><button>Join Group Order</button></a>
-                <a href="/viewindivorder/{{ username }}"><button>View Your Order</button></a>
+  
                 <form method="POST" style="display: inline;">
                 {% csrf_token %}
                 <input type="hidden" name="un" value="{{order.0}}"/>
@@ -98,7 +98,7 @@ h3   {
     <br> <a href="/addgrouporder/{{ username }}">Click to start new group order! </a> 
 <br>
 <br><h2> Group Orders Created By You </h2>
-    Kindly only click the 'Submit' button during the order closing time.
+    <br>Kindly only click the 'Submit' button during the order closing time.
 	<table class="zui-table">
 	<tr>
 		<thead>
