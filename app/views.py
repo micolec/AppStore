@@ -20,6 +20,7 @@ def baseseller(request, username):
 def buyer_menu_choice(request, username):
     context = {}
     status = ''
+    shops = ''
 
     if request.POST:
         with connection.cursor() as cursor:
