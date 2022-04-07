@@ -6,12 +6,12 @@
 <html>
 <body>
     <h2>Edit Order!</h2>
-    Username: {{order.0}}
-    <br>Hall: {{order.1}} 
-    <br>Group Order ID: {{prev.2}} 
-    <br>Shop Name: {{prev.4}} 
-    <br>Item: {{prev.5}}
-    <br>Quantity:
+    Username: {{obj.0}}
+    <br>Hall: {{obj.1}} 
+    <br>Group Order ID: {{obj.2}} 
+    <br>Shop Name: {{obj.3}} 
+    <br>Item: {{obj.4}}
+    <br>Current Quantity: {{obj.5}}
  
     <!-- Create a Form -->
     <form method="POST">
@@ -19,9 +19,9 @@
         {% csrf_token %}
         <!-- form -->
         <div id="div_id_qty" class="control-group"> <label for="id_qty" class="control-label requiredField">
-        Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" value="{{order.6}}" maxlength="64" class="textinput textInput" required="" id="id_qty"> </div> </div>
+        New Quantity<span class="asteriskField">*</span> </label> <div class="controls"> <input type="text" name="qty" maxlength="64" class="textinput textInput" required="" id="id_qty"> </div> </div>
         <br>
-        <button type="submit" value="edit">Submit Change</button>
+        <button type="submit" value="edit">Update</button>
     </form>
 </body>
 </html>
