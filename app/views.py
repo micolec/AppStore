@@ -859,23 +859,16 @@ def seller_menu(request, shopname):
 
     return render(request,"app/seller_menu.html",result_dict)
 
-def add_menu(request, id):
+def add_menu(request, shopname):
     with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
-            prev = cursor.fetchone()
-            group_ord_id = prev[0]
-            hall = prev[2]
-            shopname = prev[3]
-            result_dict = {'prev': prev}
-
-    if request.POST:
-        with connection.cursor() as cursor:
-            cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
-                    , id, request.POST['item'], request.POST['price'])
-            messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
-            return redirect(f'/seller_menu/%s' % (id))
+        if request.POST:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO item VALUES (%s, %s, %s)"
+                        , [shopname, request.POST['item'], request.POST['price']])
+                messages.success(request, f'%s has been added into the menu!' % (request.POST['item']))
+                return redirect(f'/seller_menu/%s' % (shopname))
  
-    return render(request, "app/add_menu.html", result_dict)
+    return render(request, "app/add_menu.html")
 
 def edit_menu(request, item):
     with connection.cursor() as cursor:
