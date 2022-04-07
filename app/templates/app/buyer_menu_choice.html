@@ -28,10 +28,10 @@
 				<th>Shop Name</th>
 			</thead>
 		</tr>
-		{% for shop in shops %}
+		{% for index, tuple in enumerate(shops) %}
 		<tr>
 			<tbody>
-				<td> {{ shop}} </td>
+				<td> {{tuple[0]}} </td>
 				</form>
 				</td>
 			</tbody>
