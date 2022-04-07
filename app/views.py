@@ -777,6 +777,42 @@ def sellerindex(request, shopname):
     result_dict['shopname'] = shopname
     return render(request, "app/sellerindex.html", result_dict)
 
+def su_sellerindex(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM shop")
+        results = cursor.fetchall()
+        result_dict = {'records': results}
+
+    if request.POST:
+        if request.POST['action'] == 'edit':
+            return redirect(f'/su_sellerindex/')
+    
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
+                messages.success(request, f'Item has been deleted!')
+                return redirect(f'/su_sellerindex/')
+
+    return render(request, "app/su_sellerindex.html", result_dict)
+
+def menuindex(request):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM item")
+        results = cursor.fetchall()
+        result_dict = {'records': results}
+
+    if request.POST:
+        if request.POST['action'] == 'edit':
+            return redirect(f'/menuindex/')
+    
+        if request.POST['action'] == 'delete':
+            with connection.cursor() as cursor:
+                cursor.execute("DELETE FROM item WHERE item = %s", [request.POST['id']])
+                messages.success(request, f'Item has been deleted!')
+                return redirect(f'/menuindex/')
+
+    return render(request, "app/menuindex.html", result_dict)
+
 def seller_orderid(request, id):
     with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM orderid WHERE group_order_id = %s", [id])
