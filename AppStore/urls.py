@@ -38,8 +38,8 @@ urlpatterns = [
     path('addindivorder/buyer_menu/<str:id>', app.views.buyer_menu, name='buyer_menu'),
     path('promo', app.views.promo, name='promo'),
     path('buyerstats/<str:username>', app.views.buyerstats, name='buyerstats'),
-    path('buyer_menu_choice', app.views.buyer_menu_choice, name='buyer_menu_choice'),
-    path('buyer_menu', app.views.buyer_menu, name='buyer_menu'),
+    path('buyer_menu_choice/<str:username>', app.views.buyer_menu_choice, name='buyer_menu_choice'),
+    path('buyer_menu/<str:username>', app.views.buyer_menu, name='buyer_menu'),
     path('submit_group_order/<str:id>/<str:username>', app.views.submit_group_order, name='submit_group_order'),
     path('edit_indiv_order/<str:group_order_id>/<str:username>/<str:item>', app.views.edit_indiv_order, name='edit_indiv_order'),
 
