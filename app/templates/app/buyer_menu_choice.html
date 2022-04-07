@@ -14,8 +14,9 @@
 </style>
 
 <body>
-	<h3>Pick the store</h3>
-	<form action="buyer_menu" method="GET">
+	<h3>See the Menu from your Preferred Shop</h3>
+	<form method="POST">
+		{% csrf_token %}
 		<label for="shopname">Shop Name:</label><br>
 		<input type="text" name="shopname" placeholder="Insert Shop Name" /><br><br>
 		<input type="submit" value="Search!" /><br><br>
@@ -27,10 +28,10 @@
 				<th>Shop Name</th>
 			</thead>
 		</tr>
-		{% for s in shopname %}
+		{% for index, tuple in shops %}
 		<tr>
 			<tbody>
-				<td> {{ s.0 }} </td>
+				<td> {{tuple.0}} </td>
 				</form>
 				</td>
 			</tbody>

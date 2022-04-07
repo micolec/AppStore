@@ -17,30 +17,32 @@ def baseseller(request, username):
 
     return render(request, 'app/baseseller.html', context)
 
-def buyer_menu_choice(request):
+def buyer_menu_choice(request, username):
+    context = {}
+    status = ''
+    shops = ''
+
+    if request.POST:
+        with connection.cursor() as cursor:
+            shopname = request.POST['shopname']
+            cursor.execute("SELECT shopname FROM shop")
+            shops = cursor.fetchall()
+            for index, tuple in enumerate(shops):
+                if shopname == tuple[0]:
+                    messages.success(request, f'Below are the open orders from %s!' % (request.POST['shopname']))
+                    return redirect(f'/buyer_menu/%s/%s' %(username,shopname))
+            status = 'Unable to query. Shop name is incorrect.'
+    context['status'] = status
+    context['shops'] = enumerate(shops)
+
+    return render(request, "app/buyer_menu_choice.html", context)
+
+def buyer_menu(request, username, shopname):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT shopname FROM shop")
-        results = cursor.fetchall()
-
-    result_dict = {'shopname': results}
-
-    return render(request, "app/buyer_menu_choice.html", result_dict)
-
-def buyer_menu(request):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE shopname = %s", [request.GET['shopname']])
+        cursor.execute("SELECT * FROM item WHERE shopname = %s", [shopname])
         results = cursor.fetchall()
         
-    result_dict = {'menu': results, 'shopname': request.GET['shopname']}
-
-    return render(request,"app/buyer_menu.html", result_dict)
-
-def buyer_menu(request, id):
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM item WHERE shopname = %s", [id])
-        results = cursor.fetchall()
-        
-    result_dict = {'menu': results, 'shopname': id}
+    result_dict = {'menu': results, 'username' : username, 'shopname' : shopname}
 
     return render(request,"app/buyer_menu.html", result_dict)
 
@@ -366,6 +368,7 @@ def edit_indiv_order(request, group_order_id, username, item):
             return redirect(f'/viewindivorder/%s' %group_order_id)
     
     context = {'group_order_id' : group_order_id, 'username' : username, 'item' : item, 'obj' :obj}
+
     return render(request, "app/edit_indiv_order.html", context)
 
 def deliverystatus(request, username):
@@ -418,7 +421,7 @@ def deliverystatus(request, username):
 def viewindivorder(request, id):
     ## Delete customer NEED TO FIX!!!! must add condition on item also
     status = ''
-
+    grpid = ''
     with connection.cursor() as cursor:
         cursor.execute("SELECT username, buyer_hall, oi.group_order_id, o.shopname, o.item, qty, price, (price*qty) AS total_price, paid \
                         FROM orders o, item i, orderid oi\
@@ -460,10 +463,13 @@ def viewindivorder(request, id):
                         delivery_status \
                         FROM t1,t2\
                         WHERE t1.group_order_id = t2.group_order_id AND t2.username = %s AND delivery_status = 'Order Open'\
-                        ORDER BY group_order_id", [id])
+                        ORDER BY group_order_id DESC", [id])
             fee = cursor.fetchall()
             total = fee[0][6]
             total = float(total[1:7])
+        else:
+            status = 'Buyer %s has not joined any group orders' %id
+
            
     with connection.cursor() as cursor:
             cursor.execute("SELECT wallet_balance FROM buyer WHERE username = %s", [id])
@@ -479,8 +485,8 @@ def viewindivorder(request, id):
    
     
     status = ''
-    if request.POST:
         #PROBLEM: delete deletes every order buyer has bought!!! vito pls help fix thanku :>
+    if request.POST:
         if request.POST['action'] == 'delete':
             with connection.cursor() as cursor:
                 cursor.execute("DELETE FROM orders WHERE username = %s AND group_order_id = %s AND item = %s", [id, grpid, item])
